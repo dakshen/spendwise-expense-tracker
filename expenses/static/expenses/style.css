@@ -1,0 +1,1411 @@
+
+/* SpendWise — refined typography and background
+   Existing layout, responsive rules, and JS class names are preserved. */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+/* ========================================
+   1. GLOBAL STYLES
+======================================== */
+
+:root {
+    --purple: #7554d8;
+    --purple-dark: #6040bd;
+    --purple-light: #f0ebff;
+    --page-bg: #f6f5fb;
+    --white: #ffffff;
+    --text-primary: #25233a;
+    --text-secondary: #77758d;
+    --border: #e9e6f2;
+    --green: #249b70;
+    --blue: #4d7cda;
+    --danger: #dc4545;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 24px;
+}
+
+body {
+    margin: 0;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-primary);
+    background:
+        radial-gradient(ellipse at 88% 4%, rgba(177, 153, 255, 0.16), transparent 31%),
+        radial-gradient(ellipse at 8% 42%, rgba(202, 190, 255, 0.12), transparent 28%),
+        var(--page-bg);
+    font-size: 14px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+button,
+select {
+    cursor: pointer;
+}
+
+button {
+    transition: background-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+h1,
+h2,
+p {
+    margin-top: 0;
+}
+
+h1,
+h2 {
+    font-family: 'Manrope', 'DM Sans', sans-serif;
+    line-height: 1.3;
+    letter-spacing: -0.035em;
+}
+
+
+/* ========================================
+   2. MAIN LAYOUT
+======================================== */
+
+.app-layout {
+    min-height: 100vh;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    width: 245px;
+    padding: 30px 20px;
+    background: var(--white);
+    border-right: 1px solid var(--border);
+}
+
+.main-content {
+    min-height: 100vh;
+    margin-left: 245px;
+    padding: 30px 38px;
+    min-width: 0;
+}
+
+
+/* ========================================
+   3. SIDEBAR BRAND
+======================================== */
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 7px;
+    margin-bottom: 48px;
+}
+
+.brand-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 43px;
+    height: 43px;
+    flex-shrink: 0;
+    border-radius: 13px;
+    color: var(--white);
+    background: var(--purple);
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.brand h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+}
+
+.brand p {
+    margin: 3px 0 0;
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.sidebar-label {
+    margin: 0 0 14px 10px;
+    color: #a1a0b1;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.3px;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-height: 46px;
+    padding: 12px 13px;
+    border-radius: 10px;
+    color: #77778b;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.nav-link:hover {
+    color: var(--purple);
+    background: #f8f6ff;
+}
+
+.nav-link.active {
+    color: var(--purple);
+    background: var(--purple-light);
+}
+
+.nav-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 21px;
+    font-size: 21px;
+}
+
+.sidebar-footer {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: auto;
+    padding: 15px 12px;
+    background: #f8f6ff;
+    border: 1px solid #eee8ff;
+    border-radius: 12px;
+}
+
+.sidebar-help-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 29px;
+    height: 29px;
+    color: var(--purple);
+    background: #e9e1ff;
+    border-radius: 9px;
+}
+
+.sidebar-footer strong {
+    font-size: 12px;
+}
+
+.sidebar-footer p {
+    margin: 4px 0 0;
+    color: var(--text-secondary);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+
+/* ========================================
+   4. TOP BAR AND PAGE HEADINGS
+======================================== */
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding-bottom: 27px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--border);
+}
+
+.page-eyebrow,
+.section-eyebrow {
+    margin-bottom: 7px;
+    color: var(--purple);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.1px;
+}
+
+.topbar h1 {
+    margin: 0;
+    font-size: 27px;
+    letter-spacing: -0.7px;
+}
+
+.topbar-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 17px;
+    color: var(--white);
+    background: var(--purple);
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.topbar-action:hover {
+    background: var(--purple-dark);
+}
+
+.topbar-action span {
+    font-size: 19px;
+}
+
+
+/* ========================================
+   5. DASHBOARD INTRODUCTION
+======================================== */
+
+.dashboard-section {
+    margin-bottom: 30px;
+}
+
+.welcome-section {
+    margin-bottom: 23px;
+}
+
+.welcome-section h2 {
+    margin-bottom: 8px;
+    font-size: 22px;
+    letter-spacing: -0.5px;
+}
+
+.section-description {
+    margin-bottom: 0;
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+
+/* ========================================
+   6. SUMMARY CARDS
+======================================== */
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.summary-card {
+    min-width: 0;
+    padding: 22px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 3px 12px rgba(32, 26, 65, 0.025);
+}
+
+.summary-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.summary-label {
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.summary-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 37px;
+    height: 37px;
+    border-radius: 11px;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.purple-icon {
+    color: var(--purple);
+    background: var(--purple-light);
+}
+
+.blue-icon {
+    color: var(--blue);
+    background: #edf3ff;
+}
+
+.green-icon {
+    color: var(--green);
+    background: #e8f8f1;
+}
+
+.summary-value {
+    margin: 18px 0 6px;
+    font-size: clamp(21px, 2.2vw, 29px);
+    font-weight: 700;
+    letter-spacing: -0.7px;
+    overflow-wrap: anywhere;
+}
+
+.summary-note {
+    margin-bottom: 0;
+    color: #9a9aac;
+    font-size: 11px;
+}
+
+
+/* ========================================
+   7. CONTENT CARDS
+======================================== */
+
+.content-card {
+    padding: 25px;
+    margin-bottom: 25px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    box-shadow: 0 3px 12px rgba(32, 26, 65, 0.025);
+}
+
+.card-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.card-heading h2 {
+    margin-bottom: 6px;
+    font-size: 19px;
+    letter-spacing: -0.3px;
+}
+
+.card-description {
+    margin-bottom: 0;
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.heading-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 39px;
+    height: 39px;
+    flex-shrink: 0;
+    color: var(--purple);
+    background: var(--purple-light);
+    border-radius: 11px;
+    font-size: 22px;
+}
+
+
+/* ========================================
+   8. EXPENSE FORM
+======================================== */
+
+.expense-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 8px;
+}
+
+.form-field label {
+    color: #45445a;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+input,
+select {
+    width: 100%;
+    min-width: 0;
+    min-height: 43px;
+    padding: 11px 13px;
+    color: var(--text-primary);
+    background: var(--white);
+    border: 1px solid #dedde8;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input::placeholder {
+    color: #aaa9b9;
+}
+
+input:hover,
+select:hover {
+    border-color: #bdb2e9;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px rgba(118, 82, 214, 0.12);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+
+/* ========================================
+   9. BUTTONS
+======================================== */
+
+.primary-button,
+.secondary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 40px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.primary-button {
+    color: var(--white);
+    background: var(--purple);
+    border: 1px solid var(--purple);
+}
+
+.primary-button:hover {
+    background: var(--purple-dark);
+    border-color: var(--purple-dark);
+}
+
+.secondary-button {
+    color: #5f4b9e;
+    background: var(--white);
+    border: 1px solid #e0d9f4;
+}
+
+.secondary-button:hover {
+    background: #f7f4ff;
+    border-color: #c9b9f0;
+}
+
+/* Preserve styling for existing Today button ID */
+#today-button {
+    color: #5f4b9e;
+    background: var(--white);
+    border: 1px solid #e0d9f4;
+}
+
+#today-button:hover {
+    background: #f7f4ff;
+}
+
+/* Keep the Add Expense button purple */
+#add-btn {
+    color: var(--white);
+    background: var(--purple);
+    border: 1px solid var(--purple);
+}
+
+#add-btn:hover {
+    background: var(--purple-dark);
+}
+
+
+/* ========================================
+   10. TRANSACTION TOOLBAR
+======================================== */
+
+.transactions-heading {
+    align-items: center;
+}
+
+.transaction-toolbar {
+    display: grid;
+    grid-template-columns: minmax(160px, 1fr) minmax(140px, 0.65fr) minmax(140px, 0.65fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.search-field {
+    position: relative;
+    min-width: 0;
+}
+
+.search-field input {
+    padding-left: 38px;
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    z-index: 1;
+    color: #9997aa;
+    font-size: 22px;
+    line-height: 1;
+    transform: translateY(-55%);
+}
+
+#search-expense,
+#filter-category,
+#sort-expenses {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+}
+
+
+/* ========================================
+   11. EXPENSE ITEMS CREATED BY JAVASCRIPT
+======================================== */
+
+#expense-list {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+/* Style each direct child created by your current JS */
+#expense-list > div {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    min-width: 0;
+    padding: 16px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#expense-list > div:hover {
+    border-color: #d8cff3;
+    box-shadow: 0 3px 12px rgba(70, 45, 130, 0.05);
+}
+
+#expense-list > div > span {
+    flex: 1;
+    min-width: 160px;
+    color: #4b4a60;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+#expense-list button {
+    min-height: 34px;
+    padding: 7px 11px;
+    margin: 0;
+    color: var(--purple);
+    background: var(--purple-light);
+    border: 1px solid transparent;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+#expense-list button:hover {
+    background: #e7dfff;
+}
+
+/* Retain a red style for the Delete button if it is last */
+#expense-list button:last-child {
+    color: var(--danger);
+    background: #fff0f0;
+}
+
+#expense-list button:last-child:hover {
+    background: #ffe1e1;
+}
+
+
+/* ========================================
+   12. FOOTER
+======================================== */
+
+.page-footer {
+    padding: 4px 0 15px;
+    color: #9998aa;
+    font-size: 11px;
+    text-align: center;
+}
+
+
+/* ========================================
+   13. TABLET RESPONSIVENESS
+======================================== */
+
+@media (max-width: 1100px) {
+    .main-content {
+        padding: 27px 24px;
+    }
+
+    .sidebar {
+        width: 215px;
+        padding: 25px 15px;
+    }
+
+    .main-content {
+        margin-left: 215px;
+    }
+
+    .summary-grid {
+        gap: 12px;
+    }
+
+    .summary-card {
+        padding: 17px;
+    }
+
+    .transaction-toolbar {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .search-field {
+        grid-column: 1 / -1;
+    }
+}
+
+
+/* ========================================
+   14. MOBILE RESPONSIVENESS
+======================================== */
+
+@media (max-width: 700px) {
+    .sidebar {
+        position: static;
+        width: 100%;
+        padding: 16px;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+        margin-bottom: 18px;
+    }
+
+    .sidebar-section {
+        margin-bottom: 3px;
+    }
+
+    .sidebar-label,
+    .sidebar-footer {
+        display: none;
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+        gap: 6px;
+    }
+
+    .nav-link {
+        flex: 1;
+        justify-content: center;
+        gap: 6px;
+        min-width: 0;
+        padding: 10px 6px;
+        font-size: 11px;
+    }
+
+    .nav-icon {
+        width: auto;
+        font-size: 17px;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 23px 16px;
+    }
+
+    .topbar {
+        align-items: flex-start;
+        padding-bottom: 20px;
+        margin-bottom: 24px;
+    }
+
+    .topbar h1 {
+        font-size: 22px;
+    }
+
+    .topbar-action {
+        min-height: 38px;
+        padding: 0 10px;
+        font-size: 11px;
+    }
+
+    .welcome-section h2 {
+        font-size: 20px;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .summary-card {
+        padding: 18px;
+    }
+
+    .summary-value {
+        font-size: 25px;
+    }
+
+    .content-card {
+        padding: 19px 15px;
+        border-radius: 12px;
+    }
+
+    .card-heading {
+        margin-bottom: 20px;
+    }
+
+    .card-heading h2 {
+        font-size: 17px;
+    }
+
+    .expense-form {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .form-actions {
+        justify-content: stretch;
+    }
+
+    .form-actions button {
+        flex: 1;
+    }
+
+    .transactions-heading {
+        align-items: flex-start;
+    }
+
+    .transaction-toolbar {
+        grid-template-columns: 1fr;
+    }
+
+    .search-field {
+        grid-column: auto;
+    }
+
+    #expense-list > div {
+        padding: 13px;
+    }
+
+    #expense-list > div > span {
+        flex-basis: 100%;
+        min-width: 0;
+    }
+
+    .page-footer {
+        padding-top: 3px;
+    }
+}
+
+
+/* ========================================
+   15. SMALL PHONE ADJUSTMENTS
+======================================== */
+
+@media (max-width: 380px) {
+    .nav-link {
+        flex-direction: column;
+        gap: 3px;
+        font-size: 10px;
+    }
+
+    .topbar {
+        flex-direction: column;
+    }
+
+    .topbar-action {
+        align-self: flex-start;
+    }
+
+    .transactions-heading {
+        flex-direction: column;
+    }
+}
+
+
+/* ========================================
+   16. VISUAL POLISH
+======================================== */
+
+/* Subtle, clean depth for the main dashboard panels */
+.summary-card,
+.content-card {
+    background: rgba(255, 255, 255, 0.92);
+    border-color: rgba(226, 221, 241, 0.9);
+    box-shadow:
+        0 2px 5px rgba(43, 31, 83, 0.025),
+        0 12px 32px rgba(43, 31, 83, 0.035);
+    backdrop-filter: blur(8px);
+}
+
+.summary-card {
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-3px);
+    border-color: #d9cff8;
+    box-shadow: 0 12px 28px rgba(78, 54, 145, 0.09);
+}
+
+.summary-label,
+.card-description,
+.section-description {
+    line-height: 1.65;
+}
+
+.summary-value {
+    font-family: 'Manrope', 'DM Sans', sans-serif;
+    font-variant-numeric: tabular-nums;
+}
+
+.topbar h1,
+.welcome-section h2,
+.card-heading h2 {
+    font-family: 'Manrope', 'DM Sans', sans-serif;
+    font-weight: 800;
+}
+
+.brand h2 {
+    font-family: 'Manrope', 'DM Sans', sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.045em;
+}
+
+input,
+select {
+    background-color: rgba(255, 255, 255, 0.96);
+}
+
+input:focus,
+select:focus {
+    box-shadow: 0 0 0 4px rgba(117, 84, 216, 0.11);
+}
+
+.primary-button,
+.topbar-action,
+#add-btn {
+    box-shadow: 0 5px 12px rgba(117, 84, 216, 0.16);
+}
+
+.primary-button:hover,
+.topbar-action:hover,
+#add-btn:hover {
+    box-shadow: 0 7px 16px rgba(117, 84, 216, 0.22);
+    transform: translateY(-1px);
+}
+
+.sidebar {
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(12px);
+}
+
+.nav-link {
+    border: 1px solid transparent;
+}
+
+.nav-link.active {
+    border-color: #e8e0ff;
+}
+
+#expense-list > div {
+    box-shadow: 0 2px 8px rgba(43, 31, 83, 0.025);
+}
+
+#expense-list > div:hover {
+    transform: translateY(-1px);
+}
+
+::selection {
+    color: #34215f;
+    background: #e4dbff;
+}
+
+/* Respect users who prefer less animation */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+
+
+/* ===== Unify sidebar and main background ===== */
+
+body {
+    background: #f7f7fc;
+}
+
+.sidebar {
+    background: #ffffff;
+    border-right: 1px solid #e9e7f1;
+    box-shadow: 4px 0 18px rgba(37, 28, 70, 0.025);
+}
+
+
+/* SpendWise logo — solid saturated purple */
+.brand-icon {
+    background: #7541D8 !important;
+    box-shadow: 0 4px 12px rgba(117, 65, 216, 0.22);
+}
+
+
+/* Subtle navigation interactions */
+.nav-link:hover {
+    background: #f7f4ff;
+    border-color: transparent;
+    transform: none;
+}
+
+.nav-link.active {
+    color: #6846c8;
+    background: #f0ebff;
+    border: 1px solid #e8e0ff;
+    box-shadow: inset 3px 0 0 #7956dc;
+}
+
+/* Match the help panel to the same visual system */
+.sidebar-footer {
+    background: #f8f6ff;
+    border: 1px solid #eee8ff;
+    box-shadow: none;
+}
+
+/* Consistent surface treatment */
+.summary-card,
+.content-card {
+    background: #ffffff;
+}
+
+
+/* ===== SpendWise: Visible Premium Glass ===== */
+
+body {
+    background: #f5f3fb;
+}
+
+/* Sidebar: translucent glass */
+.sidebar {
+    background: rgba(255, 255, 255, 0.68) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(135%);
+    backdrop-filter: blur(24px) saturate(135%);
+    border-right: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 5px 0 25px rgba(65, 45, 110, 0.045);
+}
+
+/* Topbar: visible frosted surface */
+.topbar {
+    position: sticky;
+    top: 12px;
+    z-index: 20;
+    background: rgba(255, 255, 255, 0.62) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    backdrop-filter: blur(24px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 18px;
+    box-shadow: 0 8px 28px rgba(65, 45, 110, 0.055);
+}
+
+/* Cards: subtle glass instead of flat white */
+.summary-card,
+.content-card {
+    background: rgba(255, 255, 255, 0.76) !important;
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    box-shadow:
+        0 8px 24px rgba(65, 45, 110, 0.045),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    border-radius: 18px;
+}
+
+/* Keep the glass clean and uncluttered */
+.summary-card:hover,
+.content-card:hover {
+    box-shadow: 0 10px 28px rgba(65, 45, 110, 0.075);
+}
+
+/* Active navigation */
+.nav-link.active {
+    background: rgba(120, 88, 220, 0.11);
+    color: #7048cf;
+    box-shadow: inset 3px 0 0 #7955d9;
+}
+
+/* Soft purple button */
+.primary-button,
+.topbar-action {
+    background: linear-gradient(135deg, #8465df, #704bd0);
+    box-shadow: 0 5px 14px rgba(112, 75, 208, 0.19);
+}
+
+/* Make keyboard focus visible */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+    outline: 2px solid #896be0;
+    outline-offset: 3px;
+}
+
+
+/* Refined dashboard header — no boxed background */
+.topbar {
+    position: relative;
+    top: auto;
+    background: transparent !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 8px 0 26px;
+    margin-bottom: 12px;
+}
+
+/* Precise typography */
+.topbar-title h1 {
+    margin: 0;
+    color: #262238;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.055em;
+    line-height: 1.2;
+}
+
+.topbar-subtitle {
+    margin: 7px 0 0;
+    color: #858196;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Keep the action aligned with the title */
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.topbar-action {
+    flex-shrink: 0;
+}
+
+
+/* ==========================================
+   SPENDWISE — PREMIUM DASHBOARD THEME
+   Purple · Pink · Blue · Refined Typography
+   ========================================== */
+
+/* 1. Color system */
+:root {
+    --sw-ink: #28243a;
+    --sw-muted: #858096;
+    --sw-purple: #7545dc;
+    --sw-pink: #d34fb5;
+    --sw-blue: #5279ef;
+    --sw-border: #ebe8f3;
+    --sw-surface: #ffffff;
+    --sw-shadow: 0 8px 28px rgba(44, 32, 78, 0.055);
+}
+
+/* 2. Background and typography */
+body {
+    font-family: "DM Sans", sans-serif;
+    color: var(--sw-ink);
+    background: #f6f4fb;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4,
+.brand,
+.summary-value,
+.card-title {
+    font-family: "Manrope", sans-serif;
+    color: var(--sw-ink);
+    letter-spacing: -0.045em;
+}
+
+p {
+    line-height: 1.7;
+}
+
+/* 3. Sidebar — clean and refined */
+.sidebar {
+    background: rgba(255, 255, 255, 0.88);
+    border-right: 1px solid rgba(226, 220, 240, 0.8);
+    box-shadow: 4px 0 24px rgba(44, 32, 78, 0.025);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+
+
+
+/* SpendWise — Vibrant Premium Logo */
+
+
+/* SpendWise logo — solid saturated purple */
+.brand-icon {
+    background: #7541D8 !important;
+    box-shadow: 0 4px 12px rgba(117, 65, 216, 0.22);
+}
+
+
+
+
+.nav-link {
+    border-radius: 10px;
+    transition: background 180ms ease,
+                color 180ms ease;
+}
+
+.nav-link:hover {
+    background: #f4efff;
+    color: #6840c6;
+}
+
+.nav-link.active {
+    color: #6840c6;
+    background: #eee7ff;
+    box-shadow: inset 3px 0 0 #7950db;
+}
+
+/* 4. Main page heading — no boxed header */
+.topbar {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 8px 0 24px;
+    margin-bottom: 12px;
+}
+
+.topbar-title h1 {
+    font-family: "Manrope", sans-serif;
+    font-size: clamp(1.7rem, 2.5vw, 2rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.06em;
+    color: #282239;
+    margin: 0;
+}
+
+.topbar-subtitle {
+    margin: 7px 0 0;
+    color: #858096;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* 5. Summary and content cards */
+.summary-card,
+.content-card {
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid var(--sw-border);
+    border-radius: 18px;
+    box-shadow: var(--sw-shadow);
+    transition: transform 180ms ease,
+                box-shadow 180ms ease,
+                border-color 180ms ease;
+}
+
+.summary-card:hover,
+.content-card:hover {
+    border-color: #ded4f3;
+    box-shadow: 0 12px 32px rgba(44, 32, 78, 0.075);
+}
+
+/* Summary numbers */
+.summary-value {
+    font-weight: 700;
+    letter-spacing: -0.055em;
+    font-variant-numeric: tabular-nums;
+}
+
+.summary-card .summary-label {
+    color: var(--sw-muted);
+    font-size: 0.83rem;
+    font-weight: 500;
+}
+
+
+/* SpendWise — Saturated Solid Purple Buttons */
+
+.primary-button,
+.topbar-action,
+#add-btn,
+#export-expenses {
+    background: #7541D8 !important;
+    color: #FFFFFF !important;
+    border: 1px solid #7541D8 !important;
+    border-radius: 11px;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 600;
+    box-shadow: 0 5px 14px rgba(117, 65, 216, 0.24);
+    transition: background 180ms ease,
+                box-shadow 180ms ease,
+                transform 180ms ease;
+}
+
+.primary-button:hover,
+.topbar-action:hover,
+#add-btn:hover,
+#export-expenses:hover {
+    background: #6332C2 !important;
+    border-color: #6332C2 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 7px 18px rgba(99, 50, 194, 0.30);
+    transform: translateY(-1px);
+}
+
+.primary-button:active,
+.topbar-action:active,
+#add-btn:active,
+#export-expenses:active {
+    background: #5226A8 !important;
+    transform: translateY(0);
+}
+
+
+/* Slightly deeper lavender — inspired by the login page */
+body {
+    background: #E3D6FF;
+    color: #30204F;
+    font-family: "DM Sans", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* A slightly deeper sidebar for subtle separation */
+.sidebar {
+    background: #D9C8FA;
+    border-right: 1px solid rgba(117, 65, 216, 0.16);
+}
+
+/* Keep cards light for readability */
+.summary-card,
+.content-card {
+    background: rgba(255, 255, 255, 0.90);
+    border: 1px solid rgba(117, 65, 216, 0.13);
+    box-shadow: 0 8px 24px rgba(48, 32, 79, 0.06);
+}
+
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-account {
+    margin-top: auto;
+    padding-top: 18px;
+    border-top: 1px solid rgba(117, 65, 216, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-avatar {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #7541D8;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.profile-details {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.profile-details strong {
+    color: #30204F;
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.profile-details span {
+    color: #817593;
+    font-size: 11px;
+}
+
+.logout-button {
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    color: #C24141;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    background: rgba(194, 65, 65, 0.10);
+}

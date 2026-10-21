@@ -1,0 +1,156 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f7f6fc">
+
+    <title>Create Account | SpendWise</title>
+
+    <link rel="stylesheet" href="{% static 'expenses/register.css' %}">
+</head>
+
+<body>
+    <main class="register-page">
+
+        <section class="register-brand">
+            <a href="/login/" class="brand">
+                <span class="brand-icon">₹</span>
+                <span class="brand-name">SpendWise</span>
+            </a>
+
+            <div class="brand-message">
+                <span class="brand-eyebrow">A BETTER WAY TO MANAGE MONEY</span>
+                <h1>Make every<br>rupee count.</h1>
+                <p>
+                    Build better financial habits, track your spending,
+                    and take control of your money.
+                </p>
+            </div>
+
+            <p class="brand-footer">
+                Your money. Your goals. Your future.
+            </p>
+        </section>
+
+        <section class="register-content">
+            <div class="register-card">
+
+                <div class="mobile-brand">
+                    <span class="brand-icon">₹</span>
+                    <span class="brand-name">SpendWise</span>
+                </div>
+
+                <div class="form-heading">
+                    <span class="form-eyebrow">GET STARTED</span>
+                    <h2>Create your account</h2>
+                    <p>Enter your details to get started with SpendWise.</p>
+                </div>
+
+                {% if messages %}
+                    <div class="form-messages" aria-live="polite">
+                        {% for message in messages %}
+                            <p class="message {{ message.tags }}">{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if error %}
+                    <p class="form-error" role="alert">{{ error }}</p>
+                {% endif %}
+
+                <form method="POST" class="register-form">
+                    {% csrf_token %}
+
+                    <div class="form-field">
+                        <label for="username">Username</label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Choose a username"
+                            autocomplete="username"
+                            required
+                            autofocus
+                        >
+                    </div>
+
+                    <div class="form-field">
+                        <label for="password">Password</label>
+                        <div class="password-wrapper">
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Create a strong password"
+                                autocomplete="new-password"
+                                required
+                            >
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                data-target="password"
+                                aria-label="Show password"
+                            >Show</button>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="confirm_password">Confirm password</label>
+                        <div class="password-wrapper">
+                            <input
+                                type="password"
+                                id="confirm_password"
+                                name="confirm_password"
+                                placeholder="Enter your password again"
+                                autocomplete="new-password"
+                                required
+                            >
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                data-target="confirm_password"
+                                aria-label="Show confirm password"
+                            >Show</button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="register-button">
+                        Create Account
+                        <span aria-hidden="true">→</span>
+                    </button>
+                </form>
+
+                <p class="login-prompt">
+                    Already have an account?
+                    <a href="/login/">Sign in</a>
+                </p>
+
+                <p class="security-note">
+                    Your financial journey starts here.
+                </p>
+
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        document.querySelectorAll(".password-toggle").forEach(button => {
+            button.addEventListener("click", () => {
+                const input = document.getElementById(button.dataset.target);
+                const isHidden = input.type === "password";
+
+                input.type = isHidden ? "text" : "password";
+                button.textContent = isHidden ? "Hide" : "Show";
+                button.setAttribute(
+                    "aria-label",
+                    isHidden ? "Hide password" : "Show password"
+                );
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,266 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
+    <title>SpendWise | Expense Dashboard</title>
+
+    <link rel="stylesheet" href="{% static 'expenses/style.css' %}">
+</head>
+
+<body>
+    <div class="app-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar glass-panel">
+            <a href="#dashboard" class="brand">
+                <div class="brand-icon">₹</div>
+                <div class="brand-copy">
+                    <h2>SpendWise</h2>
+                    <p>EXPENSE TRACKER</p>
+                </div>
+            </a>
+
+            <div class="sidebar-section">
+                <p class="sidebar-label">WORKSPACE</p>
+
+                <nav class="sidebar-nav" aria-label="Main navigation">
+                    <a href="#dashboard" class="nav-link active">
+                        <span class="nav-icon">⌂</span>
+                        <span>Dashboard</span>
+                    </a>
+
+                    <a href="#add-expense" class="nav-link">
+                        <span class="nav-icon">＋</span>
+                        <span>Add Expense</span>
+                    </a>
+
+                    <a href="#transactions" class="nav-link">
+                        <span class="nav-icon">▤</span>
+                        <span>Transactions</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-help-icon">✦</div>
+                <div>
+                    <strong>Spend with clarity</strong>
+                    <p>Small steps make a difference.</p>
+                </div>
+            </div>
+
+            <!-- USER PROFILE -->
+            <div class="sidebar-account">
+                <div class="profile-avatar">
+                    {{ request.user.username|first|upper }}
+                </div>
+
+                <div class="profile-details">
+                    <strong>{{ request.user.username }}</strong>
+                    <span>My Account</span>
+                </div>
+
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button" title="Logout" aria-label="Logout">
+                        ↪
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- TOP BAR -->
+            <header class="topbar glass-panel">
+                <div class="topbar-title">
+                    <h1>Dashboard</h1>
+                    <p class="topbar-subtitle">Here's an overview of your spending.</p>
+                </div>
+
+                <a href="#add-expense" class="topbar-action">
+                    <span aria-hidden="true">＋</span>
+                    New Expense
+                </a>
+            </header>
+
+            <!-- DASHBOARD -->
+            <section id="dashboard" class="dashboard-section">
+
+                <div class="welcome-section">
+                    <div>
+                        <p class="section-eyebrow">YOUR FINANCES AT A GLANCE</p>
+                        <h2>Manage your money smarter.</h2>
+                        <p class="section-description">
+                            Understand your spending and stay in control of your finances.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- SUMMARY CARDS -->
+                <div class="summary-grid">
+
+                    <article class="summary-card total-card">
+                        <div class="summary-card-top">
+                            <span class="summary-icon purple-icon">₹</span>
+                            <span class="summary-label">Total Expenses</span>
+                        </div>
+
+                        <p class="summary-value">
+                            ₹<span id="total-expenses">0</span>
+                        </p>
+                        <p class="summary-note">All recorded expenses</p>
+                    </article>
+
+                    <article class="summary-card count-card">
+                        <div class="summary-card-top">
+                            <span class="summary-icon blue-icon">▤</span>
+                            <span class="summary-label">Transactions</span>
+                        </div>
+
+                        <p class="summary-value">
+                            <span id="expense-count">0</span>
+                        </p>
+                        <p class="summary-note">Total recorded transactions</p>
+                    </article>
+
+                    <article class="summary-card monthly-card">
+                        <div class="summary-card-top">
+                            <span class="summary-icon green-icon">↗</span>
+                            <span class="summary-label">Monthly Spending</span>
+                        </div>
+
+                        <p class="summary-value">
+                            ₹<span id="monthly-total">0.00</span>
+                        </p>
+                        <p class="summary-note">Expenses this month</p>
+                    </article>
+
+                </div>
+            </section>
+
+            <!-- ADD EXPENSE -->
+            <section id="add-expense" class="content-card add-expense-section">
+
+                <div class="card-heading">
+                    <div>
+                        <p class="section-eyebrow">NEW TRANSACTION</p>
+                        <h2>Add an Expense</h2>
+                        <p class="card-description">
+                            Enter the details below to record your spending.
+                        </p>
+                    </div>
+
+                    <div class="heading-icon" aria-hidden="true">＋</div>
+                </div>
+
+                <div class="expense-form">
+
+                    <div class="form-field">
+                        <label for="title">Expense Name</label>
+                        <input type="text" id="title" placeholder="e.g. Grocery shopping" autocomplete="off">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="category">Category</label>
+                        <select id="category">
+                            <option value="">Select category</option>
+                            <option value="Food">Food</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Bills">Bills</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="amount">Amount (₹)</label>
+                        <input type="number" id="amount" placeholder="0.00" min="0.01" step="0.01">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="date">Expense Date</label>
+                        <input type="date" id="date">
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" id="today-button" class="secondary-button">
+                        Today
+                    </button>
+
+                    <button type="button" id="add-btn" class="primary-button">
+                        ＋ Add Expense
+                    </button>
+                </div>
+            </section>
+
+            <!-- TRANSACTIONS -->
+            <section id="transactions" class="content-card transactions-section">
+
+                <div class="card-heading transactions-heading">
+                    <div>
+                        <p class="section-eyebrow">SPENDING HISTORY</p>
+                        <h2>Recent Transactions</h2>
+                        <p class="card-description">
+                            Find, organize, and export your expenses.
+                        </p>
+                    </div>
+
+                    <button type="button" id="export-expenses" class="secondary-button">
+                        ↓ Export CSV
+                    </button>
+                </div>
+
+                <!-- SEARCH AND FILTERS -->
+                <div class="transaction-toolbar">
+
+                    <div class="search-field">
+                        <span class="search-icon" aria-hidden="true">⌕</span>
+                        <input type="search" id="search-expense" placeholder="Search expenses..."
+                            aria-label="Search expenses">
+                    </div>
+
+                    <select id="filter-category" aria-label="Filter by category">
+                        <option value="All">All Categories</option>
+                        <option value="Food">Food</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Bills">Bills</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Other">Other</option>
+                    </select>
+
+                    <select id="sort-expenses" aria-label="Sort expenses">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="highest">Highest Amount</option>
+                        <option value="lowest">Lowest Amount</option>
+                    </select>
+                </div>
+
+                <!-- JAVASCRIPT RENDERS EXPENSES HERE -->
+                <div id="expense-list" aria-live="polite"></div>
+
+            </section>
+
+            <!-- FOOTER -->
+            <footer class="page-footer">
+                <p>SpendWise <span aria-hidden="true">·</span> Your money, with more clarity.</p>
+            </footer>
+
+        </main>
+    </div>
+
+    <script src="{% static 'expenses/app.js' %}"></script>
+</body>
+
+</html>

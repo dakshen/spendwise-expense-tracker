@@ -1,0 +1,178 @@
+```html
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <link rel="stylesheet" href="{% static 'expenses/login.css' %}">
+</head>
+
+<body>
+    <div class="orb orb-one"></div>
+    <div class="orb orb-two"></div>
+    <div class="orb orb-three"></div>
+
+    <main class="page-layout">
+
+        <section class="welcome">
+            <p class="eyebrow">WELCOME TO SPENDWISE</p>
+
+            <h1>
+                Manage<br>
+                your money<br>
+                <span>smarter.</span>
+            </h1>
+
+            <p class="welcome-description">
+                Track your expenses, understand your spending habits,
+                and take control of your finances.
+            </p>
+
+            <div class="accent-line"></div>
+        </section>
+
+        <section class="login-card">
+
+            <div class="brand">
+                <div class="brand-icon">₹</div>
+
+                <div>
+                    <div class="brand-name">
+                        Spend<span>Wise</span>
+                    </div>
+                    <p class="brand-caption">EXPENSE TRACKER</p>
+                </div>
+            </div>
+
+            <div class="card-heading">
+                <h2>Welcome back!</h2>
+                <p>Sign in to your account to continue<br>
+                    tracking your expenses.</p>
+            </div>
+
+            {% if error %}
+            <div class="error-message" role="alert">
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="username">Username</label>
+                    </div>
+
+                    <div class="input-wrap">
+                        <span class="input-icon" aria-hidden="true">♙</span>
+                        <input type="text" id="username" name="username" placeholder="Enter your username"
+                            autocomplete="username" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="password">Password</label>
+                    </div>
+
+                    <div class="input-wrap">
+                        <span class="input-icon" aria-hidden="true">♙</span>
+                        <input type="password" id="password" name="password" class="password-input"
+                            placeholder="Enter your password" autocomplete="current-password" required>
+
+                        <button type="button" class="toggle-password" id="toggle-password" aria-controls="password"
+                            aria-pressed="false">Show</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-button">
+                    Login to SpendWise &nbsp; →
+                </button>
+            </form>
+
+            <div class="separator">OR</div>
+
+            <p class="register-link">
+                Don't have an account?
+                <a href="/register/">Create an account</a>
+            </p>
+        </section>
+
+        <aside class="floating-widgets" aria-label="Expense tracking preview">
+
+            <div class="widget">
+                <p class="widget-label">Total Expenses</p>
+
+                <div class="widget-top">
+                    <p class="widget-value">₹ 12,540</p>
+                    <span class="trend-icon" aria-hidden="true">↗</span>
+                </div>
+
+                <div class="bar-chart" aria-hidden="true">
+                    <span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+
+            <div class="widget">
+                <p class="widget-label">Monthly Spending</p>
+
+                <div class="widget-top">
+                    <p class="widget-value">₹ 3,120</p>
+                    <span class="trend-icon green" aria-hidden="true">↗</span>
+                </div>
+
+                <svg class="spending-line" viewBox="0 0 220 60" preserveAspectRatio="none" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="chart-fill" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.35" />
+                            <stop offset="100%" stop-color="#a78bfa" stop-opacity="0" />
+                        </linearGradient>
+                    </defs>
+
+                    <path d="M0,52 C25,48 30,23 55,30 S85,47 110,20 S145,38 166,22 S195,5 220,12 L220,60 L0,60 Z"
+                        fill="url(#chart-fill)" />
+
+                    <path d="M0,52 C25,48 30,23 55,30 S85,47 110,20 S145,38 166,22 S195,5 220,12" fill="none"
+                        stroke="#956fff" stroke-width="3" stroke-linecap="round" />
+                </svg>
+            </div>
+
+            <div class="mini-widget" aria-hidden="true">
+                <div class="donut"></div>
+                <div class="mini-lines">
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+        </aside>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const passwordInput = document.getElementById("password");
+            const toggleButton = document.getElementById("toggle-password");
+
+            if (passwordInput && toggleButton) {
+                toggleButton.addEventListener("click", function () {
+                    const showPassword = passwordInput.type === "password";
+
+                    passwordInput.type = showPassword ? "text" : "password";
+                    toggleButton.textContent = showPassword ? "Hide" : "Show";
+                    toggleButton.setAttribute("aria-pressed", String(showPassword));
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+

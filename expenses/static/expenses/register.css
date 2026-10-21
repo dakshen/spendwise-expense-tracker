@@ -1,0 +1,451 @@
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --purple: #7654d8;
+    --purple-dark: #6543c2;
+    --text: #29243a;
+    --muted: #858196;
+    --border: #e9e6f1;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: #f7f6fc;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+.register-page {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    min-height: 100vh;
+    padding: 22px;
+    gap: 22px;
+}
+
+/* Brand panel */
+
+.register-brand {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    min-height: 650px;
+    padding: 38px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 24px;
+    background: linear-gradient(145deg, #eeebfb 0%, #e5def8 55%, #f1edfb 100%);
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    width: fit-content;
+    color: inherit;
+    text-decoration: none;
+}
+
+.brand-icon {
+    display: grid;
+    place-items: center;
+    width: 43px;
+    height: 43px;
+    border-radius: 14px;
+    color: white;
+    font-size: 23px;
+    font-weight: 700;
+    background: linear-gradient(140deg, #8a6be5, #6846c7);
+    box-shadow: 0 5px 14px rgba(104, 70, 199, 0.18);
+}
+
+.brand-name {
+    font-family: 'Manrope', sans-serif;
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: -0.8px;
+}
+
+.brand-message {
+    position: relative;
+    z-index: 1;
+    max-width: 440px;
+    margin: 65px 0;
+}
+
+.brand-eyebrow,
+.form-eyebrow {
+    color: var(--purple);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.7px;
+}
+
+.brand-message h1 {
+    margin: 22px 0 17px;
+    font-family: 'Manrope', sans-serif;
+    font-size: clamp(40px, 4.2vw, 61px);
+    line-height: 1.12;
+    letter-spacing: -2.8px;
+}
+
+.brand-message p {
+    max-width: 350px;
+    color: #6f6983;
+    font-size: 15px;
+    line-height: 1.9;
+}
+
+.brand-footer {
+    margin: 0;
+    color: #777087;
+    font-size: 12px;
+}
+
+/* Registration area */
+
+.register-content {
+    display: grid;
+    place-items: center;
+    padding: 28px;
+}
+
+.register-card {
+    width: 100%;
+    max-width: 430px;
+    padding: 38px;
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.76);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    box-shadow:
+        0 16px 50px rgba(54, 39, 94, 0.055),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.mobile-brand {
+    display: none;
+}
+
+.form-heading {
+    margin-bottom: 28px;
+}
+
+.form-heading h2 {
+    margin: 12px 0 8px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 29px;
+    line-height: 1.25;
+    letter-spacing: -1.1px;
+}
+
+.form-heading p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* Fields */
+
+.register-form {
+    display: grid;
+    gap: 19px;
+}
+
+.form-field {
+    display: grid;
+    gap: 8px;
+}
+
+.form-field label {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.form-field input {
+    width: 100%;
+    min-width: 0;
+    height: 47px;
+    padding: 0 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    outline: none;
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.88);
+    font-size: 13px;
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.form-field input::placeholder {
+    color: #aaa6b8;
+}
+
+.form-field input:focus {
+    border-color: #a28be7;
+    box-shadow: 0 0 0 3px rgba(118, 84, 216, 0.09);
+}
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    padding-right: 58px;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    padding: 5px 0;
+    transform: translateY(-50%);
+    border: 0;
+    color: var(--purple);
+    background: transparent;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* Primary action */
+
+.register-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 48px;
+    margin-top: 5px;
+    border: 0;
+    border-radius: 10px;
+    color: white;
+    background: linear-gradient(115deg, #8262df, #6c49ca);
+    box-shadow: 0 5px 14px rgba(108, 73, 202, 0.17);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.register-button span {
+    font-size: 18px;
+}
+
+.register-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(108, 73, 202, 0.23);
+}
+
+.login-prompt {
+    margin: 25px 0 0;
+    color: var(--muted);
+    text-align: center;
+    font-size: 12px;
+}
+
+.login-prompt a {
+    margin-left: 4px;
+    color: var(--purple);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.login-prompt a:hover {
+    text-decoration: underline;
+}
+
+.security-note {
+    margin: 27px 0 0;
+    padding-top: 18px;
+    border-top: 1px solid #efedf5;
+    color: #a09bad;
+    text-align: center;
+    font-size: 10px;
+}
+
+/* Server feedback */
+
+.form-error,
+.message {
+    padding: 11px 13px;
+    border: 1px solid #f1d4d7;
+    border-radius: 9px;
+    color: #a33e4b;
+    background: #fff6f6;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.form-messages {
+    margin-bottom: 18px;
+}
+
+.form-messages p {
+    margin: 0 0 8px;
+}
+
+.message.success {
+    border-color: #cdebdc;
+    color: #24774f;
+    background: #f1fbf5;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+    .register-page {
+        grid-template-columns: 0.75fr 1.25fr;
+        padding: 14px;
+        gap: 14px;
+    }
+
+    .register-brand {
+        padding: 28px;
+    }
+
+    .register-content {
+        padding: 18px;
+    }
+
+    .register-card {
+        padding: 30px;
+    }
+}
+
+@media (max-width: 650px) {
+    .register-page {
+        display: flex;
+        min-height: 100vh;
+        align-items: center;
+        justify-content: center;
+        padding: 18px;
+    }
+
+    .register-brand {
+        display: none;
+    }
+
+    .register-content {
+        width: 100%;
+        padding: 0;
+    }
+
+    .register-card {
+        max-width: 440px;
+        padding: 27px 23px;
+        border-radius: 18px;
+    }
+
+    .mobile-brand {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        margin-bottom: 32px;
+    }
+
+    .form-heading h2 {
+        font-size: 26px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+    }
+}
+
+
+/* ===== SpendWise Register: Richer Premium Colors ===== */
+
+/* More visible lavender background, without messy blobs */
+body {
+    background: linear-gradient(
+        135deg,
+        #eee8ff 0%,
+        #f7f3ff 48%,
+        #e9e5ff 100%
+    );
+}
+
+/* Richer brand panel */
+.register-brand {
+    background: linear-gradient(
+        145deg,
+        #dcd0ff 0%,
+        #c8b7fa 48%,
+        #e6dcff 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.75);
+}
+
+/* Stronger brand heading contrast */
+.brand-eyebrow,
+.form-eyebrow {
+    color: #6842c2;
+}
+
+.brand-message h1 {
+    color: #30204f;
+}
+
+.brand-message p {
+    color: #574873;
+}
+
+.brand-footer {
+    color: #655580;
+}
+
+/* Richer purple logo */
+.brand-icon {
+    background: linear-gradient(135deg, #9168f5, #6238c8);
+    box-shadow: 0 7px 18px rgba(98, 56, 200, 0.25);
+}
+
+/* Make the frosted registration card more visible */
+.register-card {
+    background: rgba(255, 255, 255, 0.68);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    box-shadow:
+        0 20px 55px rgba(77, 48, 145, 0.10),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+/* Stronger primary action */
+.register-button {
+    background: linear-gradient(115deg, #9068f0, #693bd0);
+    box-shadow: 0 7px 18px rgba(105, 59, 208, 0.25);
+}
+
+.register-button:hover {
+    box-shadow: 0 10px 24px rgba(105, 59, 208, 0.32);
+}
+
+/* More defined input focus */
+.form-field input:focus {
+    border-color: #8b67e7;
+    box-shadow: 0 0 0 3px rgba(118, 75, 220, 0.13);
+}
+
+/* More distinct login link */
+.login-prompt a,
+.password-toggle {
+    color: #7042d1;
+}
