@@ -6,13 +6,15 @@ from django.core.exceptions import ValidationError
 import json
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-
+from django.contrib.auth.decorators import login_required
 from .models import Expense
 
 
 # Displays the Expense Tracker webpage
 def home(request):
-    return render(request, 'expenses/index.html')
+    if request.user.is_authenticated:
+        return render(request, 'expenses/index.html')
+    return redirect('login')
 
 
 # Handles fetching all expenses and creating a new expense
