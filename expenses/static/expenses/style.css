@@ -1409,3 +1409,30 @@ body {
 .logout-button:hover {
     background: rgba(194, 65, 65, 0.10);
 }
+
+
+/* Fix mobile expense form overflow */
+.expense-form,
+.form-field {
+    min-width: 0;
+}
+
+.form-field input,
+.form-field select {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+@media screen and (max-width: 768px) {
+    .expense-form input[type="date"] {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+}
