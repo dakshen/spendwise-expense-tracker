@@ -1,0 +1,117 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpendWise | Analytics</title>
+    <link rel="stylesheet" href="{% static 'expenses/style.css' %}">
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar glass-panel">
+            <a href="{% url 'home' %}" class="brand">
+                <div class="brand-icon">₹</div>
+                <div class="brand-copy">
+                    <h2>SpendWise</h2>
+                    <p>EXPENSE TRACKER</p>
+                </div>
+            </a>
+
+            <div class="sidebar-section">
+                <p class="sidebar-label">WORKSPACE</p>
+                <nav class="sidebar-nav" aria-label="Main navigation">
+                    <a href="{% url 'home' %}" class="nav-link">
+                        <span class="nav-icon">⌂</span>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="{% url 'home' %}#add-expense" class="nav-link">
+                        <span class="nav-icon">＋</span>
+                        <span>Add Expense</span>
+                    </a>
+                    <a href="{% url 'home' %}#transactions" class="nav-link">
+                        <span class="nav-icon">▤</span>
+                        <span>Transactions</span>
+                    </a>
+                    <a href="{% url 'analytics' %}" class="nav-link active">
+                        <span class="nav-icon">◔</span>
+                        <span>Analytics</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-help-icon">✦</div>
+                <div>
+                    <strong>Spend with clarity</strong>
+                    <p>Small steps make a difference.</p>
+                </div>
+            </div>
+
+            <div class="sidebar-account">
+                <div class="profile-avatar">
+                    {{ request.user.username|first|upper }}
+                </div>
+                <div class="profile-details">
+                    <strong>{{ request.user.username }}</strong>
+                    <span>My Account</span>
+                </div>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button"
+                        title="Logout" aria-label="Logout">↪</button>
+                </form>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar glass-panel">
+                <div class="topbar-title">
+                    <h1>Analytics</h1>
+                    <p class="topbar-subtitle">
+                        Understand your spending patterns.
+                    </p>
+                </div>
+            </header>
+
+            <section class="dashboard-section">
+                <div class="welcome-section">
+                    <div>
+                        <p class="section-eyebrow">YOUR FINANCIAL INSIGHTS</p>
+                        <h2>Where does your money go?</h2>
+                        <p class="section-description">
+                            Explore your expenses by category and month.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="charts-container">
+                    <div class="chart-card">
+                        <h3>Spending by Category</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h3>Monthly Spending</h3>
+                        <div class="chart-wrapper monthly-chart">
+                            <canvas id="monthlyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <p id="analytics-message" role="status"></p>
+            </section>
+
+            <footer class="page-footer">
+                <p>SpendWise · Your money, with more clarity.</p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'expenses/analytics.js' %}"></script>
+</body>
+</html>

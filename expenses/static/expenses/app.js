@@ -19,26 +19,51 @@ let editingExpenseId = null;
 let editingExpenseElement = null;
 
 // Creates an expense card and adds it to the page
+
 function createExpenseElement(data) {
     const expense = document.createElement('div');
+
+    expense.className = 'expense-item';
     expense.dataset.amount = data.amount;
     expense.dataset.date = data.date;
     expense.dataset.id = data.id;
     expense.dataset.category = data.category || 'Other';
     expense.dataset.title = data.title;
 
+    // Expense name
     const expenseText = document.createElement('span');
-    expenseText.textContent =
-        data.title + ' - ' +
-        (data.category || 'Other') + ' - ₹' +
-        data.amount + ' - ' +
-        data.date;
+    expenseText.className = 'expense-name';
+    expenseText.textContent = data.title;
 
+    // Category badge
+    const categoryBadge = document.createElement('span');
+    categoryBadge.className = 'expense-category';
+    categoryBadge.textContent = data.category || 'Other';
+    categoryBadge.dataset.category = data.category || 'Other';
+
+    // Amount and date
+    const expenseDetails = document.createElement('div');
+    expenseDetails.className = 'expense-details';
+
+    const expenseAmount = document.createElement('strong');
+    expenseAmount.className = 'expense-amount';
+    expenseAmount.textContent =
+        '₹' + Number(data.amount).toLocaleString('en-IN', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+    const expenseDate = document.createElement('span');
+    expenseDate.className = 'expense-date';
+    expenseDate.textContent = data.date;
+
+    expenseDetails.append(expenseAmount, expenseDate);
+
+    // Edit button
     const editButton = document.createElement('button');
     editButton.textContent = 'Edit';
     editButton.className = 'edit-btn';
 
-    // Loads an existing expense into the form for editing
     editButton.addEventListener('click', function () {
         editingExpenseId = data.id;
         editingExpenseElement = expenseText;
@@ -48,22 +73,21 @@ function createExpenseElement(data) {
         dateInput.value = data.date;
         categoryInput.value = data.category || 'Other';
 
-
         addButton.textContent = 'Save Changes';
-        document.getElementById("add-expense").scrollIntoView({
-            behavior: "smooth",
-            block: "start"
+
+        document.getElementById('add-expense').scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
         });
 
-        // Focus on the expense name field
         titleInput.focus();
     });
 
+    // Delete button
     const deleteButton = document.createElement('button');
     deleteButton.textContent = 'Delete';
     deleteButton.className = 'delete-btn';
 
-    // Deletes an expense from the database and removes its card
     deleteButton.addEventListener('click', async function () {
         try {
             const response = await fetch('/api/' + data.id + '/', {
@@ -90,9 +114,15 @@ function createExpenseElement(data) {
         }
     });
 
-    expense.appendChild(expenseText);
-    expense.appendChild(editButton);
-    expense.appendChild(deleteButton);
+    // Assemble transaction row
+    expense.append(
+        expenseText,
+        categoryBadge,
+        expenseDetails,
+        editButton,
+        deleteButton
+    );
+
     expenseList.appendChild(expense);
 }
 
@@ -361,7 +391,22 @@ todayButton.addEventListener('click', function () {
     const day = String(today.getDate()).padStart(2, '0');
     dateInput.value = `${year}-${month}-${day}`;
 })
+
+
+
+/* Sidebar active navigation */
+const sidebarLinks = document.querySelectorAll('.sidebar-nav .nav-link');
+
+sidebarLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        sidebarLinks.forEach(item => item.classList.remove('active'));
+        link.classList.add('active');
+    });
+});
+
+
 // Loads existing expenses when the page opens
 loadExpenses();
 sortExpenses.addEventListener('change', sortExpenseList);
 exportButton.addEventListener('click', exportExpensesToCSV);
+

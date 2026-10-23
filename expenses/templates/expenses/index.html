@@ -29,7 +29,7 @@
                 <p class="sidebar-label">WORKSPACE</p>
 
                 <nav class="sidebar-nav" aria-label="Main navigation">
-                    <a href="#dashboard" class="nav-link active">
+                    <a href="#dashboard" class="nav-link">
                         <span class="nav-icon">⌂</span>
                         <span>Dashboard</span>
                     </a>
@@ -43,6 +43,12 @@
                         <span class="nav-icon">▤</span>
                         <span>Transactions</span>
                     </a>
+
+                    <a href="{% url 'analytics' %}" class="nav-link">
+                        <span class="nav-icon">◷</span>
+                        <span>Analytics</span>
+                    </a>
+
                 </nav>
             </div>
 
@@ -259,7 +265,7 @@
 
         </main>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{% static 'expenses/app.js' %}"></script>
 </body>
 

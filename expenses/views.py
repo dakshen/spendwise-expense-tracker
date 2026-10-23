@@ -16,6 +16,9 @@ def home(request):
         return render(request, 'expenses/index.html')
     return redirect('login')
 
+@login_required
+def analytics(request):
+    return render(request, 'expenses/analytics.html')
 
 # Handles fetching all expenses and creating a new expense
 

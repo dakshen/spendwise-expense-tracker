@@ -8,10 +8,7 @@ urlpatterns = [
     path('api/<int:expense_id>/',views.expense_detail_api,name='expense_detail_api'),
     path('login/', views.login_view, name='login'),
     path('register/', views.register_view, name='register'),
-    path(
-    'logout/',
-    auth_views.LogoutView.as_view(next_page='login'),
-    name='logout',
-),
+    path('analytics/', views.analytics, name='analytics'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
 
 ]
