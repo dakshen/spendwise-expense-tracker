@@ -197,24 +197,53 @@ addButton.addEventListener('click', async function () {
             return;
         }
 
-        if (isEditing) {
-            // Updates the existing expense card
-            editingExpenseElement.textContent =
-                data.title + ' - ' +
-                (data.category || 'Other') + ' - ₹' +
-                data.amount + ' - ' +
-                data.date;
 
-            const expense = editingExpenseElement.parentElement;
-            expense.dataset.amount = data.amount;
-            expense.dataset.date = data.date;
-            expense.dataset.id = data.id;
-            expense.dataset.category = data.category || 'Other';
-            expense.dataset.title = data.title.toLowerCase();
+        if (isEditing) {
+            // Get the complete transaction row
+            const expense = editingExpenseElement.closest('.expense-item');
+
+            if (expense) {
+                // Update stored values
+                expense.dataset.amount = data.amount;
+                expense.dataset.date = data.date;
+                expense.dataset.id = data.id;
+                expense.dataset.category = data.category || 'Other';
+                expense.dataset.title = data.title;
+
+                // Update transaction title
+                const expenseName = expense.querySelector('.expense-name');
+                if (expenseName) {
+                    expenseName.textContent = data.title;
+                }
+
+                // Update category badge
+                const categoryBadge = expense.querySelector('.expense-category');
+                if (categoryBadge) {
+                    categoryBadge.textContent = data.category || 'Other';
+                    categoryBadge.dataset.category = data.category || 'Other';
+                }
+
+                // Update amount displayed on the right
+                const expenseAmount = expense.querySelector('.expense-amount');
+                if (expenseAmount) {
+                    expenseAmount.textContent =
+                        '₹' + Number(data.amount).toLocaleString('en-IN', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        });
+                }
+
+                // Update date displayed on the right
+                const expenseDate = expense.querySelector('.expense-date');
+                if (expenseDate) {
+                    expenseDate.textContent = data.date;
+                }
+            }
         } else {
-            // Adds the new expense card
+            // Add a new expense card
             createExpenseElement(data);
         }
+
 
         resetForm();
         updateTotal();
