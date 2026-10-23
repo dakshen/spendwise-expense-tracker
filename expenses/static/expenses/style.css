@@ -1436,3 +1436,28 @@ body {
         appearance: none;
     }
 }
+
+
+
+/* Darker Edit and Delete buttons */
+#expense-list .edit-btn {
+    background-color: #ded0ff;
+    color: #4b20a8;
+    border: 1px solid #c6b0ff;
+}
+
+#expense-list .edit-btn:hover {
+    background-color: #cbb5ff;
+}
+
+#expense-list .delete-btn {
+    background-color: #ffdada;
+    color: #b71c1c;
+    border: 1px solid #ffbaba;
+}
+
+#expense-list .delete-btn:hover {
+    background-color: #ffc2c2;
+}
+
+

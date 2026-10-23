@@ -36,6 +36,7 @@ function createExpenseElement(data) {
 
     const editButton = document.createElement('button');
     editButton.textContent = 'Edit';
+    editButton.className = 'edit-btn';
 
     // Loads an existing expense into the form for editing
     editButton.addEventListener('click', function () {
@@ -60,6 +61,7 @@ function createExpenseElement(data) {
 
     const deleteButton = document.createElement('button');
     deleteButton.textContent = 'Delete';
+    deleteButton.className = 'delete-btn';
 
     // Deletes an expense from the database and removes its card
     deleteButton.addEventListener('click', async function () {
