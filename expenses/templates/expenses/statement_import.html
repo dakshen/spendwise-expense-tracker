@@ -1,0 +1,320 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Import Statement | SpendWise</title>
+
+    <!-- Apply saved theme before first paint (prevents flash between pages) -->
+    <script>
+        try {
+            if (localStorage.getItem("spendwise-theme") === "dark") {
+                document.documentElement.style.backgroundColor = "#000000";
+            }
+        } catch (e) {}
+    </script>
+
+    <!-- Tailwind CSS: styles the sidebar and navigation -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Phosphor Icons: displays the sidebar and header icons -->
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'expenses/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'expenses/statement_import.css' %}">
+
+    <style>
+        /* Import card */
+        .import-card {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 28px;
+            box-sizing: border-box;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            box-shadow: 0 8px 28px rgba(15, 23, 42, .04);
+        }
+
+        .upload-area {
+            border: 2px dashed #c7d2fe;
+            background: #f8faff;
+            border-radius: 14px;
+            padding: 36px 20px;
+            text-align: center;
+            margin: 22px 0;
+        }
+
+        .primary-btn {
+            border: 0;
+            border-radius: 10px;
+            padding: 12px 18px;
+            background: #4f46e5;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+
+        .primary-btn:hover {
+            background: #4338ca;
+        }
+
+        .messages {
+            margin-bottom: 18px;
+        }
+
+        .message {
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+        .help {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        input[type="file"] {
+            max-width: 100%;
+            margin: 16px 0;
+        }
+
+        input[type="file"]::file-selector-button {
+            margin-right: 12px;
+            padding: 8px 14px;
+            border: 1px solid #c7d2fe;
+            border-radius: 8px;
+            background: #eef2ff;
+            color: #4f46e5;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .password-field {
+            margin: 0 0 18px;
+        }
+
+        .password-field label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .password-field label span {
+            font-weight: 400;
+        }
+
+        .password-field input {
+            width: 100%;
+            max-width: 360px;
+            box-sizing: border-box;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: #fff;
+            color: #1e293b;
+            font: inherit;
+        }
+
+        .export-help {
+            margin: 0 0 20px;
+            font-size: 14px;
+        }
+
+        .export-help summary {
+            cursor: pointer;
+            color: #4f46e5;
+            font-weight: 600;
+        }
+
+        .export-help ul {
+            margin: 10px 0 0 18px;
+            padding: 0;
+            list-style: disc;
+        }
+
+        .import-card form {
+            margin-top: 24px;
+        }
+
+        /* Responsive */
+        @media (max-width: 767px) {
+            .import-card {
+                padding: 20px;
+            }
+        }
+
+        /* ===== Dark mode (true black) ===== */
+        body.dark-mode .import-card {
+            background: #0f0f0f !important;
+            border-color: #262626 !important;
+            box-shadow: none;
+        }
+
+        body.dark-mode .upload-area {
+            background: #000000;
+            border-color: rgba(165, 160, 255, 0.35);
+        }
+
+        body.dark-mode .help {
+            color: #a3a3a3;
+        }
+
+        body.dark-mode .message {
+            background: rgba(239, 68, 68, 0.12);
+            color: #fca5a5;
+        }
+
+        body.dark-mode input[type="file"]::file-selector-button {
+            background: rgba(165, 160, 255, 0.14);
+            border-color: #333333;
+            color: #c7d2fe;
+        }
+
+        body.dark-mode .password-field input {
+            background: #000000;
+            border-color: #333333;
+            color: #e5e5e5;
+        }
+
+        body.dark-mode .export-help summary {
+            color: #c7d2fe;
+        }
+    </style>
+
+</head>
+
+
+<body class="bg-slate-50 text-slate-800 h-screen flex overflow-hidden">
+    <script>
+        try {
+            if (localStorage.getItem("spendwise-theme") === "dark") {
+                document.body.classList.add("dark-mode");
+            }
+        } catch (e) {}
+    </script>
+
+    {% include 'expenses/sidebar.html' %}
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden dashboard-main">
+
+        <!-- Header (same structure as the Dashboard header) -->
+        <header
+            class="dashboard-header bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-8 flex-shrink-0">
+            <div class="flex items-center gap-4">
+                <button id="sidebar-toggle" type="button" class="md:hidden p-2 text-slate-700 rounded-lg"
+                    aria-label="Open navigation menu" aria-expanded="false">
+                    <span>☰</span>
+                </button>
+
+                <h1 class="header-title flex items-center gap-3 text-xl font-semibold text-slate-800"><i class="ph ph-upload-simple header-title-icon inline-flex items-center justify-center shrink-0 w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 text-xl" aria-hidden="true"></i>Auto Expense Import </h1>
+            </div>
+
+            <div class="header-actions flex items-center gap-3">
+                <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode"
+                    title="Switch to dark mode">
+                    <i class="ph ph-moon" id="theme-icon"></i>
+                </button>
+
+                <button type="button"
+                    class="notification-button relative p-2 text-slate-400 hover:text-slate-600 transition-colors"
+                    aria-label="Notifications">
+                    <i class="ph ph-bell text-xl"></i>
+                    <span
+                        class="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full border border-white"></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Scrollable page content -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8">
+
+            <div class="import-card">
+
+                <p class="help">SPENDWISE / TRANSACTIONS</p>
+
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">
+                    Import a statement
+                </h2>
+
+                <p class="help">
+                    Upload your PhonePe or Google Pay export and review
+                    the extracted transactions before adding them.
+                </p>
+
+                {% if messages %}
+                <div class="messages" aria-live="polite">
+                    {% for message in messages %}
+                    <div class="message">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <form method="post" enctype="multipart/form-data" action="{% url 'statement_import' %}">
+
+                    {% csrf_token %}
+
+                    <div class="upload-area">
+                        <h3>Choose your export</h3>
+
+                        <p class="help">
+                            PhonePe or Google Pay statement (PDF) · Google Pay export (CSV or HTML) · Maximum 10 MB
+                        </p>
+
+                        <input type="file" name="statement" accept=".pdf,.csv,.html,.htm" required>
+                    </div>
+
+                    <div class="password-field">
+                        <label class="help" for="pdf_password">
+                            PDF password <span>(only if your PDF is protected)</span>
+                        </label>
+                        <input type="password" id="pdf_password" name="pdf_password"
+                            autocomplete="new-password" placeholder="Leave empty if not needed">
+                    </div>
+
+                    <details class="export-help">
+                        <summary>Where do I get these files?</summary>
+                        <ul class="help">
+                            <li><strong>PhonePe:</strong> open History, tap Download Statement, then choose the
+                                months or financial year.</li>
+                            <li><strong>Google Pay statement:</strong> open your transaction history, tap the
+                                More icon, choose Get Statement, pick the period and save the PDF.</li>
+                            <li><strong>Google Pay Takeout:</strong> export your Google Pay data from Google
+                                Takeout and unzip it. Upload the transactions CSV or the My Activity HTML file from
+                                inside it, not the .zip.</li>
+                        </ul>
+                    </details>
+
+                    <button class="primary-btn" type="submit">
+                        Extract transactions
+                    </button>
+
+                </form>
+
+                <p class="help">
+                    Your file is processed for extraction. A PDF password, if
+                    you enter one, is used only to open the file and is not
+                    stored. Review the results before importing. Do not upload
+                    a statement on a shared or public computer.
+                </p>
+
+            </div>
+
+            <div class="h-6"></div>
+        </div>
+    </main>
+
+    <script src="{% static 'expenses/sidebar.js' %}"></script>
+    <script src="{% static 'expenses/darkmode.js' %}"></script>
+</body>
+
+
+</html>

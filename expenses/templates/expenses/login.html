@@ -1,0 +1,364 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#dfe1fd">
+    <title>Login | SpendWise</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'expenses/spendwise-favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'expenses/spendwise-favicon.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'expenses/spendwise-apple-touch-icon.png' %}">
+    <script>
+        /* Apply the saved theme before first paint (same key as the rest of SpendWise) */
+        (function () {
+            var theme = "light";
+            try {
+                var saved = localStorage.getItem("spendwise-theme");
+                if (saved === "light" || saved === "dark") theme = saved;
+                else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) theme = "dark";
+            } catch (e) {}
+            document.documentElement.setAttribute("data-theme", theme);
+        })();
+    </script>
+    <link rel="stylesheet" href="{% static 'expenses/login.css' %}">
+</head>
+
+<body>
+    <!-- Live background (reacts to the pointer) -->
+    <canvas id="bg" aria-hidden="true"></canvas>
+
+    <button type="button" class="theme-switch" id="theme-switch" aria-label="Switch to dark mode" title="Switch theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" />
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />
+        </svg>
+    </button>
+
+    <main class="shell">
+
+        <!-- Form -->
+        <section class="form-side" aria-labelledby="login-title">
+            <div class="form-inner">
+                <div class="brand">
+                    <div class="brand-icon">₹</div>
+                    <div>
+                        <div class="brand-name">Spend<span>Wise</span></div>
+                        <p class="brand-caption">EXPENSE TRACKER</p>
+                    </div>
+                </div>
+
+                <h2 id="login-title">Welcome back</h2>
+                <p class="lead">Sign in to continue tracking your expenses.</p>
+
+                {% if error %}
+                <div class="error-message" role="alert">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9" />
+                        <path d="M12 8v5M12 16.5v.01" />
+                    </svg>
+                    <span>{{ error }}</span>
+                </div>
+                {% endif %}
+
+                <form method="POST" id="login-form">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <div class="input-wrap">
+                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="12" cy="8" r="4" />
+                                <path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6" />
+                            </svg>
+                            <input type="text" id="username" name="username" placeholder="Enter your username"
+                                autocomplete="username" autocapitalize="none" spellcheck="false" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-wrap">
+                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="4.5" y="10.5" width="15" height="10" rx="2.5" />
+                                <path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" />
+                            </svg>
+                            <input type="password" id="password" name="password" class="password-input"
+                                placeholder="Enter your password" autocomplete="current-password" required>
+                            <button type="button" class="toggle-password" id="toggle-password"
+                                aria-controls="password" aria-pressed="false">Show</button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="login-button" id="login-button">
+                        <span class="btn-label">Login</span>
+                        <svg class="btn-arrow" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                            stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
+                            aria-hidden="true">
+                            <path d="M5 12h14M13 6l6 6-6 6" />
+                        </svg>
+                        <span class="btn-spinner" aria-hidden="true"></span>
+                    </button>
+                </form>
+
+                <p class="register-link">
+                    Don't have an account?
+                    <a href="/register/">Create an account</a>
+                </p>
+            </div>
+        </section>
+
+        <!-- Brand panel -->
+        <aside class="visual-side" id="visual-side" aria-hidden="true">
+            <span class="step step-a"></span>
+            <span class="step step-b"></span>
+
+            <div class="stage">
+                <div class="float chip chip-one">₹</div>
+
+                <div class="float panel-card card-main">
+                    <small>Total Expenses</small>
+                    <strong data-count="12540" data-prefix="₹ ">₹ 12,540</strong>
+                    <svg viewBox="0 0 220 60" preserveAspectRatio="none">
+                        <defs>
+                            <linearGradient id="chart-fill" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#5236ee" stop-opacity="0.28" />
+                                <stop offset="100%" stop-color="#5236ee" stop-opacity="0" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M0,52 C25,48 30,23 55,30 S85,47 110,20 S145,38 166,22 S195,5 220,12 L220,60 L0,60 Z" fill="url(#chart-fill)" />
+                        <path class="line-draw" d="M0,52 C25,48 30,23 55,30 S85,47 110,20 S145,38 166,22 S195,5 220,12"
+                            fill="none" stroke="#5236ee" stroke-width="3" stroke-linecap="round" pathLength="1" />
+                    </svg>
+                </div>
+
+                <div class="float panel-card card-small">
+                    <small>Saved this month</small>
+                    <strong data-count="3120" data-prefix="₹ ">₹ 3,120</strong>
+                    <span class="up">↗ <span data-count="18" data-suffix="%">18%</span></span>
+                </div>
+
+                <div class="float chip chip-two">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6z" />
+                        <path d="M9 12l2 2 4-4" />
+                    </svg>
+                </div>
+            </div>
+
+            <div class="tagline">
+                <h3>Know where every rupee goes.</h3>
+                <p>Track expenses, spot trends and stay in control, all in one place.</p>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var root = document.documentElement;
+            var themeButton = document.getElementById("theme-switch");
+            var passwordInput = document.getElementById("password");
+            var toggleButton = document.getElementById("toggle-password");
+            var form = document.getElementById("login-form");
+            var submit = document.getElementById("login-button");
+
+            function syncThemeButton() {
+                var dark = root.getAttribute("data-theme") === "dark";
+                var label = dark ? "Switch to light mode" : "Switch to dark mode";
+                themeButton.setAttribute("aria-label", label);
+                themeButton.setAttribute("title", label);
+                var meta = document.querySelector('meta[name="theme-color"]');
+                if (meta) meta.setAttribute("content", dark ? "#0a0822" : "#dfe1fd");
+            }
+
+            if (themeButton) {
+                syncThemeButton();
+                themeButton.addEventListener("click", function () {
+                    var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+                    root.classList.add("theme-shift");
+                    root.setAttribute("data-theme", next);
+                    try { localStorage.setItem("spendwise-theme", next); } catch (e) {}
+                    syncThemeButton();
+                    window.dispatchEvent(new Event("themechange"));
+                    setTimeout(function () { root.classList.remove("theme-shift"); }, 450);
+                });
+            }
+
+            if (passwordInput && toggleButton) {
+                toggleButton.addEventListener("click", function () {
+                    var show = passwordInput.type === "password";
+                    passwordInput.type = show ? "text" : "password";
+                    toggleButton.textContent = show ? "Hide" : "Show";
+                    toggleButton.setAttribute("aria-pressed", String(show));
+                });
+            }
+
+            if (form && submit) {
+                form.addEventListener("submit", function () {
+                    if (!form.checkValidity || form.checkValidity()) {
+                        submit.classList.add("is-loading");
+                        submit.setAttribute("aria-busy", "true");
+                    }
+                });
+            }
+
+            window.addEventListener("pageshow", function () {
+                if (submit) {
+                    submit.classList.remove("is-loading");
+                    submit.removeAttribute("aria-busy");
+                }
+            });
+        });
+    </script>
+
+    <script>
+        /* Live background: a dot field that swells, repels and links to the cursor.
+           Also drives --mx/--my (parallax for the brand panel). Idle and touch
+           devices follow a slow drifting path so it still feels alive. */
+        (function () {
+            var canvas = document.getElementById("bg");
+            var ctx = canvas.getContext("2d");
+            var root = document.documentElement;
+            var panel = document.getElementById("visual-side");
+            var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            var fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+            var GAP = 34, RADIUS = 190;
+            var w = 0, h = 0, dpr = 1, dots = [], rgb = "82,52,238";
+            var target = { x: innerWidth / 2, y: innerHeight / 3 };
+            var pos = { x: target.x, y: target.y };
+            var lastMove = 0;
+
+            function readColor() {
+                var v = getComputedStyle(root).getPropertyValue("--dot").trim();
+                if (v) rgb = v;
+            }
+
+            function resize() {
+                dpr = Math.min(window.devicePixelRatio || 1, 2);
+                w = innerWidth; h = innerHeight;
+                canvas.width = w * dpr; canvas.height = h * dpr;
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                dots = [];
+                var cols = Math.ceil(w / GAP) + 1, rows = Math.ceil(h / GAP) + 1;
+                var ox = (w - (cols - 1) * GAP) / 2, oy = (h - (rows - 1) * GAP) / 2;
+                for (var r = 0; r < rows; r++)
+                    for (var c = 0; c < cols; c++)
+                        dots.push({ x: ox + c * GAP, y: oy + r * GAP });
+                readColor();
+                if (reduce) draw(0);
+            }
+
+            function draw(t) {
+                ctx.clearRect(0, 0, w, h);
+
+                var g = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, 320);
+                g.addColorStop(0, "rgba(" + rgb + ",0.20)");
+                g.addColorStop(1, "rgba(" + rgb + ",0)");
+                ctx.fillStyle = g;
+                ctx.fillRect(0, 0, w, h);
+
+                for (var i = 0; i < dots.length; i++) {
+                    var d = dots[i];
+                    var dx = d.x - pos.x, dy = d.y - pos.y;
+                    var dist = Math.sqrt(dx * dx + dy * dy) || 1;
+                    var inf = Math.max(0, 1 - dist / RADIUS);
+                    inf *= inf;
+
+                    var wave = reduce ? 0 : Math.sin(t * 0.0012 + d.x * 0.012 + d.y * 0.009) * 0.07;
+                    var x = d.x + (dx / dist) * inf * 18;
+                    var y = d.y + (dy / dist) * inf * 18;
+                    var r = 1.2 + inf * 2.6;
+
+                    if (inf > 0.12) {
+                        ctx.strokeStyle = "rgba(" + rgb + "," + (inf * 0.38).toFixed(3) + ")";
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(x, y);
+                        ctx.lineTo(pos.x, pos.y);
+                        ctx.stroke();
+                    }
+
+                    ctx.fillStyle = "rgba(" + rgb + "," + Math.min(1, 0.2 + wave + inf * 0.7).toFixed(3) + ")";
+                    ctx.beginPath();
+                    ctx.arc(x, y, r, 0, 6.2832);
+                    ctx.fill();
+                }
+            }
+
+            var cur = { x: 0, y: 0 }, norm = { x: 0, y: 0 };
+
+            function frame(now) {
+                if (!fine || now - lastMove > 3500) {
+                    var s = now / 1000;
+                    target.x = w / 2 + Math.sin(s * 0.35) * w * 0.32;
+                    target.y = h / 2 + Math.cos(s * 0.27) * h * 0.28;
+                }
+                pos.x += (target.x - pos.x) * 0.1;
+                pos.y += (target.y - pos.y) * 0.1;
+
+                norm.x = (pos.x / w) * 2 - 1;
+                norm.y = (pos.y / h) * 2 - 1;
+                cur.x += (norm.x - cur.x) * 0.08;
+                cur.y += (norm.y - cur.y) * 0.08;
+                root.style.setProperty("--mx", cur.x.toFixed(4));
+                root.style.setProperty("--my", cur.y.toFixed(4));
+
+                if (panel) {
+                    var r = panel.getBoundingClientRect();
+                    panel.style.setProperty("--px", (pos.x - r.left).toFixed(0) + "px");
+                    panel.style.setProperty("--py", (pos.y - r.top).toFixed(0) + "px");
+                }
+
+                draw(now);
+                requestAnimationFrame(frame);
+            }
+
+            window.addEventListener("resize", resize);
+            window.addEventListener("themechange", function () { readColor(); if (reduce) draw(0); });
+            window.addEventListener("pointermove", function (e) {
+                target.x = e.clientX; target.y = e.clientY;
+                lastMove = performance.now();
+            }, { passive: true });
+
+            resize();
+            if (!reduce) requestAnimationFrame(frame);
+        })();
+    </script>
+    <script>
+        /* Count-up animation for the figures in the brand panel */
+        (function () {
+            var els = document.querySelectorAll("[data-count]");
+            var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+            function fmt(el, v) {
+                el.textContent = (el.dataset.prefix || "") + Math.round(v).toLocaleString("en-IN") + (el.dataset.suffix || "");
+            }
+
+            function run(el, delay) {
+                var end = parseFloat(el.dataset.count), dur = 1800;
+                if (reduce) { fmt(el, end); return; }
+                fmt(el, 0);
+                setTimeout(function () {
+                    var t0 = performance.now();
+                    (function step(now) {
+                        var p = Math.min(1, (now - t0) / dur);
+                        fmt(el, end * (1 - Math.pow(1 - p, 3)));
+                        if (p < 1) requestAnimationFrame(step);
+                    })(t0);
+                }, delay);
+            }
+
+            els.forEach(function (el, i) { run(el, 500 + i * 180); });
+        })();
+    </script>
+</body>
+
+</html>

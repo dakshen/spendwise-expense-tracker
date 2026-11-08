@@ -1,0 +1,3253 @@
+/* Signature-style font for the sidebar brand name only */
+@import url('https://fonts.googleapis.com/css2?family=Rethink+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap');
+body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+.chart-bar-height-1 { height: 40%; }
+.chart-bar-height-2 { height: 65%; }
+.chart-bar-height-3 { height: 30%; }
+.chart-bar-height-4 { height: 85%; }
+.chart-bar-height-5 { height: 50%; }
+.chart-bar-height-6 { height: 75%; }
+.chart-bar-height-7 { height: 45%; }
+
+
+button.edit-btn,
+.edit-btn {
+    background: #eef2ff !important;
+    color: #4f46e5 !important;
+    border: 1px solid #c7d2fe !important;
+    border-radius: 8px !important;
+    padding: 7px 12px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+button.edit-btn:hover,
+.edit-btn:hover {
+    background: #e0e7ff !important;
+    color: #3730a3 !important;
+}
+
+button.delete-btn,
+.delete-btn {
+    background: #fef2f2 !important;
+    color: #dc2626 !important;
+    border: 1px solid #fecaca !important;
+    border-radius: 8px !important;
+    padding: 7px 12px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+button.delete-btn:hover,
+.delete-btn:hover {
+    background: #fee2e2 !important;
+    color: #991b1b !important;
+}
+
+
+#recent-transactions button.edit-btn,
+#recent-transactions button.delete-btn {
+    text-decoration: none !important;
+}
+
+#recent-transactions button.edit-btn:hover,
+#recent-transactions button.delete-btn:hover {
+    text-decoration: none !important;
+}
+
+#add-income-button {
+    background-color: #16a34a;
+    color: #ffffff;
+    border: none;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+#add-income-button:hover {
+    background-color: #15803d;
+}
+
+#add-income-button:active {
+    transform: scale(0.98);
+}
+
+#add-income-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Prevent cards and their content from overflowing */
+.summary-cards > div {
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.summary-cards h2,
+.summary-cards h3 {
+    white-space: nowrap;
+    font-size: clamp(16px, 1.5vw, 24px);
+}
+
+/* Stack cards when the available dashboard width is limited */
+@media (max-width: 904px) {
+    .summary-cards {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* Smaller screens */
+@media (max-width: 650px) {
+    .summary-cards {
+        gap: 12px;
+    }
+}
+
+header {
+    position: relative;
+    z-index: 60;
+}
+
+#sidebar-toggle {
+    z-index: 70;
+}
+
+/* Mobile sidebar must appear above the header */
+@media (max-width: 767px) {
+    #sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        height: 100dvh;
+        z-index: 100 !important;
+        background: #ffffff;
+    }
+
+    #sidebar-overlay {
+        position: fixed !important;
+        inset: 0 !important;
+        z-index: 90 !important;
+    }
+
+    header {
+        position: relative;
+        z-index: 10;
+    }
+
+    #sidebar-close {
+        position: relative;
+        z-index: 101;
+        flex-shrink: 0;
+    }
+}
+@media (max-width: 767px) {
+    #sidebar > div:first-child {
+        position: relative;
+        justify-content: flex-start;
+        padding: 12px 16px;
+        min-height: 74px;
+    }
+
+    #sidebar-close {
+        position: absolute;
+        top: 10px;
+        right: 12px;
+
+        width: 28px;
+        height: 28px;
+        padding: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: transparent;
+        border: none;
+        border-radius: 6px;
+        color: #475569;
+        font-size: 20px;
+        line-height: 1;
+    }
+
+    #sidebar-close:hover {
+        background: #f1f5f9;
+        color: #4f46e5;
+    }
+
+    #sidebar-close span {
+        font-size: 20px !important;
+        line-height: 1;
+    }
+}
+
+
+/* Sidebar fills the viewport */
+#sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+}
+
+/* Navigation occupies the available space */
+#sidebar nav {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+/* Profile stays at the bottom */
+#sidebar > div:last-of-type {
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+
+/* Consistent header across all SpendWise pages */
+.main-page-header,
+.page-header {
+    position: fixed;
+    top: 0;
+    left: 264px;
+    right: 0;
+    height: 70px;
+    min-height: 70px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    margin: 0;
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    z-index: 100;
+}
+
+/* Consistent header title */
+.main-page-header h1,
+.main-page-header h2,
+.page-header h1,
+.page-header h2 {
+    margin: 0;
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* Sidebar brand name: signature style (apply class "brand-signature" to the sidebar brand text only) */
+.brand-signature {
+    font-family: 'Allura', 'Brush Script MT', cursive !important;
+    font-size: 34px !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.3px;
+    line-height: 1.1;
+    display: inline-block;
+    color: #312e81;
+    white-space: nowrap;
+}
+
+/* Reserve space for the fixed header */
+.main-content,
+.page-content {
+    padding-top: 70px;
+}
+
+@media (max-width: 767px) {
+    .main-page-header,
+    .page-header {
+        left: 0;
+        padding: 0 20px;
+    }
+}
+
+/* =========================================================
+   SpendWise dashboard refresh
+   Keeps existing IDs and JavaScript hooks intact.
+   ========================================================= */
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f4f7fc;
+}
+
+.dashboard-header {
+    height: 70px;
+    min-height: 70px;
+    padding: 0 32px;
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom: 1px solid #e7edf5;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 20;
+}
+
+.dashboard-header h1 {
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 650;
+    letter-spacing: -0.35px;
+    color: #172033;
+}
+
+.dashboard-header button {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #f5f7fc;
+}
+
+.dashboard-header button:hover {
+    background: #eef2ff;
+    color: #4f46e5;
+}
+
+.dashboard-header button i {
+    font-size: 20px;
+}
+
+.dashboard-welcome {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 24px 28px;
+    border: 1px solid #e8edf5;
+    border-radius: 20px;
+    background: linear-gradient(115deg, #ffffff 0%, #f8faff 100%);
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.035);
+}
+
+.welcome-eyebrow {
+    margin: 0 0 7px;
+    color: #7773ef;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.25px;
+}
+
+.dashboard-welcome h2 {
+    margin: 0;
+    color: #172033;
+    font-size: clamp(21px, 2vw, 27px);
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: -0.7px;
+}
+
+.dashboard-welcome p:last-child {
+    margin: 7px 0 0;
+    color: #71809a;
+    font-size: 13px;
+}
+
+.welcome-icon {
+    width: 54px;
+    height: 54px;
+    flex: 0 0 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 17px;
+    color: #5145e5;
+    background: #eeefff;
+    font-size: 26px;
+}
+
+.summary-cards {
+    gap: 18px;
+}
+
+.summary-cards > div {
+    min-height: 145px;
+    border-radius: 18px;
+    box-shadow: 0 3px 14px rgba(15, 23, 42, 0.045);
+    border-color: #e9eef5;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.summary-cards > div:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.07);
+}
+
+.summary-cards h2,
+.summary-cards h3 {
+    letter-spacing: -0.5px;
+}
+
+main > div.flex-1.overflow-y-auto {
+    background: #f4f7fc;
+    scrollbar-gutter: stable;
+}
+
+main > div.flex-1.overflow-y-auto > div {
+    width: 100%;
+}
+
+main .bg-white.rounded-2xl {
+    border-radius: 18px;
+    border-color: #e8edf5;
+    box-shadow: 0 3px 14px rgba(15, 23, 42, 0.04);
+}
+
+main form input,
+main form select {
+    border-radius: 11px;
+}
+
+main form input:focus,
+main form select:focus {
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.10);
+}
+
+#add-income-button,
+#add-expense-button {
+    min-height: 46px;
+    border-radius: 11px;
+    font-weight: 600;
+}
+
+#recent-transactions-section {
+    overflow: hidden;
+}
+
+#recent-transactions {
+    min-width: 0;
+}
+
+@media (max-width: 767px) {
+    .dashboard-header {
+        height: 64px;
+        min-height: 64px;
+        padding: 0 16px;
+    }
+
+    .dashboard-welcome {
+        padding: 20px;
+        border-radius: 16px;
+    }
+
+    .welcome-icon {
+        width: 46px;
+        height: 46px;
+        flex-basis: 46px;
+    }
+
+    .summary-cards {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* Dashboard content offset */
+.dashboard-main {
+    margin-left: 16rem;
+    width: calc(100% - 16rem);
+    min-width: 0;
+}
+
+/* Mobile layout */
+@media (max-width: 767px) {
+    .dashboard-main {
+        margin-left: 0;
+        width: 100%;
+    }
+}
+
+
+
+/* SpendWise brand */
+.sidebar .brand-signature {
+    font-family: -apple-system, BlinkMacSystemFont,
+        "SF Pro Display", "Helvetica Neue", sans-serif !important;
+    font-size: 26px !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+    letter-spacing: -0.8px !important;
+    color: #5146f5 !important;
+}
+
+/* SpendWise - Apple-inspired brand typography */
+#sidebar .brand-signature {
+    font-family: "Segoe UI Variable", "Segoe UI", sans-serif !important;
+    font-size: 25px !important;
+    font-weight: 700 !important;
+    letter-spacing: -1px !important;
+    font-style: normal !important;
+    color: black !important;
+    line-height: 1.5 !important;
+}
+
+#sidebar .brand-logo {
+    flex-shrink: 0;
+    display: block;
+}
+
+/* ==============================
+   DARK MODE
+============================== */
+
+body.dark-mode {
+    background: #000000 !important;
+    color: #e5e5e5 !important;
+}
+
+/* Main surfaces */
+body.dark-mode #sidebar,
+body.dark-mode header,
+body.dark-mode .main-page-header,
+body.dark-mode .page-header,
+body.dark-mode .bg-white {
+    background: #0f0f0f !important;
+    color: #e5e5e5 !important;
+    border-color: #262626 !important;
+}
+
+/* Main content backgrounds */
+body.dark-mode main,
+body.dark-mode .main-content,
+body.dark-mode .page-content,
+body.dark-mode .bg-slate-50,
+body.dark-mode .bg-gray-50 {
+    background: #000000 !important;
+    color: #e5e5e5 !important;
+}
+
+/* Cards and panels */
+body.dark-mode .summary-card,
+body.dark-mode .card,
+body.dark-mode .import-card,
+body.dark-mode .glass-panel {
+    background: #0f0f0f !important;
+    color: #e5e5e5 !important;
+    border-color: #262626 !important;
+    box-shadow: none;
+}
+
+/* Text */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode p,
+body.dark-mode label,
+body.dark-mode span,
+body.dark-mode .text-slate-700,
+body.dark-mode .text-slate-800,
+body.dark-mode .text-gray-700,
+body.dark-mode .text-gray-800 {
+    color: #e5e5e5;
+}
+
+/* Muted text */
+body.dark-mode .text-slate-400,
+body.dark-mode .text-slate-500,
+body.dark-mode .text-slate-600 {
+    color: #a3a3a3 !important;
+}
+
+/* Sidebar navigation */
+body.dark-mode #sidebar nav a {
+    color: #d4d4d4;
+}
+
+body.dark-mode #sidebar nav a:hover {
+    background: #262626 !important;
+}
+
+body.dark-mode #sidebar nav a.bg-indigo-50,
+body.dark-mode #sidebar nav a.active {
+    background: #312e81 !important;
+    color: #c4b5fd !important;
+}
+
+/* Inputs */
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+    background: #000000 !important;
+    color: #e5e5e5 !important;
+    border-color: #333333 !important;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+    color: #a3a3a3;
+}
+
+/* Borders */
+body.dark-mode .border,
+body.dark-mode .border-slate-100,
+body.dark-mode .border-slate-200,
+body.dark-mode .border-gray-200 {
+    border-color: #262626 !important;
+}
+
+/* Theme button */
+.theme-toggle {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #4f46e5;
+    cursor: pointer;
+    font-size: 21px;
+    transition: 0.2s ease;
+}
+
+.theme-toggle:hover {
+    background: #eef2ff;
+    transform: translateY(-1px);
+}
+
+body.dark-mode .theme-toggle {
+    background: #262626;
+    color: #facc15;
+    border-color: #333333;
+}
+
+/* Dark mode dashboard background */
+body.dark-mode {
+    background: #000000 !important;
+    color: #e5e5e5 !important;
+}
+
+body.dark-mode main,
+body.dark-mode main > div,
+body.dark-mode .dashboard-content {
+    background-color: #000000 !important;
+}
+
+/* Welcome section */
+body.dark-mode .welcome-card,
+body.dark-mode .dashboard-welcome {
+    background: #0f0f0f !important;
+    border-color: #262626 !important;
+}
+
+body.dark-mode .welcome-card h1,
+body.dark-mode .dashboard-welcome h1,
+body.dark-mode .welcome-card p,
+body.dark-mode .dashboard-welcome p {
+    color: #e5e5e5 !important;
+}
+
+/* Keep secondary welcome text readable */
+body.dark-mode .welcome-card .subtitle,
+body.dark-mode .dashboard-welcome .subtitle {
+    color: #a3a3a3 !important;
+}
+
+
+/* =========================================================
+   Header controls + dark-mode brand fixes
+   ========================================================= */
+
+/* Keep the header controls grouped at the far right */
+.dashboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.dashboard-header > div:first-child {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+}
+
+.dashboard-header .header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+/* The general header button rule must not force the mobile menu open */
+.dashboard-header #sidebar-toggle {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .dashboard-header #sidebar-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* Desktop sidebar brand: readable in both themes */
+#sidebar .brand-signature {
+    color: #111827 !important;
+}
+
+body.dark-mode #sidebar .brand-signature {
+    color: #e5e5e5 !important;
+}
+
+/* Dark theme header and header controls */
+body.dark-mode .dashboard-header {
+    background: #0f0f0f !important;
+    border-color: #262626 !important;
+}
+
+body.dark-mode .dashboard-header h1 {
+    color: #e5e5e5 !important;
+}
+
+body.dark-mode .dashboard-header #sidebar-toggle {
+    color: #e5e5e5 !important;
+}
+
+body.dark-mode .dashboard-header .notification-button {
+    background: #262626 !important;
+    color: #d4d4d4 !important;
+    border-color: #333333 !important;
+}
+
+body.dark-mode .dashboard-header .notification-button:hover {
+    background: #404040 !important;
+    color: #ffffff !important;
+}
+
+/* Ensure the logo/name remains visible on dark sidebar */
+body.dark-mode #sidebar {
+    background: #0f0f0f !important;
+    border-color: #262626 !important;
+}
+
+@media (min-width: 768px) {
+    .dashboard-header #sidebar-toggle {
+        display: none !important;
+    }
+}
+/* =================================
+   SIDEBAR CLOSE BUTTON
+================================= */
+
+/* Default/light mode */
+#sidebar-close {
+    background: transparent !important;
+    color: #64748b !important;
+    border: none !important;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+#sidebar-close:hover {
+    background: #e2e8f0 !important;
+    color: #4f46e5 !important;
+}
+
+/* Dark mode */
+body.dark-mode #sidebar-close {
+    background: transparent !important;
+    color: #d4d4d4 !important;
+}
+
+body.dark-mode #sidebar-close:hover {
+    background: #262626 !important;
+    color: #ffffff !important;
+}
+
+
+/* =================================
+   HAMBURGER BUTTON
+================================= */
+
+/* Default/light mode */
+#sidebar-toggle {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+#sidebar-toggle:hover {
+    background: #e2e8f0 !important;
+    color: #4f46e5 !important;
+}
+
+/* Dark mode */
+body.dark-mode #sidebar-toggle {
+    background: #1a1a1a !important;
+    color: #d4d4d4 !important;
+    border-color: #333333 !important;
+}
+
+body.dark-mode #sidebar-toggle:hover {
+    background: #262626 !important;
+    color: #ffffff !important;
+}
+
+/* SpendWise brand typography - Geist */
+#sidebar .brand-signature {
+    font-family: 'Geist', sans-serif !important;
+    font-size: 26px !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+    letter-spacing: -1.1px !important;
+    line-height: 1.2 !important;
+    color: #111827 !important;
+    white-space: nowrap;
+}
+
+/* Dark mode brand color */
+body.dark-mode #sidebar .brand-signature {
+    color: #e5e5e5 !important;
+}
+
+/* SpendWise brand - Rethink Sans */
+#sidebar .brand-signature {
+    font-family: 'Rethink Sans', sans-serif !important;
+    font-size: 26px !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+    letter-spacing: -0.8px !important;
+    line-height: 1.2 !important;
+    color: #111827 !important;
+    white-space: nowrap;
+}
+
+/* Dark mode */
+body.dark-mode #sidebar .brand-signature {
+    color: #e5e5e5 !important;
+}
+/* =========================================
+   SPENDWISE - SMOKY GLASS SIDEBAR EFFECT
+========================================= */
+
+/* Normal navigation */
+#sidebar nav a {
+    border-radius: 13px !important;
+    color: #64748b !important;
+    background: transparent !important;
+    transition: all 0.25s ease !important;
+    position: relative;
+}
+
+/* Hover - subtle smoky glass */
+#sidebar nav a:hover {
+    background: rgba(30, 41, 59, 0.07) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #334155 !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.65),
+        0 3px 12px rgba(15, 23, 42, 0.06);
+    transform: translateX(2px);
+}
+
+/* Selected item - translucent charcoal */
+#sidebar nav a.active,
+#sidebar nav a.bg-indigo-50 {
+    background: linear-gradient(
+        135deg,
+        rgba(31, 41, 55, 0.13),
+        rgba(15, 23, 42, 0.08)
+    ) !important;
+
+    color: #263246 !important;
+
+    border: 1px solid rgba(30, 41, 59, 0.09);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.8),
+        0 4px 14px rgba(15, 23, 42, 0.07);
+}
+
+/* Selected and hover icons */
+#sidebar nav a:hover i,
+#sidebar nav a.active i,
+#sidebar nav a.bg-indigo-50 i,
+#sidebar nav a:hover svg,
+#sidebar nav a.active svg,
+#sidebar nav a.bg-indigo-50 svg {
+    color: #5145e5 !important;
+}
+
+/* Dark mode - subtle glass */
+body.dark-mode #sidebar nav a {
+    color: #a3a3a3 !important;
+}
+
+body.dark-mode #sidebar nav a:hover {
+    background: rgba(255, 255, 255, 0.07) !important;
+    color: #ffffff !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        0 3px 12px rgba(0, 0, 0, 0.12);
+}
+
+body.dark-mode #sidebar nav a.active,
+body.dark-mode #sidebar nav a.bg-indigo-50 {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.12),
+        rgba(255, 255, 255, 0.055)
+    ) !important;
+
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.16),
+        0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+body.dark-mode #sidebar nav a:hover i,
+body.dark-mode #sidebar nav a.active i,
+body.dark-mode #sidebar nav a.bg-indigo-50 i {
+    color: #a5a0ff !important;
+}
+
+/* Sidebar text - black in light mode */
+#sidebar nav a {
+    color: #1e293b !important;
+}
+
+/* Keep text black on hover and selection */
+#sidebar nav a:hover,
+#sidebar nav a.active,
+#sidebar nav a.bg-indigo-50 {
+    color: #111827 !important;
+}
+
+/* Sidebar icons */
+#sidebar nav a i,
+#sidebar nav a svg {
+    color: #475569 !important;
+}
+
+/* Dark mode text */
+body.dark-mode #sidebar nav a {
+    color: #e5e5e5 !important;
+}
+
+body.dark-mode #sidebar nav a i,
+body.dark-mode #sidebar nav a svg {
+    color: #d4d4d4 !important;
+}
+
+/* Recent transactions: keep income green / expense red in dark mode */
+body.dark-mode #recent-transactions [class*="text-green-"]:not(.edit-btn):not(.delete-btn),
+body.dark-mode #recent-transactions [class*="text-emerald-"]:not(.edit-btn):not(.delete-btn),
+body.dark-mode #recent-transactions .income-value {
+    color: #34d399 !important;
+}
+
+body.dark-mode #recent-transactions [class*="text-red-"]:not(.edit-btn):not(.delete-btn),
+body.dark-mode #recent-transactions [class*="text-rose-"]:not(.edit-btn):not(.delete-btn),
+body.dark-mode #recent-transactions .expense-value {
+    color: #fd1336 !important;
+}
+/* =========================================================
+   Page title with the matching sidebar icon
+   ========================================================= */
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+}
+
+.header-title-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+    background: #eef2ff;
+    color: #5145e5;
+    font-size: 20px;
+}
+
+body.dark-mode .header-title-icon {
+    background: rgba(165, 160, 255, 0.14);
+    color: #a5a0ff;
+}
+
+@media (max-width: 480px) {
+    .header-title {
+        gap: 8px;
+    }
+
+    .header-title-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        font-size: 18px;
+    }
+}
+
+/* =========================================================================
+   SPENDWISE - PREMIUM POLISH & MOTION LAYER
+   Purely additive: no IDs, classes or JS hooks above were changed.
+   Pairs with dashboard-fx.js (count-up, pointer spotlight, ripple).
+   Everything animated respects prefers-reduced-motion (see bottom).
+   ========================================================================= */
+
+/* ---------- Tokens ---------- */
+body {
+    --fx-ease: cubic-bezier(0.22, 0.8, 0.24, 1);
+    --fx-spot: rgba(99, 102, 241, 0.09);
+    --fx-row-tint: rgba(79, 70, 229, 0.05);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+body.dark-mode {
+    --fx-spot: rgba(255, 255, 255, 0.07);
+    --fx-row-tint: rgba(255, 255, 255, 0.045);
+    color-scheme: dark; /* native date picker icon + controls turn light */
+}
+
+/* Figures line up and don't jitter while they count */
+.summary-cards h2,
+.summary-cards h3,
+#recent-transactions {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1, "cv11" 1;
+}
+
+/* ---------- Ambient depth behind the content ---------- */
+main > div.flex-1.overflow-y-auto {
+    background-image: radial-gradient(900px 360px at 72% -140px, rgba(99, 102, 241, 0.10), transparent 70%);
+    background-repeat: no-repeat;
+}
+
+body.dark-mode main > div.flex-1.overflow-y-auto {
+    background-image: radial-gradient(900px 420px at 68% -170px, rgba(99, 102, 241, 0.17), transparent 70%);
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb { background: #2a2a2f; }
+body.dark-mode ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+
+/* ---------- Header ---------- */
+.dashboard-header {
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.dashboard-header.is-scrolled {
+    box-shadow: 0 12px 28px -20px rgba(15, 23, 42, 0.45);
+}
+
+body.dark-mode .dashboard-header.is-scrolled {
+    box-shadow: 0 14px 30px -16px rgba(0, 0, 0, 0.95);
+}
+
+.dashboard-header button {
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s var(--fx-ease);
+}
+
+.dashboard-header button:active {
+    transform: scale(0.94);
+}
+
+/* Notification dot pings three times on load, then rests */
+.notification-button > span.absolute {
+    animation: fx-ping 1.8s ease-out 1.2s 3;
+}
+
+.notification-button:hover > i {
+    transform-origin: 50% 10%;
+    animation: fx-ring 0.7s ease;
+}
+
+/* Theme switch: icon turns in, colours cross-fade instead of snapping */
+.fx-spin {
+    animation: fx-spin 0.6s var(--fx-ease);
+}
+
+html.fx-theme-shift *,
+html.fx-theme-shift *::before,
+html.fx-theme-shift *::after {
+    transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease,
+        box-shadow 0.35s ease, fill 0.35s ease !important;
+}
+
+/* ---------- Sidebar: active marker + icon response ---------- */
+#sidebar nav a i,
+#sidebar nav a svg {
+    transition: transform 0.25s var(--fx-ease), color 0.25s ease;
+}
+
+#sidebar nav a:hover i,
+#sidebar nav a:hover svg {
+    transform: scale(1.12);
+}
+
+#sidebar nav a.active::before,
+#sidebar nav a.bg-indigo-50::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    width: 3px;
+    height: 16px;
+    margin-top: -8px;
+    border-radius: 3px;
+    background: linear-gradient(180deg, #a5a0ff, #5145e5);
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.65);
+    animation: fx-bar 0.5s var(--fx-ease) 0.3s backwards;
+}
+
+/* ---------- Welcome card ---------- */
+main .dashboard-welcome {
+    background:
+        radial-gradient(520px 200px at 100% 0%, rgba(99, 102, 241, 0.10), transparent 70%),
+        linear-gradient(115deg, #ffffff 0%, #f8faff 100%);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 14px 34px -22px rgba(15, 23, 42, 0.18);
+}
+
+body.dark-mode main section.dashboard-welcome {
+    background:
+        radial-gradient(520px 200px at 100% 0%, rgba(99, 102, 241, 0.17), transparent 70%),
+        linear-gradient(180deg, #131316 0%, #0e0e10 100%) !important;
+    border-color: #26262b !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 18px 40px -24px rgba(0, 0, 0, 1);
+}
+
+main .welcome-icon {
+    background: linear-gradient(145deg, #f5f5ff, #e4e6ff);
+    box-shadow: inset 0 0 0 1px rgba(99, 102, 241, 0.16), 0 8px 18px -10px rgba(79, 70, 229, 0.5);
+    transition: transform 0.45s var(--fx-ease), box-shadow 0.3s ease;
+}
+
+.dashboard-welcome:hover .welcome-icon {
+    transform: rotate(-7deg) scale(1.06);
+}
+
+body.dark-mode .welcome-icon {
+    background: rgba(165, 160, 255, 0.12);
+    color: #a5a0ff;
+    box-shadow: inset 0 0 0 1px rgba(165, 160, 255, 0.22), 0 10px 24px -12px rgba(99, 102, 241, 0.7);
+}
+
+/* ---------- Cards: surfaces, depth ---------- */
+main .bg-white.rounded-2xl {
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 12px 30px -20px rgba(15, 23, 42, 0.16);
+}
+
+body.dark-mode main .bg-white.rounded-2xl {
+    background: linear-gradient(180deg, #131316 0%, #0e0e10 100%) !important;
+    border-color: #26262b !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045), 0 18px 40px -26px rgba(0, 0, 0, 1);
+}
+
+main .grid > .bg-white.rounded-2xl {
+    transition: border-color 0.3s var(--fx-ease), box-shadow 0.3s var(--fx-ease);
+}
+
+/* Summary cards: lift + soft accent per card */
+.summary-cards > div {
+    position: relative;
+    transition: transform 0.35s var(--fx-ease), box-shadow 0.35s var(--fx-ease), border-color 0.3s ease;
+}
+
+main .summary-cards > div:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.05), 0 22px 40px -22px rgba(15, 23, 42, 0.3);
+}
+
+main .summary-cards > div:nth-child(2):hover {
+    border-color: rgba(16, 185, 129, 0.38);
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.05), 0 22px 40px -22px rgba(16, 185, 129, 0.45);
+}
+
+main .summary-cards > div:nth-child(3):hover {
+    border-color: rgba(244, 63, 94, 0.38);
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.05), 0 22px 40px -22px rgba(244, 63, 94, 0.45);
+}
+
+body.dark-mode main .summary-cards > div:hover {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 26px 44px -24px rgba(0, 0, 0, 1);
+}
+
+body.dark-mode main .summary-cards > div:nth-child(2):hover {
+    border-color: rgba(52, 211, 153, 0.42) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 26px 44px -26px rgba(52, 211, 153, 0.35);
+}
+
+body.dark-mode main .summary-cards > div:nth-child(3):hover {
+    border-color: rgba(255, 45, 69, 0.45) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 26px 44px -26px rgba(255, 45, 69, 0.4);
+}
+
+/* Net balance is the hero figure */
+.summary-cards .balance-card h2 {
+    font-size: clamp(22px, 2.1vw, 32px);
+    letter-spacing: -0.04em;
+    line-height: 1.15;
+}
+
+/* Pointer spotlight (position fed by dashboard-fx.js) */
+.summary-cards > div::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background: radial-gradient(300px circle at var(--mx, 50%) var(--my, 50%), var(--fx-spot), transparent 65%);
+}
+
+.summary-cards > .balance-card {
+    --fx-spot: rgba(255, 255, 255, 0.2);
+}
+
+@media (hover: hover) {
+    .summary-cards > div:hover::before {
+        opacity: 1;
+    }
+}
+
+/* One-off light sweep across the balance card whenever its figure updates */
+.balance-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 45%;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transform: translateX(-130%) skewX(-18deg);
+}
+
+.balance-card.fx-sheen::after {
+    animation: fx-sheen 1.15s ease-out;
+}
+
+/* Icon tiles: tonal on dark instead of bright pastel discs */
+.summary-cards .w-12.h-12 {
+    transition: transform 0.35s var(--fx-ease);
+}
+
+.summary-cards > div:hover .w-12.h-12 {
+    transform: scale(1.08) rotate(-4deg);
+}
+
+body.dark-mode main .bg-emerald-50 {
+    background: rgba(52, 211, 153, 0.12) !important;
+    color: #34d399 !important;
+    box-shadow: inset 0 0 0 1px rgba(52, 211, 153, 0.24);
+}
+
+body.dark-mode main .bg-rose-50 {
+    background: rgba(255, 45, 69, 0.12) !important;
+    color: #ff4a5e !important;
+    box-shadow: inset 0 0 0 1px rgba(255, 45, 69, 0.28);
+}
+
+body.dark-mode main .bg-indigo-50 {
+    background: rgba(129, 140, 248, 0.14) !important;
+    color: #a5a0ff !important;
+    box-shadow: inset 0 0 0 1px rgba(129, 140, 248, 0.26);
+}
+
+/* ---------- Forms ---------- */
+main form input,
+main form select {
+    transition: border-color 0.2s ease, box-shadow 0.25s ease, background-color 0.2s ease;
+}
+
+main form input:hover:not(:focus),
+main form select:hover:not(:focus) {
+    border-color: #b9c4d6;
+}
+
+body.dark-mode main form input:hover:not(:focus),
+body.dark-mode main form select:hover:not(:focus) {
+    border-color: #4a4a52 !important;
+}
+
+main form input:focus,
+main form select:focus {
+    background-color: #ffffff;
+}
+
+#income-form input:focus,
+#income-form select:focus {
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.14);
+}
+
+#expense-form input:focus,
+#expense-form select:focus {
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.16);
+}
+
+body.dark-mode #income-form input:focus,
+body.dark-mode #income-form select:focus {
+    border-color: #34d399 !important;
+    box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.15);
+}
+
+body.dark-mode #expense-form input:focus,
+body.dark-mode #expense-form select:focus {
+    border-color: #818cf8 !important;
+    box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.17);
+}
+
+/* Label takes on the form's accent while its field is active */
+main form .space-y-4 > div > label {
+    transition: color 0.2s ease;
+}
+
+#income-form .space-y-4 > div:focus-within > label { color: #059669; }
+#expense-form .space-y-4 > div:focus-within > label { color: #4f46e5; }
+
+body.dark-mode #income-form .space-y-4 > div:focus-within > label { color: #34d399 !important; }
+body.dark-mode #expense-form .space-y-4 > div:focus-within > label { color: #a5a0ff !important; }
+
+/* Whole card acknowledges that you're working in it */
+main .grid > .bg-white.rounded-2xl:has(#income-form:focus-within) {
+    border-color: rgba(16, 185, 129, 0.4);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.07), 0 22px 44px -26px rgba(16, 185, 129, 0.4);
+}
+
+main .grid > .bg-white.rounded-2xl:has(#expense-form:focus-within) {
+    border-color: rgba(99, 102, 241, 0.4);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.07), 0 22px 44px -26px rgba(99, 102, 241, 0.4);
+}
+
+body.dark-mode main .grid > .bg-white.rounded-2xl:has(#income-form:focus-within) {
+    border-color: rgba(52, 211, 153, 0.42) !important;
+    box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.06), 0 26px 50px -28px rgba(52, 211, 153, 0.35);
+}
+
+body.dark-mode main .grid > .bg-white.rounded-2xl:has(#expense-form:focus-within) {
+    border-color: rgba(129, 140, 248, 0.45) !important;
+    box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.07), 0 26px 50px -28px rgba(129, 140, 248, 0.4);
+}
+
+/* Cleaner number field + custom select chevron */
+main form input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+main form input[type="number"]::-webkit-outer-spin-button,
+main form input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+main form select {
+    -webkit-appearance: none;
+    appearance: none;
+    padding-right: 42px;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+}
+
+body.dark-mode main form select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a3a3a3' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 14px center !important;
+    background-size: 16px !important;
+}
+
+/* Status messages ease in rather than pop */
+#income-message:not(:empty),
+#form-message:not(:empty) {
+    animation: fx-msg-in 0.4s var(--fx-ease);
+}
+
+/* ---------- Buttons ---------- */
+#add-income-button,
+#add-expense-button {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    transition: transform 0.25s var(--fx-ease), box-shadow 0.3s var(--fx-ease),
+        background-color 0.25s ease, opacity 0.2s ease;
+}
+
+#add-income-button {
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 60%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 8px 18px -10px rgba(22, 163, 74, 0.7);
+}
+
+#add-expense-button {
+    background-color: #4f46e5;
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 60%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 8px 18px -10px rgba(79, 70, 229, 0.75);
+}
+
+#add-income-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 14px 26px -12px rgba(22, 163, 74, 0.8);
+}
+
+#add-expense-button:hover:not(:disabled) {
+    background-color: #4338ca;
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 14px 26px -12px rgba(79, 70, 229, 0.85);
+}
+
+#add-income-button:active:not(:disabled),
+#add-expense-button:active:not(:disabled) {
+    transform: translateY(0) scale(0.985);
+}
+
+#add-income-button:disabled,
+#add-expense-button:disabled {
+    opacity: 0.75;
+    cursor: progress;
+}
+
+/* While a request is in flight (button is disabled) show a spinner */
+#add-income-button:disabled::after,
+#add-expense-button:disabled::after {
+    content: "";
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #ffffff;
+    animation: fx-spinner 0.7s linear infinite;
+}
+
+/* Click ripple (injected by dashboard-fx.js) */
+.fx-ripple {
+    position: absolute;
+    z-index: -1;
+    border-radius: 50%;
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(0);
+    animation: fx-ripple 0.65s ease-out forwards;
+}
+
+/* Keyboard focus that's actually visible */
+main a:focus-visible,
+main button:focus-visible,
+.theme-toggle:focus-visible,
+#sidebar a:focus-visible {
+    outline: 2px solid #818cf8;
+    outline-offset: 3px;
+}
+
+/* ---------- Recent transactions ---------- */
+#recent-transactions > div:not(.tx-skeleton) {
+    border-radius: 12px;
+    transition: background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+#recent-transactions > div:not(.tx-skeleton):hover {
+    background-color: var(--fx-row-tint);
+    box-shadow: 0 0 0 8px var(--fx-row-tint);
+}
+
+#recent-transactions:not([data-fx-seen]) > * {
+    animation: fx-row-in 0.45s var(--fx-ease) backwards;
+}
+
+#recent-transactions:not([data-fx-seen]) > *:nth-child(1) { animation-delay: 0.05s; }
+#recent-transactions:not([data-fx-seen]) > *:nth-child(2) { animation-delay: 0.10s; }
+#recent-transactions:not([data-fx-seen]) > *:nth-child(3) { animation-delay: 0.15s; }
+#recent-transactions:not([data-fx-seen]) > *:nth-child(4) { animation-delay: 0.20s; }
+#recent-transactions:not([data-fx-seen]) > *:nth-child(5) { animation-delay: 0.25s; }
+#recent-transactions:not([data-fx-seen]) > *:nth-child(6) { animation-delay: 0.30s; }
+#recent-transactions:not([data-fx-seen]) > *:nth-child(n+7) { animation-delay: 0.35s; }
+
+#recent-transactions-section > div:first-child a {
+    position: relative;
+}
+
+#recent-transactions-section > div:first-child a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -3px;
+    height: 1.5px;
+    border-radius: 2px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s var(--fx-ease);
+}
+
+#recent-transactions-section > div:first-child a:hover::after {
+    transform: scaleX(1);
+}
+
+/* Edit / delete: lift on hover, tonal in dark mode */
+#recent-transactions button.edit-btn,
+#recent-transactions button.delete-btn {
+    transition: all 0.2s ease, transform 0.2s var(--fx-ease);
+}
+
+#recent-transactions button.edit-btn:hover,
+#recent-transactions button.delete-btn:hover {
+    transform: translateY(-1px);
+}
+
+#recent-transactions button.edit-btn:active,
+#recent-transactions button.delete-btn:active {
+    transform: scale(0.95);
+}
+
+body.dark-mode #recent-transactions button.edit-btn {
+    background: rgba(129, 140, 248, 0.14) !important;
+    color: #b4b9ff !important;
+    border-color: rgba(129, 140, 248, 0.3) !important;
+}
+
+body.dark-mode #recent-transactions button.edit-btn:hover {
+    background: rgba(129, 140, 248, 0.24) !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode #recent-transactions button.delete-btn {
+    background: rgba(255, 45, 69, 0.12) !important;
+    color: #ff5468 !important;
+    border-color: rgba(255, 45, 69, 0.3) !important;
+}
+
+body.dark-mode #recent-transactions button.delete-btn:hover {
+    background: rgba(255, 45, 69, 0.22) !important;
+    color: #ffffff !important;
+}
+
+/* Loading skeleton (replaced as soon as dashboard.js renders the list) */
+.tx-skeleton {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 4px 0;
+}
+
+.tx-skeleton .sk-lines {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tx-skeleton .sk-dot {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    flex: none;
+}
+
+.tx-skeleton .sk-lines i {
+    display: block;
+    height: 10px;
+    width: 40%;
+    border-radius: 6px;
+}
+
+.tx-skeleton .sk-lines i + i {
+    width: 24%;
+    height: 8px;
+}
+
+.tx-skeleton .sk-amount {
+    width: 84px;
+    height: 12px;
+    border-radius: 6px;
+}
+
+.tx-skeleton .sk-dot,
+.tx-skeleton .sk-lines i,
+.tx-skeleton .sk-amount {
+    background: linear-gradient(90deg, #eceff5 25%, #f8fafc 50%, #eceff5 75%);
+    background-size: 200% 100%;
+    animation: fx-shimmer 1.6s linear infinite;
+}
+
+body.dark-mode .tx-skeleton .sk-dot,
+body.dark-mode .tx-skeleton .sk-lines i,
+body.dark-mode .tx-skeleton .sk-amount {
+    background: linear-gradient(90deg, #17171a 25%, #25252a 50%, #17171a 75%);
+    background-size: 200% 100%;
+}
+
+/* ---------- One orchestrated entrance, top to bottom ---------- */
+@media (prefers-reduced-motion: no-preference) {
+    .dashboard-welcome,
+    .summary-cards > div,
+    main .grid > .bg-white.rounded-2xl,
+    #recent-transactions-section {
+        animation: fx-rise 0.75s var(--fx-ease) backwards;
+    }
+
+    .summary-cards > div:nth-child(1) { animation-delay: 0.10s; }
+    .summary-cards > div:nth-child(2) { animation-delay: 0.18s; }
+    .summary-cards > div:nth-child(3) { animation-delay: 0.26s; }
+    main .grid > .bg-white.rounded-2xl:nth-child(1) { animation-delay: 0.34s; }
+    main .grid > .bg-white.rounded-2xl:nth-child(2) { animation-delay: 0.42s; }
+    #recent-transactions-section { animation-delay: 0.50s; }
+}
+
+/* ---------- Keyframes ---------- */
+@keyframes fx-rise {
+    from { opacity: 0; transform: translateY(14px); }
+}
+
+@keyframes fx-row-in {
+    from { opacity: 0; transform: translateX(-10px); }
+}
+
+@keyframes fx-msg-in {
+    from { opacity: 0; transform: translateY(-4px); }
+}
+
+@keyframes fx-shimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
+}
+
+@keyframes fx-spinner {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes fx-ripple {
+    from { transform: scale(0); opacity: 0.45; }
+    to { transform: scale(1); opacity: 0; }
+}
+
+@keyframes fx-sheen {
+    from { opacity: 1; transform: translateX(-130%) skewX(-18deg); }
+    to { opacity: 1; transform: translateX(330%) skewX(-18deg); }
+}
+
+@keyframes fx-ping {
+    0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.55); }
+    100% { box-shadow: 0 0 0 9px rgba(244, 63, 94, 0); }
+}
+
+@keyframes fx-ring {
+    0%, 100% { transform: rotate(0); }
+    20% { transform: rotate(14deg); }
+    40% { transform: rotate(-12deg); }
+    60% { transform: rotate(8deg); }
+    80% { transform: rotate(-4deg); }
+}
+
+@keyframes fx-spin {
+    from { opacity: 0.3; transform: rotate(-90deg) scale(0.6); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes fx-bar {
+    from { transform: scaleY(0); opacity: 0; }
+}
+
+/* ---------- Reduced motion: keep the polish, drop the movement ---------- */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
+}
+
+/* =========================================================================
+   SPENDWISE - PREMIUM LIGHT MODE
+   Scoped to body:not(.dark-mode) so dark mode is untouched.
+   Palette: platinum canvas, cool white surfaces, deep ink text,
+   indigo primary, silver-blue hairline accents.
+   Tweak the tokens below to re-tint the whole theme.
+   ========================================================================= */
+
+body:not(.dark-mode) {
+    --pl-canvas:        #eef1f6;   /* platinum page background          */
+    --pl-canvas-2:      #e6ebf3;   /* cool tint blended into the canvas  */
+    --pl-surface:       #fcfdff;   /* cards: cool white            */
+    --pl-surface-2:     #f5f7fb;   /* inputs, subtle wells               */
+    --pl-sidebar:       #f9fafd;
+    --pl-border:        #dfe4ee;   /* cool hairline                      */
+    --pl-border-soft:   #e8ecf4;
+    --pl-ink:           #0f1a30;   /* headings                           */
+    --pl-text:          #27324a;   /* body text                          */
+    --pl-muted:         #66728a;   /* secondary text                     */
+    --pl-faint:         #98a2b6;   /* placeholders                       */
+    --pl-primary:       #254bb8;
+    --pl-primary-deep:  #172f80;
+    --pl-gold:          #94a3c4;   /* silver-blue accent                   */
+    --pl-shadow-sm:     0 1px 2px rgba(15, 26, 48, 0.05);
+    --pl-shadow-md:     0 1px 2px rgba(15, 26, 48, 0.04), 0 14px 32px -18px rgba(15, 26, 48, 0.18);
+    --pl-shadow-lg:     0 2px 4px rgba(15, 26, 48, 0.05), 0 26px 48px -24px rgba(15, 26, 48, 0.28);
+    --fx-spot:          rgba(37, 75, 184, 0.07);
+    --fx-row-tint:      rgba(148, 163, 196, 0.09);
+    background: var(--pl-canvas) !important;
+    color: var(--pl-text);
+}
+
+/* ---------- Page canvas ---------- */
+body:not(.dark-mode) main > div.flex-1.overflow-y-auto {
+    background:
+        radial-gradient(900px 420px at 85% -80px, rgba(37, 75, 184, 0.07), transparent 70%),
+        radial-gradient(700px 380px at 0% 0%, rgba(148, 163, 196, 0.10), transparent 70%),
+        linear-gradient(180deg, var(--pl-canvas) 0%, var(--pl-canvas-2) 100%);
+}
+
+/* ---------- Sidebar ---------- */
+body:not(.dark-mode) #sidebar {
+    background: linear-gradient(180deg, #fbfcfe 0%, var(--pl-sidebar) 100%) !important;
+    border-right: 1px solid var(--pl-border) !important;
+    box-shadow: 1px 0 0 rgba(255, 255, 255, 0.8), 8px 0 30px -22px rgba(15, 26, 48, 0.25);
+}
+
+body:not(.dark-mode) #sidebar > div:first-child {
+    border-color: var(--pl-border-soft) !important;
+}
+
+body:not(.dark-mode) #sidebar .brand-signature {
+    color: var(--pl-ink) !important;
+}
+
+body:not(.dark-mode) #sidebar nav a {
+    color: var(--pl-text) !important;
+    font-weight: 500;
+}
+
+body:not(.dark-mode) #sidebar nav a i,
+body:not(.dark-mode) #sidebar nav a svg {
+    color: var(--pl-muted) !important;
+}
+
+body:not(.dark-mode) #sidebar nav a:hover {
+    background: rgba(37, 75, 184, 0.055) !important;
+    color: var(--pl-ink) !important;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+body:not(.dark-mode) #sidebar nav a.active,
+body:not(.dark-mode) #sidebar nav a.bg-indigo-50 {
+    background: linear-gradient(135deg, #ffffff 0%, #eef2fb 100%) !important;
+    color: var(--pl-ink) !important;
+    font-weight: 600;
+    border: 1px solid #d9e1f3;
+    box-shadow: 0 1px 2px rgba(15, 26, 48, 0.05), 0 10px 22px -14px rgba(37, 75, 184, 0.35);
+}
+
+body:not(.dark-mode) #sidebar nav a:hover i,
+body:not(.dark-mode) #sidebar nav a.active i,
+body:not(.dark-mode) #sidebar nav a.bg-indigo-50 i {
+    color: var(--pl-primary) !important;
+}
+
+/* Profile block at the bottom */
+body:not(.dark-mode) #sidebar > div:last-of-type {
+    border-top: 1px solid var(--pl-border-soft) !important;
+    background: rgba(255, 255, 255, 0.55);
+}
+
+/* ---------- Header ---------- */
+body:not(.dark-mode) .dashboard-header,
+body:not(.dark-mode) .main-page-header,
+body:not(.dark-mode) .page-header {
+    background: rgba(252, 253, 255, 0.82) !important;
+    backdrop-filter: saturate(160%) blur(14px);
+    -webkit-backdrop-filter: saturate(160%) blur(14px);
+    border-bottom: 1px solid var(--pl-border) !important;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9), 0 8px 24px -20px rgba(15, 26, 48, 0.3);
+}
+
+body:not(.dark-mode) .dashboard-header h1,
+body:not(.dark-mode) .page-header h1,
+body:not(.dark-mode) .main-page-header h1 {
+    color: var(--pl-ink);
+}
+
+body:not(.dark-mode) .header-title-icon {
+    background: linear-gradient(145deg, #f3f6ff, #e2e9fa);
+    color: var(--pl-primary);
+    box-shadow: inset 0 0 0 1px rgba(37, 75, 184, 0.12);
+}
+
+body:not(.dark-mode) .dashboard-header button,
+body:not(.dark-mode) .theme-toggle {
+    background: var(--pl-surface);
+    color: var(--pl-primary);
+    border: 1px solid var(--pl-border);
+    box-shadow: var(--pl-shadow-sm);
+}
+
+body:not(.dark-mode) .dashboard-header .notification-button {
+    color: var(--pl-muted);
+}
+
+body:not(.dark-mode) .dashboard-header button:hover,
+body:not(.dark-mode) .theme-toggle:hover {
+    background: #eef2fb;
+    color: var(--pl-primary-deep);
+    border-color: #cdd8f0;
+}
+
+body:not(.dark-mode) #sidebar-toggle {
+    background: var(--pl-surface) !important;
+    border-color: var(--pl-border) !important;
+    color: var(--pl-text) !important;
+}
+
+/* ---------- Welcome banner ---------- */
+body:not(.dark-mode) .dashboard-welcome {
+    position: relative;
+    background:
+        radial-gradient(520px 200px at 100% 0%, rgba(37, 75, 184, 0.08), transparent 70%),
+        linear-gradient(115deg, #fcfdff 0%, #f3f6fb 100%);
+    border: 1px solid var(--pl-border);
+    box-shadow: var(--pl-shadow-md);
+    overflow: hidden;
+}
+
+/* Silver hairline along the top edge */
+body:not(.dark-mode) .dashboard-welcome::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 28px;
+    right: 28px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--pl-gold), transparent);
+    opacity: 0.8;
+}
+
+body:not(.dark-mode) .welcome-eyebrow {
+    color: #4a5f8f;                 /* steel navy */
+    letter-spacing: 1.6px;
+}
+
+body:not(.dark-mode) .dashboard-welcome h2 {
+    color: var(--pl-ink);
+}
+
+body:not(.dark-mode) .dashboard-welcome p:last-child {
+    color: var(--pl-muted);
+}
+
+body:not(.dark-mode) main .welcome-icon {
+    background: linear-gradient(145deg, #ffffff, #e3eafb);
+    color: var(--pl-primary);
+    box-shadow: inset 0 0 0 1px rgba(37, 75, 184, 0.14), 0 12px 22px -12px rgba(37, 75, 184, 0.45);
+}
+
+/* ---------- Cards ---------- */
+body:not(.dark-mode) main .bg-white,
+body:not(.dark-mode) main .bg-white.rounded-2xl {
+    background: linear-gradient(180deg, #ffffff 0%, var(--pl-surface) 100%);
+    border-color: var(--pl-border);
+    box-shadow: var(--pl-shadow-md);
+}
+
+body:not(.dark-mode) main .summary-cards > div:hover {
+    box-shadow: var(--pl-shadow-lg);
+}
+
+body:not(.dark-mode) main .grid > .bg-white.rounded-2xl:hover,
+body:not(.dark-mode) #recent-transactions-section:hover {
+    border-color: #cfd7e6;
+}
+
+/* Net Balance hero card - only when it is in its default (indigo) state,
+   so any positive/negative state colours set by your JS still apply. */
+body:not(.dark-mode) .balance-card.bg-indigo-600 {
+    background:
+        radial-gradient(420px 220px at 100% 0%, rgba(148, 163, 196, 0.28), transparent 65%),
+        linear-gradient(135deg, #254bb8 0%, #142a6e 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 24px 40px -22px rgba(20, 42, 110, 0.65);
+}
+
+/* Typography inside cards */
+body:not(.dark-mode) main .text-slate-800 { color: var(--pl-ink); }
+body:not(.dark-mode) main .text-slate-700 { color: var(--pl-text); }
+body:not(.dark-mode) main .text-slate-500 { color: var(--pl-muted); }
+body:not(.dark-mode) main .text-slate-400 { color: var(--pl-faint); }
+body:not(.dark-mode) main .border-slate-100,
+body:not(.dark-mode) main .border-slate-200 { border-color: var(--pl-border-soft); }
+
+/* Icon tiles: soft tonal with a hairline ring */
+body:not(.dark-mode) main .bg-emerald-50 {
+    background: linear-gradient(145deg, #f0fbf6, #e1f6ec);
+    box-shadow: inset 0 0 0 1px rgba(16, 150, 100, 0.16);
+}
+
+body:not(.dark-mode) main .bg-rose-50 {
+    background: linear-gradient(145deg, #fff5f6, #fde8eb);
+    box-shadow: inset 0 0 0 1px rgba(225, 29, 72, 0.14);
+}
+
+body:not(.dark-mode) main .bg-indigo-50 {
+    background: linear-gradient(145deg, #f4f7ff, #e6ecfb);
+    box-shadow: inset 0 0 0 1px rgba(37, 75, 184, 0.14);
+}
+
+/* ---------- Forms ---------- */
+body:not(.dark-mode) main form label {
+    color: var(--pl-muted);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+body:not(.dark-mode) main form input,
+body:not(.dark-mode) main form select {
+    background-color: var(--pl-surface-2);
+    border: 1px solid var(--pl-border);
+    color: var(--pl-ink);
+    box-shadow: inset 0 1px 2px rgba(15, 26, 48, 0.03);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+body:not(.dark-mode) main form input::placeholder {
+    color: var(--pl-faint);
+}
+
+body:not(.dark-mode) main form input:hover,
+body:not(.dark-mode) main form select:hover {
+    background-color: #fcfdff;
+    border-color: #cbd3e3;
+}
+
+body:not(.dark-mode) main form input:focus,
+body:not(.dark-mode) main form select:focus {
+    background-color: #ffffff;
+    border-color: var(--pl-primary);
+    box-shadow: 0 0 0 4px rgba(37, 75, 184, 0.11);
+}
+
+/* Income form keeps its emerald focus identity */
+body:not(.dark-mode) #income-form input:focus,
+body:not(.dark-mode) #income-form select:focus {
+    border-color: #0f9d6b;
+    box-shadow: 0 0 0 4px rgba(15, 157, 107, 0.12);
+}
+
+/* ---------- Buttons ---------- */
+body:not(.dark-mode) #add-income-button {
+    background-color: #0f8a5f;
+    background-image:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0) 60%),
+        linear-gradient(135deg, #12a06f, #0b6e4c);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 12px 22px -12px rgba(11, 110, 76, 0.75);
+}
+
+body:not(.dark-mode) #add-expense-button {
+    background-color: var(--pl-primary);
+    background-image:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0) 60%),
+        linear-gradient(135deg, #2f5ce0, var(--pl-primary-deep));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 12px 22px -12px rgba(23, 47, 128, 0.8);
+}
+
+body:not(.dark-mode) #add-income-button:hover:not(:disabled) {
+    background-color: #0b6e4c;
+}
+
+body:not(.dark-mode) #add-expense-button:hover:not(:disabled) {
+    background-color: var(--pl-primary-deep);
+}
+
+/* ---------- Recent transactions ---------- */
+body:not(.dark-mode) #recent-transactions-section a {
+    color: var(--pl-primary);
+    font-weight: 600;
+}
+
+body:not(.dark-mode) #recent-transactions > div:not(.tx-skeleton) {
+    border-bottom: 1px solid var(--pl-border-soft);
+    padding-bottom: 14px;
+}
+
+body:not(.dark-mode) #recent-transactions > div:not(.tx-skeleton):last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+body:not(.dark-mode) button.edit-btn,
+body:not(.dark-mode) .edit-btn {
+    background: #f3f6ff !important;
+    border-color: #d6def5 !important;
+    color: var(--pl-primary) !important;
+}
+
+body:not(.dark-mode) button.delete-btn,
+body:not(.dark-mode) .delete-btn {
+    background: #fff6f6 !important;
+    border-color: #f6d4d6 !important;
+    color: #c4283c !important;
+}
+
+body:not(.dark-mode) .tx-skeleton .sk-dot,
+body:not(.dark-mode) .tx-skeleton .sk-lines i,
+body:not(.dark-mode) .tx-skeleton .sk-amount {
+    background: linear-gradient(90deg, #e9edf4 25%, #f5f7fb 50%, #e9edf4 75%);
+    background-size: 200% 100%;
+}
+
+/* ---------- Scrollbar ---------- */
+body:not(.dark-mode) ::-webkit-scrollbar-thumb {
+    background: #cbd3e2;
+}
+
+body:not(.dark-mode) ::-webkit-scrollbar-thumb:hover {
+    background: #a5afc4;
+}
+
+/* ---------- Focus ring ---------- */
+body:not(.dark-mode) main a:focus-visible,
+body:not(.dark-mode) main button:focus-visible,
+body:not(.dark-mode) .theme-toggle:focus-visible,
+body:not(.dark-mode) #sidebar a:focus-visible {
+    outline: 2px solid var(--pl-primary);
+    outline-offset: 3px;
+}
+
+
+/* =========================================================================
+   PREMIUM LIGHT MODE - SIDEBAR & HEADER UPGRADE
+   Deep navy sidebar + frosted gradient header with an accent line.
+   Light mode only; dark mode is untouched.
+   ========================================================================= */
+
+/* ---------- Sidebar: deep navy ---------- */
+body:not(.dark-mode) #sidebar {
+    background:
+        radial-gradient(360px 260px at 0% 0%, rgba(120, 150, 230, 0.20), transparent 70%),
+        radial-gradient(300px 240px at 100% 100%, rgba(148, 163, 196, 0.10), transparent 70%),
+        linear-gradient(180deg, #14213f 0%, #0d1730 100%) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+    box-shadow: 10px 0 40px -18px rgba(13, 23, 48, 0.55);
+}
+
+/* Brand area */
+body:not(.dark-mode) #sidebar > div:first-child {
+    border-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+body:not(.dark-mode) #sidebar .brand-signature {
+    color: #ffffff !important;
+}
+
+/* Navigation links */
+body:not(.dark-mode) #sidebar nav a {
+    color: #b9c5de !important;
+    font-weight: 500;
+    border: 1px solid transparent;
+}
+
+body:not(.dark-mode) #sidebar nav a i,
+body:not(.dark-mode) #sidebar nav a svg {
+    color: #7f90b3 !important;
+}
+
+body:not(.dark-mode) #sidebar nav a:hover {
+    background: rgba(255, 255, 255, 0.07) !important;
+    color: #ffffff !important;
+    box-shadow: none;
+    transform: translateX(3px);
+}
+
+body:not(.dark-mode) #sidebar nav a:hover i,
+body:not(.dark-mode) #sidebar nav a:hover svg {
+    color: #cfd9f2 !important;
+}
+
+/* Active item: glassy highlight with a soft glow */
+body:not(.dark-mode) #sidebar nav a.active,
+body:not(.dark-mode) #sidebar nav a.bg-indigo-50 {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.06)) !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.18),
+        0 12px 24px -14px rgba(0, 0, 0, 0.6),
+        0 0 24px -8px rgba(110, 140, 235, 0.45);
+}
+
+body:not(.dark-mode) #sidebar nav a.active i,
+body:not(.dark-mode) #sidebar nav a.bg-indigo-50 i,
+body:not(.dark-mode) #sidebar nav a.active svg,
+body:not(.dark-mode) #sidebar nav a.bg-indigo-50 svg {
+    color: #9db4f5 !important;
+}
+
+/* Profile block */
+body:not(.dark-mode) #sidebar > div:last-of-type {
+    background: rgba(255, 255, 255, 0.04);
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: #e6ecf8;
+}
+
+body:not(.dark-mode) #sidebar > div:last-of-type [class*="text-slate-8"],
+body:not(.dark-mode) #sidebar > div:last-of-type [class*="text-gray-8"],
+body:not(.dark-mode) #sidebar > div:last-of-type p:first-child {
+    color: #ffffff;
+}
+
+body:not(.dark-mode) #sidebar > div:last-of-type [class*="text-slate-4"],
+body:not(.dark-mode) #sidebar > div:last-of-type [class*="text-slate-5"],
+body:not(.dark-mode) #sidebar > div:last-of-type [class*="text-gray-5"] {
+    color: #8a99ba;
+}
+
+body:not(.dark-mode) #sidebar > div:last-of-type [class*="rounded-full"] {
+    background: linear-gradient(145deg, #5b7be8, #3552c2);
+    color: #ffffff;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12), 0 8px 16px -8px rgba(0, 0, 0, 0.6);
+}
+
+/* Mobile close button on the navy panel */
+body:not(.dark-mode) #sidebar-close {
+    color: #b9c5de !important;
+}
+
+body:not(.dark-mode) #sidebar-close:hover {
+    background: rgba(255, 255, 255, 0.10) !important;
+    color: #ffffff !important;
+}
+
+/* Scrollbar inside the navy sidebar */
+body:not(.dark-mode) #sidebar nav::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+/* ---------- Header: frosted gradient + accent line ---------- */
+body:not(.dark-mode) .dashboard-header,
+body:not(.dark-mode) .main-page-header,
+body:not(.dark-mode) .page-header {
+    background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.94) 0%, rgba(238, 243, 252, 0.90) 100%) !important;
+    border-bottom: 1px solid #d5ddec !important;
+    box-shadow: 0 10px 30px -22px rgba(15, 26, 48, 0.45);
+    position: relative;
+}
+
+/* Thin navy-to-silver accent along the bottom edge */
+body:not(.dark-mode) .dashboard-header::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: linear-gradient(90deg, #254bb8 0%, #6f8be0 35%, rgba(148, 163, 196, 0.15) 100%);
+    pointer-events: none;
+}
+
+body:not(.dark-mode) .dashboard-header h1 {
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    color: #0f1a30;
+}
+
+body:not(.dark-mode) .header-title-icon {
+    background: linear-gradient(145deg, #254bb8, #172f80);
+    color: #ffffff;
+    box-shadow: 0 10px 18px -10px rgba(23, 47, 128, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+/* Header buttons: crisp white chips */
+body:not(.dark-mode) .dashboard-header button,
+body:not(.dark-mode) .theme-toggle {
+    background: #ffffff;
+    border: 1px solid #d5ddec;
+    color: #254bb8;
+    box-shadow: 0 1px 2px rgba(15, 26, 48, 0.06), 0 8px 16px -12px rgba(15, 26, 48, 0.3);
+}
+
+body:not(.dark-mode) .dashboard-header button:hover,
+body:not(.dark-mode) .theme-toggle:hover {
+    background: #254bb8;
+    color: #ffffff;
+    border-color: #254bb8;
+    transform: translateY(-1px);
+}
+
+body:not(.dark-mode) .dashboard-header .notification-button {
+    color: #66728a;
+}
+
+
+/* =========================================================================
+   PREMIUM LIGHT MODE - COHESION PASS
+   Calmer sidebar, aligned brand row / header, visible logo, no stray lines,
+   Net Balance negative state harmonised with the navy palette.
+   ========================================================================= */
+
+/* ---------- Sidebar: calmer ink-navy, no light spill onto the page ---------- */
+body:not(.dark-mode) #sidebar {
+    background:
+        radial-gradient(320px 220px at 0% 0%, rgba(90, 120, 210, 0.10), transparent 70%),
+        linear-gradient(180deg, #111c36 0%, #0b1326 100%) !important;
+    border-right: 1px solid #0b1326 !important;
+    box-shadow: none;
+}
+
+/* Brand row lines up exactly with the header (desktop) */
+@media (min-width: 768px) {
+    body:not(.dark-mode) #sidebar > div:first-child {
+        height: 70px;
+        min-height: 70px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+}
+
+/* Logo mark: make it clearly visible on navy */
+body:not(.dark-mode) #sidebar .brand-logo {
+    filter: brightness(0) invert(1);
+    opacity: 0.95;
+}
+
+/* Quieter nav: less glow, more refinement */
+body:not(.dark-mode) #sidebar nav a.active,
+body:not(.dark-mode) #sidebar nav a.bg-indigo-50 {
+    background: rgba(255, 255, 255, 0.09) !important;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+body:not(.dark-mode) #sidebar nav a:hover {
+    transform: none;
+    background: rgba(255, 255, 255, 0.06) !important;
+}
+
+body:not(.dark-mode) #sidebar nav a.active i,
+body:not(.dark-mode) #sidebar nav a.bg-indigo-50 i,
+body:not(.dark-mode) #sidebar nav a.active svg,
+body:not(.dark-mode) #sidebar nav a.bg-indigo-50 svg {
+    color: #a9bdf7 !important;
+}
+
+/* ---------- Header: clean, flat, no stray accent stroke ---------- */
+body:not(.dark-mode) .dashboard-header::after {
+    display: none;
+}
+
+body:not(.dark-mode) .dashboard-header,
+body:not(.dark-mode) .main-page-header,
+body:not(.dark-mode) .page-header {
+    background: rgba(252, 253, 255, 0.92) !important;
+    border-bottom: 1px solid #dfe4ee !important;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* Header buttons: calmer, hover stays light */
+body:not(.dark-mode) .dashboard-header button:hover,
+body:not(.dark-mode) .theme-toggle:hover {
+    background: #eef2fb;
+    color: #172f80;
+    border-color: #cdd8f0;
+}
+
+/* ---------- Page canvas: remove the muddy grey haze under the header ---------- */
+body:not(.dark-mode) main > div.flex-1.overflow-y-auto {
+    background:
+        radial-gradient(900px 360px at 90% -120px, rgba(37, 75, 184, 0.05), transparent 70%),
+        linear-gradient(180deg, #f1f4f9 0%, #ebeff6 100%);
+}
+
+/* ---------- Net Balance: deep garnet instead of bright red ---------- */
+body:not(.dark-mode) .balance-card[class*="bg-red"],
+body:not(.dark-mode) .balance-card[class*="bg-rose"],
+body:not(.dark-mode) .balance-card.negative,
+body:not(.dark-mode) .balance-card.is-negative {
+    background:
+        radial-gradient(380px 200px at 100% 0%, rgba(255, 255, 255, 0.14), transparent 65%),
+        linear-gradient(135deg, #b02840 0%, #741527 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 22px 38px -22px rgba(116, 21, 39, 0.65);
+}
+
+/* Cards: slightly crisper edge so they separate from the canvas cleanly */
+body:not(.dark-mode) main .bg-white,
+body:not(.dark-mode) main .bg-white.rounded-2xl,
+body:not(.dark-mode) .dashboard-welcome {
+    border-color: #dde3ee;
+    box-shadow: 0 1px 2px rgba(15, 26, 48, 0.04), 0 12px 28px -20px rgba(15, 26, 48, 0.2);
+}
+
+
+/* =========================================================================
+   PREMIUM LIGHT MODE - UNIFIED SIDEBAR + CONTENT
+   Light sidebar from the same family as the page; navy only as the accent.
+   Light mode only; dark mode is untouched.
+   ========================================================================= */
+
+/* ---------- Sidebar: light, same family as the canvas ---------- */
+body:not(.dark-mode) #sidebar {
+    background: linear-gradient(180deg, #fbfcfe 0%, #f5f7fb 100%) !important;
+    border-right: 1px solid #dfe4ee !important;
+    box-shadow: none;
+}
+
+@media (min-width: 768px) {
+    body:not(.dark-mode) #sidebar > div:first-child {
+        border-bottom: 1px solid #e3e8f1 !important;
+    }
+}
+
+body:not(.dark-mode) #sidebar .brand-signature {
+    color: #0f1a30 !important;
+}
+
+body:not(.dark-mode) #sidebar .brand-logo {
+    filter: none;
+    opacity: 1;
+}
+
+/* Navigation */
+body:not(.dark-mode) #sidebar nav a {
+    color: #3a465f !important;
+    font-weight: 500;
+    border: 1px solid transparent;
+}
+
+body:not(.dark-mode) #sidebar nav a i,
+body:not(.dark-mode) #sidebar nav a svg {
+    color: #7a86a0 !important;
+}
+
+body:not(.dark-mode) #sidebar nav a:hover {
+    background: rgba(37, 75, 184, 0.06) !important;
+    color: #0f1a30 !important;
+    transform: none;
+    box-shadow: none;
+}
+
+body:not(.dark-mode) #sidebar nav a:hover i,
+body:not(.dark-mode) #sidebar nav a:hover svg {
+    color: #254bb8 !important;
+}
+
+/* Active item: solid navy pill, the one strong accent in the sidebar */
+body:not(.dark-mode) #sidebar nav a.active,
+body:not(.dark-mode) #sidebar nav a.bg-indigo-50 {
+    background: linear-gradient(135deg, #2a52c4 0%, #1a37a0 100%) !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 12px 22px -14px rgba(23, 47, 128, 0.75);
+}
+
+body:not(.dark-mode) #sidebar nav a.active i,
+body:not(.dark-mode) #sidebar nav a.bg-indigo-50 i,
+body:not(.dark-mode) #sidebar nav a.active svg,
+body:not(.dark-mode) #sidebar nav a.bg-indigo-50 svg {
+    color: #ffffff !important;
+}
+
+/* Profile block */
+body:not(.dark-mode) #sidebar > div:last-of-type {
+    background: rgba(255, 255, 255, 0.7);
+    border-top: 1px solid #e3e8f1 !important;
+    color: #27324a;
+}
+
+body:not(.dark-mode) #sidebar > div:last-of-type [class*="text-slate-8"],
+body:not(.dark-mode) #sidebar > div:last-of-type [class*="text-gray-8"],
+body:not(.dark-mode) #sidebar > div:last-of-type p:first-child {
+    color: #0f1a30;
+}
+
+body:not(.dark-mode) #sidebar > div:last-of-type [class*="text-slate-4"],
+body:not(.dark-mode) #sidebar > div:last-of-type [class*="text-slate-5"],
+body:not(.dark-mode) #sidebar > div:last-of-type [class*="text-gray-5"] {
+    color: #6d7a94;
+}
+
+body:not(.dark-mode) #sidebar > div:last-of-type [class*="rounded-full"] {
+    box-shadow: 0 0 0 3px #ffffff, 0 8px 16px -8px rgba(23, 47, 128, 0.5);
+}
+
+/* Mobile close button + sidebar scrollbar back to light-theme colours */
+body:not(.dark-mode) #sidebar-close {
+    color: #66728a !important;
+}
+
+body:not(.dark-mode) #sidebar-close:hover {
+    background: #e8ecf4 !important;
+    color: #254bb8 !important;
+}
+
+body:not(.dark-mode) #sidebar nav::-webkit-scrollbar-thumb {
+    background: #cbd3e2;
+}
+
+/* ---------- Net Balance: tone the red down whatever sets it ---------- */
+body:not(.dark-mode) .balance-card {
+    filter: saturate(0.78) brightness(0.93);
+}
+
+
+/* =========================================================================
+   NET BALANCE - SATURATED RED
+   Replaces the earlier toned-down garnet / desaturating filter.
+   ========================================================================= */
+
+/* Remove the earlier desaturation and give the card a slight colour boost,
+   whatever class or inline style your JS uses to set the red. */
+body:not(.dark-mode) .balance-card {
+    filter: saturate(1.25) brightness(1.03);
+}
+
+/* If the card uses a red/rose class or a "negative" class, use a vivid red gradient */
+body:not(.dark-mode) .balance-card[class*="bg-red"],
+body:not(.dark-mode) .balance-card[class*="bg-rose"],
+body:not(.dark-mode) .balance-card.negative,
+body:not(.dark-mode) .balance-card.is-negative {
+    background:
+        radial-gradient(380px 200px at 100% 0%, rgba(255, 255, 255, 0.18), transparent 65%),
+        linear-gradient(135deg, #f0172f 0%, #c40f22 55%, #9d0a1a 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.28),
+        0 22px 38px -20px rgba(220, 20, 45, 0.7);
+}
+
+/* =========================================================================
+   SPENDWISE - MOBILE LAYOUT (dashboard)
+   Load AFTER dashboard.css. Everything is scoped to phones (<= 767px),
+   except the two hidden-by-default helpers, so desktop is untouched.
+   ========================================================================= */
+
+/* Helpers that only exist on mobile ------------------------------------- */
+.mobile-actions,
+.mobile-bottom-nav {
+    display: none;
+}
+
+@media (max-width: 767px) {
+
+    /* ---------- Header: slim, title + icon, controls on the right ------- */
+    .dashboard-header {
+        height: 60px;
+        min-height: 60px;
+        padding: 0 14px;
+        gap: 10px;
+    }
+
+    .dashboard-header > div:first-child {
+        gap: 10px;
+    }
+
+    .dashboard-header h1,
+    .header-title {
+        font-size: 17px;
+        line-height: 24px;
+        gap: 8px;
+    }
+
+    .header-title-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 9px;
+        font-size: 17px;
+    }
+
+    .dashboard-header button,
+    .theme-toggle {
+        width: 36px;
+        height: 36px;
+        border-radius: 11px;
+    }
+
+    .dashboard-header .header-actions {
+        gap: 8px;
+    }
+
+    .dashboard-header button i,
+    .theme-toggle i {
+        font-size: 18px;
+    }
+
+    /* ---------- Page body ---------------------------------------------- */
+    /* Room for the fixed bottom nav */
+    main > div.flex-1.overflow-y-auto {
+        padding: 14px 14px calc(88px + env(safe-area-inset-bottom, 0px));
+    }
+
+    main .max-w-7xl > * + * {
+        margin-top: 14px !important;
+    }
+
+    /* Smaller card padding + headings everywhere */
+    main .p-6 {
+        padding: 16px !important;
+    }
+
+    main .mb-6 {
+        margin-bottom: 14px !important;
+    }
+
+    main .bg-white.rounded-2xl,
+    .dashboard-welcome {
+        border-radius: 16px;
+    }
+
+    /* ---------- Welcome card ------------------------------------------- */
+    .dashboard-welcome {
+        padding: 16px 18px;
+        gap: 12px;
+    }
+
+    .welcome-eyebrow {
+        font-size: 10px;
+        letter-spacing: 1.2px;
+        margin-bottom: 5px;
+    }
+
+    .dashboard-welcome h2 {
+        font-size: 20px;
+        letter-spacing: -0.5px;
+    }
+
+    .dashboard-welcome p:last-child {
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    .welcome-icon {
+        width: 40px;
+        height: 40px;
+        flex-basis: 40px;
+        border-radius: 13px;
+        font-size: 20px;
+    }
+
+    /* ---------- Summary cards: balance full width, income | expense ----- */
+    .summary-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .summary-cards > div {
+        min-height: 0;
+    }
+
+    .summary-cards > .balance-card {
+        grid-column: 1 / -1;
+        padding: 16px !important;
+    }
+
+    .summary-cards .balance-card h2 {
+        font-size: 28px;
+        letter-spacing: -0.04em;
+    }
+
+    .summary-cards .balance-card .mb-4 {
+        margin-bottom: 10px;
+    }
+
+    /* Income / expense: icon on top, figure underneath */
+    .summary-cards > div:not(.balance-card) {
+        padding: 14px !important;
+        justify-content: flex-start;
+    }
+
+    .summary-cards > div:not(.balance-card) > .flex {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .summary-cards .w-12.h-12 {
+        width: 34px;
+        height: 34px;
+        font-size: 17px;
+    }
+
+    .summary-cards > div:not(.balance-card) p {
+        font-size: 12px;
+        margin-bottom: 2px;
+    }
+
+    .summary-cards h3 {
+        font-size: 19px;
+        letter-spacing: -0.04em;
+    }
+
+    /* No lift effect on touch screens */
+    main .summary-cards > div:hover {
+        transform: none;
+    }
+
+    /* ---------- Quick action pills (replace stacked tall forms' CTA) ---- */
+    .mobile-actions {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding: 2px 2px 6px;
+        margin-left: -2px;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .mobile-actions::-webkit-scrollbar {
+        display: none;
+    }
+
+    .mobile-action {
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 44px;
+        padding: 0 16px;
+        border-radius: 999px;
+        border: 1px solid #dfe4ee;
+        background: #ffffff;
+        color: #27324a;
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+        cursor: pointer;
+        box-shadow: 0 1px 2px rgba(15, 26, 48, 0.05);
+        transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    .mobile-action i {
+        font-size: 18px;
+        color: #254bb8;
+    }
+
+    .mobile-action:active {
+        transform: scale(0.96);
+    }
+
+    .mobile-action.primary {
+        background: linear-gradient(135deg, #2f5ce0, #172f80);
+        border-color: transparent;
+        color: #ffffff;
+        box-shadow: 0 10px 18px -10px rgba(23, 47, 128, 0.8);
+    }
+
+    .mobile-action.primary i {
+        color: #ffffff;
+    }
+
+    /* Scan Bill now lives in the pill row */
+    #scan-bill-button {
+        display: none !important;
+    }
+
+    /* ---------- Forms --------------------------------------------------- */
+    main form input,
+    main form select {
+        font-size: 16px; /* stops iOS zooming into the field */
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    main form select {
+        padding-right: 38px;
+        background-position: right 12px center;
+    }
+
+    main form .space-y-4 > * + * {
+        margin-top: 12px;
+    }
+
+    #add-income-button,
+    #add-expense-button {
+        min-height: 48px;
+    }
+
+    /* Anchor jumps from the pills land below the header */
+    #income-card,
+    #expense-card {
+        scroll-margin-top: 12px;
+    }
+
+    /* ---------- Recent transactions ------------------------------------ */
+    #recent-transactions-section h3 {
+        font-size: 17px;
+    }
+
+    #recent-transactions {
+        gap: 0;
+    }
+
+    #recent-transactions > div:not(.tx-skeleton) {
+        gap: 10px;
+        min-width: 0;
+    }
+
+    #recent-transactions > div:not(.tx-skeleton):hover {
+        box-shadow: none;
+    }
+
+    /* Row layout (matches the markup dashboard.js renders):
+         [ title / subtitle ............ amount ]
+         [ ........................ Edit  Delete ]  */
+    #recent-transactions > div:not(.tx-skeleton) {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        column-gap: 12px;
+        row-gap: 8px;
+        align-items: start;
+        padding-bottom: 12px;
+    }
+
+    /* Flatten the "right" wrapper so amount and buttons join the row grid */
+    #recent-transactions > div:not(.tx-skeleton) > div:last-child {
+        display: contents;
+    }
+
+    #recent-transactions > div:not(.tx-skeleton) > div:first-child {
+        grid-column: 1;
+        grid-row: 1;
+        min-width: 0;
+    }
+
+    #recent-transactions > div:not(.tx-skeleton) > div:last-child > span {
+        grid-column: 2;
+        grid-row: 1;
+        font-size: 15px;
+        white-space: nowrap;
+    }
+
+    #recent-transactions > div:not(.tx-skeleton) > div:last-child > div {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        justify-content: flex-end;
+    }
+
+    /* Title / subtitle truncate on one line each */
+    #recent-transactions > div:not(.tx-skeleton) > div:first-child p {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    #recent-transactions > div:not(.tx-skeleton) > div:first-child p:first-child {
+        font-size: 14px;
+    }
+
+    /* Smaller edit / delete buttons */
+    #recent-transactions button.edit-btn,
+    #recent-transactions button.delete-btn {
+        padding: 5px 9px !important;
+        font-size: 11px !important;
+        border-radius: 7px !important;
+    }
+
+    /* ---------- Bottom navigation (built by dashboard-mobile.js) -------- */
+    .mobile-bottom-nav {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 80;
+        display: grid;
+        grid-template-columns: repeat(var(--mbn-count, 4), minmax(0, 1fr));
+        padding: 6px 6px calc(6px + env(safe-area-inset-bottom, 0px));
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: saturate(160%) blur(14px);
+        -webkit-backdrop-filter: saturate(160%) blur(14px);
+        border-top: 1px solid #dfe4ee;
+        box-shadow: 0 -10px 30px -22px rgba(15, 26, 48, 0.35);
+    }
+
+    .mobile-bottom-nav a,
+    .mobile-bottom-nav button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        padding: 6px 2px;
+        border-radius: 12px;
+        color: #66728a;
+        font-size: 11px;
+        font-weight: 600;
+        text-decoration: none;
+        letter-spacing: 0.01em;
+        -webkit-tap-highlight-color: transparent;
+        transition: color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .mobile-bottom-nav button {
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+        font-family: inherit;
+    }
+
+    .mobile-bottom-nav a i,
+    .mobile-bottom-nav button i {
+        font-size: 22px;
+        line-height: 1;
+    }
+
+    .mobile-bottom-nav a.is-active {
+        color: #254bb8;
+        background: rgba(37, 75, 184, 0.08);
+    }
+
+    /* ---------- Dark mode ---------------------------------------------- */
+    body.dark-mode .mobile-action {
+        background: #17171a;
+        border-color: #2a2a30;
+        color: #e5e5e5;
+        box-shadow: none;
+    }
+
+    body.dark-mode .mobile-action i {
+        color: #a5a0ff;
+    }
+
+    body.dark-mode .mobile-action.primary {
+        background: linear-gradient(135deg, #5b5ff0, #3d3fc4);
+        border-color: transparent;
+        color: #ffffff;
+    }
+
+    body.dark-mode .mobile-action.primary i {
+        color: #ffffff;
+    }
+
+    body.dark-mode .mobile-bottom-nav {
+        background: rgba(15, 15, 15, 0.94);
+        border-top-color: #262626;
+        box-shadow: none;
+    }
+
+    body.dark-mode .mobile-bottom-nav a,
+    body.dark-mode .mobile-bottom-nav button {
+        color: #a3a3a3;
+    }
+
+    body.dark-mode .mobile-bottom-nav a.is-active {
+        color: #a5a0ff;
+        background: rgba(165, 160, 255, 0.12);
+    }
+}
+
+/* Very small phones ------------------------------------------------------ */
+@media (max-width: 380px) {
+    .summary-cards h3 {
+        font-size: 17px;
+    }
+
+    .summary-cards .balance-card h2 {
+        font-size: 25px;
+    }
+
+    .mobile-action {
+        padding: 0 13px;
+        font-size: 13px;
+    }
+}
+
+/* SpendWise - mobile layout (phones, up to 767px)
+   Link this file AFTER dashboard.css on every page.
+   Desktop and tablet layouts are not touched. */
+
+/* ---------- Log out button (sidebar) ---------- */
+.logout-btn {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #64748b;
+    font-size: 19px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.logout-btn:hover { background: #fef2f2; border-color: #fecaca; color: #dc2626; }
+body.dark-mode .logout-btn { background: #18181b !important; border-color: #2a2a30; color: #d4d4d8; }
+body.dark-mode .logout-btn:hover { background: rgba(255, 45, 69, 0.14) !important; border-color: rgba(255, 45, 69, 0.35); color: #ff5468; }
+
+/* ---------- Hidden on larger screens ---------- */
+.dashboard-header .m-avatar,
+.m-brand,
+.m-actions,
+.m-sheet-close,
+.m-sheet-grip,
+.m-sheet-backdrop { display: none; }
+
+/* ---------- Bottom navigation ---------- */
+.bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom);
+    background: rgba(252, 253, 255, 0.94);
+    backdrop-filter: saturate(160%) blur(14px);
+    -webkit-backdrop-filter: saturate(160%) blur(14px);
+    box-shadow: 0 -10px 28px -22px rgba(15, 26, 48, 0.35);
+}
+
+.bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-height: 62px;
+    padding: 8px 4px 6px;
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: color 0.2s ease;
+}
+
+.bottom-nav-item i { font-size: 23px; transition: transform 0.25s cubic-bezier(0.22, 0.8, 0.24, 1); }
+.bottom-nav-item.is-active { color: #4f46e5; font-weight: 600; }
+.bottom-nav-item.is-active i { transform: translateY(-1px) scale(1.06); }
+.bottom-nav-item:active i { transform: scale(0.92); }
+
+body.dark-mode .bottom-nav {
+    background: rgba(15, 15, 15, 0.94) !important;
+    border-color: #262626 !important;
+    box-shadow: 0 -12px 30px -18px rgba(0, 0, 0, 1);
+}
+body.dark-mode .bottom-nav-item { color: #a3a3a3; }
+body.dark-mode .bottom-nav-item.is-active { color: #a5a0ff; }
+
+@media (max-width: 767px) {
+
+    /* ---------- Page frame ---------- */
+    body { height: 100vh; height: 100dvh; }
+
+    main > div.flex-1.overflow-y-auto,
+    .analytics-scroll {
+        padding: 14px 14px calc(88px + env(safe-area-inset-bottom)) !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    main > div.flex-1.overflow-y-auto > div { margin-left: 0; margin-right: 0; }
+
+    /* On the dashboard the avatar opens the menu (profile + log out) */
+    .dashboard-header:has(.m-brand) #sidebar-toggle { display: none !important; }
+
+    /* ---------- Header ---------- */
+    .dashboard-header {
+        height: 64px;
+        min-height: 64px;
+        padding: 0 16px !important;
+    }
+
+    .dashboard-header:has(.m-brand) .header-title { display: none; }
+
+    .m-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+    }
+
+    .m-brand-logo {
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        flex: none;
+        border-radius: 13px;
+        background: linear-gradient(145deg, #f3f6ff, #e2e9fa);
+        color: #4f46e5;
+        font-size: 21px;
+        box-shadow: inset 0 0 0 1px rgba(79, 70, 229, 0.14);
+    }
+
+    .m-brand-text { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
+    .m-brand-text strong { font-size: 19px; font-weight: 650; letter-spacing: -0.03em; color: #0f1a30; }
+    .m-brand-text small { font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em; color: #66728a; }
+
+    body.dark-mode .m-brand-logo { background: rgba(165, 160, 255, 0.14); color: #a5a0ff; box-shadow: inset 0 0 0 1px rgba(165, 160, 255, 0.22); }
+    body.dark-mode .m-brand-text strong { color: #f5f5f5; }
+    body.dark-mode .m-brand-text small { color: #a3a3a3; }
+
+    .dashboard-header .m-avatar {
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, #5b50f0, #4338ca) !important;
+        color: #ffffff !important;
+        border: 0 !important;
+        font-size: 20px;
+        box-shadow: 0 8px 18px -10px rgba(79, 70, 229, 0.8) !important;
+    }
+
+    .dashboard-header .header-actions { gap: 10px; }
+    .dashboard-header button,
+    .theme-toggle { width: 42px; height: 42px; border-radius: 999px !important; }
+
+    /* ---------- Welcome ---------- */
+    .dashboard-welcome { padding: 18px 20px; border-radius: 20px; }
+    .dashboard-welcome .welcome-icon,
+    .dashboard-welcome p:last-child { display: none; }
+    .dashboard-welcome h2 { font-size: 22px; letter-spacing: -0.03em; }
+    .welcome-eyebrow { font-size: 10.5px; margin-bottom: 8px; }
+
+    /* ---------- Quick action chips ---------- */
+    .m-actions {
+        display: flex;
+        gap: 10px;
+        margin: 0 -14px;
+        padding: 2px 14px 4px;
+        overflow-x: auto;
+        scroll-snap-type: x proximity;
+        scrollbar-width: none;
+    }
+    .m-actions::-webkit-scrollbar { display: none; }
+
+    .m-chip {
+        flex: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 46px;
+        padding: 0 20px;
+        scroll-snap-align: start;
+        border-radius: 999px;
+        border: 1px solid #dfe4ee;
+        background: #ffffff;
+        color: #27324a;
+        font-size: 15px;
+        font-weight: 600;
+        white-space: nowrap;
+        cursor: pointer;
+        box-shadow: 0 1px 2px rgba(15, 26, 48, 0.05);
+        transition: transform 0.15s ease, background-color 0.2s ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .m-chip i { font-size: 20px; color: #4f46e5; }
+    .m-chip:active { transform: scale(0.96); }
+
+    .m-chip--primary {
+        background: linear-gradient(135deg, #5b50f0, #4338ca);
+        border-color: transparent;
+        color: #ffffff;
+        box-shadow: 0 10px 20px -12px rgba(79, 70, 229, 0.85);
+    }
+    .m-chip--primary i { color: #ffffff; }
+
+    body.dark-mode .m-chip { background: #131316; border-color: #26262b; color: #e5e5e5; box-shadow: none; }
+    body.dark-mode .m-chip i { color: #a5a0ff; }
+    body.dark-mode .m-chip--primary { background: linear-gradient(135deg, #6366f1, #4f46e5); color: #fff; border-color: transparent; }
+    body.dark-mode .m-chip--primary i { color: #fff; }
+
+    /* ---------- Summary cards ---------- */
+    .summary-cards { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px; }
+    .summary-cards > .balance-card { grid-column: 1 / -1; padding: 20px !important; min-height: 0; }
+    .summary-cards > .balance-card h2 { font-size: clamp(26px, 8vw, 32px); }
+
+    .summary-cards > div:not(.balance-card) { min-height: 0; padding: 16px !important; justify-content: flex-start; }
+    .summary-cards > div:not(.balance-card) > .flex { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .summary-cards .w-12.h-12 { width: 40px; height: 40px; font-size: 19px; }
+    .summary-cards h3 { font-size: clamp(16px, 5.2vw, 21px); }
+
+    /* ---------- Income / expense forms become bottom sheets ---------- */
+    .m-forms { display: block !important; height: 0; margin: 0 !important; overflow: visible; }
+
+    .m-sheet { display: none !important; }
+
+    .m-sheet.sheet-open {
+        display: flex !important;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 95;
+        max-height: 90vh;
+        max-height: 90dvh;
+        overflow-y: auto;
+        border-radius: 26px 26px 0 0 !important;
+        padding: 14px 20px calc(22px + env(safe-area-inset-bottom)) !important;
+        animation: m-sheet-up 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+        box-shadow: 0 -24px 60px -20px rgba(15, 26, 48, 0.45) !important;
+    }
+
+    .m-sheet-grip {
+        display: block;
+        width: 40px;
+        height: 4px;
+        margin: 0 auto 14px;
+        border-radius: 4px;
+        background: #d5dbe7;
+        flex: none;
+    }
+
+    .m-sheet-close {
+        display: grid;
+        place-items: center;
+        position: absolute;
+        top: 18px;
+        right: 16px;
+        width: 34px;
+        height: 34px;
+        border: 0;
+        border-radius: 50%;
+        background: #eef1f6;
+        color: #475569;
+        font-size: 16px;
+        z-index: 2;
+    }
+    body.dark-mode .m-sheet-grip { background: #3a3a40; }
+    body.dark-mode .m-sheet-close { background: #26262b; color: #d4d4d8; }
+
+    /* The scan button lives in the chip row on phones */
+    .m-sheet .scan-bill-btn { margin-right: 40px; }
+
+    .m-sheet-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 90;
+        background: rgba(15, 23, 42, 0.5);
+        backdrop-filter: blur(3px);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+    }
+    body.m-sheet-open .m-sheet-backdrop { opacity: 1; pointer-events: auto; }
+
+    /* Inputs: 16px stops iOS zooming when a field is focused */
+    main form input,
+    main form select { font-size: 16px !important; min-height: 48px; }
+
+    /* ---------- Recent activity ---------- */
+    #recent-transactions-section {
+        padding: 0 !important;
+        background: transparent !important;
+        border: 0 !important;
+        box-shadow: none !important;
+    }
+    #recent-transactions-section > div:first-child { margin-bottom: 14px; }
+    #recent-transactions-section h3 { font-size: 20px; letter-spacing: -0.02em; }
+
+    #recent-transactions { display: flex; flex-direction: column; gap: 12px; }
+    #recent-transactions > div:not(.tx-skeleton) {
+        padding: 14px 16px;
+        border: 1px solid #e8ecf4;
+        border-radius: 18px;
+        background: #ffffff;
+        box-shadow: 0 1px 2px rgba(15, 26, 48, 0.04), 0 10px 24px -18px rgba(15, 26, 48, 0.2);
+        min-width: 0;
+    }
+    #recent-transactions > div:not(.tx-skeleton):hover { box-shadow: 0 1px 2px rgba(15, 26, 48, 0.04); background-color: #ffffff; }
+    #recent-transactions * { min-width: 0; }
+    #recent-transactions h4,
+    #recent-transactions p { overflow: hidden; text-overflow: ellipsis; }
+
+    body.dark-mode #recent-transactions > div:not(.tx-skeleton) { background: #0f0f0f; border-color: #26262b; box-shadow: none; }
+
+    /* ---------- Scan popup fits small screens ---------- */
+    .scan-modal { align-items: end; padding: 0; }
+    .scan-panel { max-width: none; border-radius: 24px 24px 0 0; padding-bottom: calc(22px + env(safe-area-inset-bottom)); }
+
+    /* Scan button inside the sheet is replaced by the chip */
+    .m-sheet .scan-bill-btn { display: none; }
+}
+
+@keyframes m-sheet-up {
+    from { transform: translateY(40px); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+}
+
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+    .m-sheet.sheet-open { animation: none; }
+}
+
+/*new changes*/
+
+
+/* =========================================================================
+   iOS INPUT ZOOM FIX + HORIZONTAL OVERFLOW FIX
+   Safari zooms into any focused field whose font-size is under 16px.
+   This applies to every iPhone/iPad regardless of width or breakpoint.
+   ========================================================================= */
+
+@supports (-webkit-touch-callout: none) {
+    input,
+    select,
+    textarea,
+    main form input,
+    main form select,
+    main form textarea {
+        font-size: 16px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    input,
+    select,
+    textarea {
+        font-size: 16px !important;
+    }
+}
+
+/* Stop the page being wider than the screen (iOS pans/zooms around overflow) */
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+main,
+.dashboard-main {
+    max-width: 100%;
+}

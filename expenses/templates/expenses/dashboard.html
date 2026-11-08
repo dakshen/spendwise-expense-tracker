@@ -1,0 +1,365 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+    <title>SpendWise - Dashboard</title>
+    <!-- Apply saved theme before first paint (prevents white flash between pages) -->
+    <script>
+        try {
+            if (localStorage.getItem("spendwise-theme") === "dark") {
+                document.documentElement.style.backgroundColor = "#000000";
+            }
+        } catch (e) {}
+    </script>
+
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'expenses/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'expenses/scan-bill.css' %}">
+
+</head>
+
+<body class="bg-slate-50 text-slate-800 h-screen flex overflow-hidden">
+    <script>
+        try {
+            if (localStorage.getItem("spendwise-theme") === "dark") {
+                document.body.classList.add("dark-mode");
+            }
+        } catch (e) {}
+    </script>
+
+
+    <!-- Living background for the main content (decorative; see dashboard-backdrop.css) -->
+    <div class="fin-backdrop" aria-hidden="true">
+        <span class="fin-glow fin-glow--income"></span>
+        <span class="fin-glow fin-glow--violet"></span>
+        <div class="fin-lines">
+            <svg class="fin-line fin-line--income" viewBox="0 0 2400 300" preserveAspectRatio="none" focusable="false">
+                <defs>
+                    <linearGradient id="fin-area-income" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="currentColor" stop-opacity="0.9" />
+                        <stop offset="1" stop-color="currentColor" stop-opacity="0" />
+                    </linearGradient>
+                </defs>
+                <path class="fin-area" fill="url(#fin-area-income)" d="M0 128.1 C33 126.6 67 97.1 100 92.6 C133 88.1 167 103.6 200 101.3 C233 99.0 267 82.0 300 78.7 C333 75.4 367 80.7 400 81.6 C433 82.6 467 83.6 500 84.5 C533 85.5 567 86.5 600 87.4 C633 88.4 667 89.4 700 90.4 C733 91.3 767 92.3 800 93.3 C833 94.2 867 95.2 900 96.2 C933 97.1 967 98.1 1000 99.1 C1033 100.0 1067 97.1 1100 102.0 C1133 106.8 1167 129.7 1200 128.1 C1233 126.6 1267 97.1 1300 92.6 C1333 88.1 1367 103.6 1400 101.3 C1433 99.0 1467 82.0 1500 78.7 C1533 75.4 1567 80.7 1600 81.6 C1633 82.6 1667 83.6 1700 84.5 C1733 85.5 1767 86.5 1800 87.4 C1833 88.4 1867 89.4 1900 90.4 C1933 91.3 1967 92.3 2000 93.3 C2033 94.2 2067 95.2 2100 96.2 C2133 97.1 2167 98.1 2200 99.1 C2233 100.0 2267 97.1 2300 102.0 C2333 106.8 2367 129.7 2400 128.1 L2400 300 L0 300 Z" />
+                <path class="fin-stroke" d="M0 128.1 C33 126.6 67 97.1 100 92.6 C133 88.1 167 103.6 200 101.3 C233 99.0 267 82.0 300 78.7 C333 75.4 367 80.7 400 81.6 C433 82.6 467 83.6 500 84.5 C533 85.5 567 86.5 600 87.4 C633 88.4 667 89.4 700 90.4 C733 91.3 767 92.3 800 93.3 C833 94.2 867 95.2 900 96.2 C933 97.1 967 98.1 1000 99.1 C1033 100.0 1067 97.1 1100 102.0 C1133 106.8 1167 129.7 1200 128.1 C1233 126.6 1267 97.1 1300 92.6 C1333 88.1 1367 103.6 1400 101.3 C1433 99.0 1467 82.0 1500 78.7 C1533 75.4 1567 80.7 1600 81.6 C1633 82.6 1667 83.6 1700 84.5 C1733 85.5 1767 86.5 1800 87.4 C1833 88.4 1867 89.4 1900 90.4 C1933 91.3 1967 92.3 2000 93.3 C2033 94.2 2067 95.2 2100 96.2 C2133 97.1 2167 98.1 2200 99.1 C2233 100.0 2267 97.1 2300 102.0 C2333 106.8 2367 129.7 2400 128.1" />
+                <path class="fin-pulse" d="M0 128.1 C33 126.6 67 97.1 100 92.6 C133 88.1 167 103.6 200 101.3 C233 99.0 267 82.0 300 78.7 C333 75.4 367 80.7 400 81.6 C433 82.6 467 83.6 500 84.5 C533 85.5 567 86.5 600 87.4 C633 88.4 667 89.4 700 90.4 C733 91.3 767 92.3 800 93.3 C833 94.2 867 95.2 900 96.2 C933 97.1 967 98.1 1000 99.1 C1033 100.0 1067 97.1 1100 102.0 C1133 106.8 1167 129.7 1200 128.1 C1233 126.6 1267 97.1 1300 92.6 C1333 88.1 1367 103.6 1400 101.3 C1433 99.0 1467 82.0 1500 78.7 C1533 75.4 1567 80.7 1600 81.6 C1633 82.6 1667 83.6 1700 84.5 C1733 85.5 1767 86.5 1800 87.4 C1833 88.4 1867 89.4 1900 90.4 C1933 91.3 1967 92.3 2000 93.3 C2033 94.2 2067 95.2 2100 96.2 C2133 97.1 2167 98.1 2200 99.1 C2233 100.0 2267 97.1 2300 102.0 C2333 106.8 2367 129.7 2400 128.1" />
+            </svg>
+            <svg class="fin-line fin-line--expense" viewBox="0 0 2400 300" preserveAspectRatio="none" focusable="false">
+                <path class="fin-stroke" d="M0 113.8 C33 115.6 67 128.3 100 133.9 C133 139.5 167 145.1 200 147.4 C233 149.6 267 150.5 300 147.3 C333 144.1 367 127.6 400 128.1 C433 128.5 467 143.0 500 149.9 C533 156.9 567 166.5 600 169.7 C633 172.9 667 169.4 700 169.1 C733 168.7 767 170.3 800 167.5 C833 164.7 867 158.7 900 152.2 C933 145.6 967 133.1 1000 128.3 C1033 123.5 1067 125.9 1100 123.4 C1133 121.0 1167 112.1 1200 113.8 C1233 115.6 1267 128.3 1300 133.9 C1333 139.5 1367 145.1 1400 147.4 C1433 149.6 1467 150.5 1500 147.3 C1533 144.1 1567 127.6 1600 128.1 C1633 128.5 1667 143.0 1700 149.9 C1733 156.9 1767 166.5 1800 169.7 C1833 172.9 1867 169.4 1900 169.1 C1933 168.7 1967 170.3 2000 167.5 C2033 164.7 2067 158.7 2100 152.2 C2133 145.6 2167 133.1 2200 128.3 C2233 123.5 2267 125.9 2300 123.4 C2333 121.0 2367 112.1 2400 113.8" />
+                <path class="fin-pulse fin-pulse--late" d="M0 113.8 C33 115.6 67 128.3 100 133.9 C133 139.5 167 145.1 200 147.4 C233 149.6 267 150.5 300 147.3 C333 144.1 367 127.6 400 128.1 C433 128.5 467 143.0 500 149.9 C533 156.9 567 166.5 600 169.7 C633 172.9 667 169.4 700 169.1 C733 168.7 767 170.3 800 167.5 C833 164.7 867 158.7 900 152.2 C933 145.6 967 133.1 1000 128.3 C1033 123.5 1067 125.9 1100 123.4 C1133 121.0 1167 112.1 1200 113.8 C1233 115.6 1267 128.3 1300 133.9 C1333 139.5 1367 145.1 1400 147.4 C1433 149.6 1467 150.5 1500 147.3 C1533 144.1 1567 127.6 1600 128.1 C1633 128.5 1667 143.0 1700 149.9 C1733 156.9 1767 166.5 1800 169.7 C1833 172.9 1867 169.4 1900 169.1 C1933 168.7 1967 170.3 2000 167.5 C2033 164.7 2067 158.7 2100 152.2 C2133 145.6 2167 133.1 2200 128.3 C2233 123.5 2267 125.9 2300 123.4 C2333 121.0 2367 112.1 2400 113.8" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+
+    {% include 'expenses/sidebar.html' %}
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden dashboard-main">
+
+        <!-- Header -->
+        <header class="dashboard-header bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-8 flex-shrink-0">
+            <!-- Left side: menu and page title -->
+            <div class="flex items-center gap-4">
+                <button id="sidebar-toggle" type="button"
+                    class="md:hidden p-2 text-slate-700 rounded-lg"
+                    aria-label="Open navigation menu" aria-expanded="false">
+                    <span>☰</span>
+                </button>
+
+                <h1 class="header-title text-xl font-semibold text-slate-800"><i class="ph ph-squares-four header-title-icon" aria-hidden="true"></i>Dashboard</h1>
+            </div>
+
+            <!-- Right side: theme and notifications -->
+            <div class="header-actions flex items-center gap-3">
+                <button type="button" id="theme-toggle" class="theme-toggle"
+                    aria-label="Switch to dark mode" title="Switch to dark mode">
+                    <i class="ph ph-moon" id="theme-icon"></i>
+                </button>
+
+                <button type="button" class="notification-button relative p-2 text-slate-400 hover:text-slate-600 transition-colors"
+                    aria-label="Notifications">
+                    <i class="ph ph-bell text-xl"></i>
+                    <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full border border-white"></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Scrollable Dashboard Content -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8">
+            <div class="max-w-7xl mx-auto space-y-6">
+
+                <!-- Dashboard welcome -->
+                <section class="dashboard-welcome">
+                    <div>
+                        <p class="welcome-eyebrow">YOUR FINANCIAL SPACE</p>
+                        <h2>Good to see you, {{ request.user.first_name|default:request.user.username }}.</h2>
+                        <p>Here's an overview of your income, expenses and recent activity.</p>
+                    </div>
+                    <div class="welcome-icon">
+                        <i class="ph ph-wallet"></i>
+                    </div>
+                </section>
+
+                <!-- Summary Cards -->
+                <div class="summary-cards">
+
+                    <!-- Net Balance -->
+                    <div
+                        class="bg-indigo-600 rounded-2xl p-6 text-white shadow-lg shadow-indigo-200 relative overflow-hidden balance-card summary-card">
+                        <div
+                            class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-white opacity-10 blur-2xl ">
+                        </div>
+
+                        <div class="flex justify-between items-start mb-4 ">
+                            <div>
+                                <p class="text-indigo-100 text-sm font-medium mb-1">Net Balance</p>
+                                <h2 id="total-balance" class="text-2xl font-bold whitespace-nowrap">₹0.00</h2>
+                            </div>
+
+                            <div class="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
+                                <i class="ph ph-wallet text-xl"></i>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 text-sm text-indigo-100">
+                            <i class="ph ph-arrows-left-right"></i>
+                            <span id="expense-count">0 transactions</span>
+                        </div>
+                    </div>
+
+                    <!-- Total Income -->
+                    <div
+                        class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex flex-col justify-center summary-card">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-12 h-12 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center text-xl flex-shrink-0">
+                                <i class="ph ph-arrow-down-left"></i>
+                            </div>
+
+                            <div>
+                                <p class="text-slate-500 text-sm font-medium mb-1 summary-card">Total Income</p>
+                                <h3 id="total-income" class="text-xl font-bold text-slate-800 whitespace-nowrap">₹0.00
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Expense -->
+                    <div
+                        class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex flex-col justify-center summary-card">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-12 h-12 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center text-xl flex-shrink-0">
+                                <i class="ph ph-arrow-up-right"></i>
+                            </div>
+
+                            <div>
+                                <p class="text-slate-500 text-sm font-medium mb-1">Total Expense</p>
+                                <h3 id="total-expense" class="text-xl font-bold text-slate-800 whitespace-nowrap">₹0.00
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile quick actions (hidden on desktop) -->
+                <div class="mobile-actions" aria-label="Quick actions">
+                    <button type="button" class="mobile-action primary" data-target="income-card">
+                        <i class="ph ph-plus-circle"></i><span>Add Income</span>
+                    </button>
+                    <button type="button" class="mobile-action" data-target="expense-card">
+                        <i class="ph ph-lightning"></i><span>Quick Transfer</span>
+                    </button>
+                    <button type="button" class="mobile-action" data-scan="true">
+                        <i class="ph ph-scan"></i><span>Scan Bill</span>
+                    </button>
+                </div>
+
+                <!-- Income and Expense Forms -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                    <!-- Add Income -->
+                    <div id="income-card" class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex flex-col">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
+                                <i class="ph ph-arrow-down-left"></i>
+                            </div>
+
+                            <div>
+                                <h3 class="text-lg font-semibold text-slate-800">Add Income</h3>
+                                <p class="text-xs text-slate-400 mt-1">Record money you receive</p>
+                            </div>
+                        </div>
+
+                        <form id="income-form" class="space-y-4 flex-1 flex flex-col justify-between">
+                            {% csrf_token %}
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="income-title"
+                                        class="block text-xs font-medium text-slate-500 mb-1">Income Source</label>
+                                    <input id="income-title" type="text" required maxlength="200"
+                                        placeholder="e.g. Salary"
+                                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors">
+                                </div>
+
+                                <div>
+                                    <label for="income-amount"
+                                        class="block text-xs font-medium text-slate-500 mb-1">Amount (₹)</label>
+                                    <input id="income-amount" type="number" min="0.01" step="0.01" required
+                                        placeholder="0.00"
+                                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-semibold focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors">
+                                </div>
+
+                                <div>
+                                    <label for="income-category"
+                                        class="block text-xs font-medium text-slate-500 mb-1">Category</label>
+                                    <select id="income-category" required
+                                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors">
+                                        <option value="">Select a category</option>
+                                        <option value="Salary">Salary</option>
+                                        <option value="Freelance">Freelance</option>
+                                        <option value="Business">Business</option>
+                                        <option value="Investment">Investment</option>
+                                        <option value="Gift">Gift</option>
+                                        <option value="Refund">Refund</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label for="income-date"
+                                        class="block text-xs font-medium text-slate-500 mb-1">Date</label>
+                                    <input id="income-date" type="date" required
+                                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors">
+                                </div>
+                            </div>
+
+                            <p id="income-message" class="text-sm" role="status"></p>
+
+                            <button id="add-income-button" type="submit"
+                                class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl shadow-sm transition-colors mt-2 flex items-center justify-center gap-2">
+                                <i class="ph ph-plus-circle text-lg"></i>
+                                Add Income
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Add Expense / Quick Transfer -->
+                    <div id="expense-card" class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex flex-col">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl">
+                                <i class="ph ph-arrow-up-right"></i>
+                            </div>
+
+                            <div>
+                                <h3 class="text-lg font-semibold text-slate-800">Quick Transfer</h3>
+                                <p class="text-xs text-slate-400 mt-1">Record an expense</p>
+                            </div>
+
+                            <button type="button" id="scan-bill-button" class="scan-bill-btn" aria-haspopup="dialog">
+                                <i class="ph ph-scan"></i><span>Scan bill</span>
+                            </button>
+                        </div>
+
+                        <form id="expense-form" class="space-y-4 flex-1 flex flex-col justify-between">
+                            {% csrf_token %}
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="expense-title"
+                                        class="block text-xs font-medium text-slate-500 mb-1">Title</label>
+                                    <input id="expense-title" type="text" required maxlength="200"
+                                        placeholder="e.g. Grocery shopping"
+                                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors">
+                                </div>
+
+                                <div>
+                                    <label for="expense-amount"
+                                        class="block text-xs font-medium text-slate-500 mb-1">Amount (₹)</label>
+                                    <input id="expense-amount" type="number" min="0.01" step="0.01" required
+                                        placeholder="0.00"
+                                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-semibold focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors">
+                                </div>
+
+                                <div>
+                                    <label for="expense-category"
+                                        class="block text-xs font-medium text-slate-500 mb-1">Category</label>
+                                    <select id="expense-category" required
+                                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors">
+                                        <option value="">Select a category</option>
+                                        <option value="Food &amp; Dining">Food &amp; Dining</option>
+                                        <option value="Transportation">Transportation</option>
+                                        <option value="Shopping">Shopping</option>
+                                        <option value="Entertainment">Entertainment</option>
+                                        <option value="Bills &amp; Utilities">Bills &amp; Utilities</option>
+                                        <option value="Health">Health</option>
+                                        <option value="Education">Education</option>
+                                        <option value="Travel">Travel</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label for="expense-date"
+                                        class="block text-xs font-medium text-slate-500 mb-1">Date</label>
+                                    <input id="expense-date" type="date" required
+                                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors">
+                                </div>
+                            </div>
+
+                            <p id="form-message" class="text-sm" role="status"></p>
+
+                            <button id="add-expense-button" type="submit"
+                                class="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl shadow-sm shadow-indigo-200 transition-colors mt-2 flex items-center justify-center gap-2">
+                                <i class="ph ph-plus-circle text-lg"></i>
+                                Add Expense
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <div id="recent-transactions-section"
+                    class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-semibold text-slate-800">Recent Transactions</h3>
+                        <a href="{% url 'analytics' %}"
+                            class="text-sm font-medium text-indigo-600 hover:text-indigo-700">
+                            View Analytics
+                        </a>
+                    </div>
+
+                    <div id="recent-transactions" class="space-y-4" aria-live="polite">
+                        <p class="text-sm text-slate-400">Loading your transactions...</p>
+                        <div class="tx-skeleton" aria-hidden="true"><span class="sk-dot"></span><span class="sk-lines"><i></i><i></i></span><span class="sk-amount"></span></div>
+                        <div class="tx-skeleton" aria-hidden="true"><span class="sk-dot"></span><span class="sk-lines"><i></i><i></i></span><span class="sk-amount"></span></div>
+                        <div class="tx-skeleton" aria-hidden="true"><span class="sk-dot"></span><span class="sk-lines"><i></i><i></i></span><span class="sk-amount"></span></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="h-6"></div>
+        </div>
+    </main>
+
+    <script src="{% static 'expenses/dashboard.js' %}" defer></script>
+    <script src="{% static 'expenses/scan-bill.js' %}" defer></script>
+    <script src="{% static 'expenses/sidebar.js' %}"></script>
+    <script src="{% static 'expenses/darkmode.js' %}"></script>
+</body>
+
+</html>

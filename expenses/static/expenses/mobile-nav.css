@@ -1,0 +1,68 @@
+/* =========================================================================
+   SPENDWISE - MOBILE BOTTOM NAV (shared)
+   For Transactions and Analytics. The nav itself is built by
+   dashboard-mobile.js from the sidebar links. Phones only (<= 767px).
+   ========================================================================= */
+
+.mobile-bottom-nav {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .mobile-bottom-nav {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 80;
+        display: grid;
+        grid-template-columns: repeat(var(--mbn-count, 4), minmax(0, 1fr));
+        padding: 6px 6px calc(6px + env(safe-area-inset-bottom, 0px));
+        background: rgba(255, 255, 255, 0.94);
+        -webkit-backdrop-filter: saturate(160%) blur(14px);
+        backdrop-filter: saturate(160%) blur(14px);
+        border-top: 1px solid #dfe4ee;
+        box-shadow: 0 -10px 30px -22px rgba(15, 26, 48, 0.35);
+    }
+
+    .mobile-bottom-nav a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        padding: 6px 2px;
+        border-radius: 12px;
+        color: #66728a;
+        font-size: 11px;
+        font-weight: 600;
+        text-decoration: none;
+        letter-spacing: 0.01em;
+        -webkit-tap-highlight-color: transparent;
+        transition: color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .mobile-bottom-nav a i {
+        font-size: 22px;
+        line-height: 1;
+    }
+
+    .mobile-bottom-nav a.is-active {
+        color: #254bb8;
+        background: rgba(37, 75, 184, 0.08);
+    }
+
+    body.dark-mode .mobile-bottom-nav {
+        background: rgba(15, 15, 15, 0.94);
+        border-top-color: #262626;
+        box-shadow: none;
+    }
+
+    body.dark-mode .mobile-bottom-nav a {
+        color: #a3a3a3;
+    }
+
+    body.dark-mode .mobile-bottom-nav a.is-active {
+        color: #a5a0ff;
+        background: rgba(165, 160, 255, 0.12);
+    }
+}

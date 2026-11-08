@@ -1,0 +1,318 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+    <title>Transactions | SpendWise</title>
+    <!-- Apply saved theme before first paint (prevents white flash between pages) -->
+    <script>
+        try {
+            if (localStorage.getItem("spendwise-theme") === "dark") {
+                document.documentElement.style.backgroundColor = "#000000";
+            }
+        } catch (e) {}
+    </script>
+
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'expenses/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'expenses/transactions.css' %}">
+
+</head>
+
+<body>
+    <script>
+        try {
+            if (localStorage.getItem("spendwise-theme") === "dark") {
+                document.body.classList.add("dark-mode");
+            }
+        } catch (e) {}
+    </script>
+
+    {% include 'expenses/sidebar.html' %}
+    <main class="transactions-page">
+
+
+        <header class="transactions-header h-16 bg-white border-b border-slate-200
+               flex items-center justify-between px-4 sm:px-8">
+
+            <div class="flex items-center gap-4">
+                <button id="sidebar-toggle" type="button" class="md:hidden p-2 rounded-lg"
+                    aria-label="Open navigation menu" aria-expanded="false">
+                    <span>☰</span>
+                </button>
+
+                <h1 class="header-title text-xl font-semibold text-slate-800"><i class="ph ph-list-dashes header-title-icon" aria-hidden="true"></i>Transactions</h1>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode"
+                    title="Switch to dark mode">
+                    <i class="ph ph-moon" id="theme-icon"></i>
+                </button>
+
+                <button type="button" class="notification-button" aria-label="Notifications">
+                    <i class="ph ph-bell text-xl"></i>
+                    <span class="notification-dot"></span>
+                </button>
+            </div>
+        </header>
+
+
+
+        <section class="summary-grid">
+            <article class="summary-card">
+                <span>Total Income</span>
+                <strong id="sum-income" class="income-value">
+                    ₹{{ total_income|floatformat:2 }}
+                </strong>
+            </article>
+
+            <article class="summary-card">
+                <span>Total Expenses</span>
+                <strong id="sum-expense" class="expense-value">
+                    ₹{{ total_expense|floatformat:2 }}
+                </strong>
+            </article>
+
+
+            <article class="summary-card net-balance-card">
+                <span>Net Balance</span>
+                <strong id="sum-net" class="{% if net_balance < 0 %}expense-value{% else %}income-value{% endif %}">
+                    ₹{{ net_balance|floatformat:2 }}
+                </strong>
+            </article>
+
+        </section>
+
+        <section class="transactions-panel">
+            <div class="panel-heading">
+                <div>
+                    <h2>All Transactions</h2>
+                    <p>View your income and expenses in one place.</p>
+                    <button type="button" id="export-csv" class="px-4 py-2 rounded-lg bg-indigo-50 text-indigo-600
+                     hover:bg-indigo-100 font-medium transition-colors">
+                        <i class="ph ph-download-simple mr-2"></i>
+                        Export CSV
+                    </button>
+
+                </div>
+                <span id="result-count" class="result-count">
+                    {{ transactions|length }} records
+                </span>
+            </div>
+
+
+            <div class="period-bar">
+                <div class="period-chips" id="period-chips" role="group" aria-label="Quick date ranges">
+                    <button type="button" class="period-chip" data-period="all">All time</button>
+                    <button type="button" class="period-chip" data-period="month">This month</button>
+                    <button type="button" class="period-chip" data-period="last">Last month</button>
+                    <button type="button" class="period-chip" data-period="d30">Last 30 days</button>
+                    <button type="button" class="period-chip" data-period="year">This year</button>
+                </div>
+                <p id="summary-scope" class="summary-scope" aria-live="polite"></p>
+            </div>
+
+            <div class="filters">
+                <input type="search" id="search-input" placeholder="Search transactions..."
+                    aria-label="Search transactions">
+
+                <select id="type-filter" aria-label="Filter by type">
+                    <option value="all">All types</option>
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+
+                <select id="category-filter" aria-label="Filter by category">
+                    <option value="all">All categories</option>
+                    {% for category in categories %}
+                    <option value="{{ category|lower }}">{{ category }}</option>
+                    {% endfor %}
+                </select>
+
+                <div class="date-range">
+                    <label for="start-date">From</label>
+                    <input type="date" id="start-date" aria-label="Start date">
+                </div>
+
+                <div class="date-range">
+                    <label for="end-date">To</label>
+                    <input type="date" id="end-date" aria-label="End date">
+                </div>
+
+                <button type="button" id="clear-filters">Clear filters</button>
+            </div>
+
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Transaction</th>
+                            <th>Category</th>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th class="amount-column">Amount</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="transaction-rows">
+                        {% for item in transactions %}
+                        <tr class="transaction-row" data-title="{{ item.title|lower }}"
+                            data-category="{{ item.category|lower }}" data-type="{{ item.type }}"
+                            data-date="{{ item.date|date:'Y-m-d' }}"
+                            data-amount="{{ item.amount|floatformat:2|cut:',' }}">
+                            <td>
+                                <div class="transaction-title">
+                                    <span
+                                        class="transaction-icon {% if item.type == 'income' %}income-icon{% else %}expense-icon{% endif %}">
+                                        {% if item.type == 'income' %}↙{% else %}↗{% endif %}
+                                    </span>
+                                    <span>{{ item.title }}</span>
+                                </div>
+                            </td>
+
+                            <td>{{ item.category }}</td>
+                            <td>{{ item.date|date:"d M Y" }}</td>
+
+                            <td>
+                                <span class="type-badge {{ item.type }}">
+                                    {{ item.type|title }}
+                                </span>
+                            </td>
+
+                            <td
+                                class="amount-column {% if item.type == 'income' %}income-value{% else %}expense-value{% endif %}">
+                                {% if item.type == 'income' %}+{% else %}−{% endif %}
+                                ₹{{ item.amount|floatformat:2 }}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="empty-state">
+                                <div class="empty-icon">₹</div>
+                                <strong>No transactions yet</strong>
+                                <p>Add income or expenses from your dashboard to see them here.</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <p id="no-results" class="no-results" hidden>
+                    No transactions match your filters.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script src="{% static 'expenses/transactions.js' %}" defer></script>
+    <script src="{% static 'expenses/transactions-summary.js' %}" defer></script>
+    <script src="{% static 'expenses/sidebar.js' %}"></script>
+    <script src="{% static 'expenses/darkmode.js' %}"></script>
+    <script>
+/* SpendWise - mobile bottom navigation.
+   1. Builds the bottom navigation from the existing sidebar links
+      (so URLs/icons never get out of sync with sidebar.html).
+   Nothing here runs visibly on desktop: the nav and pills are hidden by CSS. */
+(function () {
+    "use strict";
+
+    var WANTED = [
+        { re: /dashboard/i, label: "Dashboard", icon: "ph-squares-four" },
+        { re: /transaction/i, label: "Transactions", icon: "ph-receipt" },
+        { re: /analytic/i, label: "Analytics", icon: "ph-chart-line-up" },
+        { re: /setting/i, label: "Settings", icon: "ph-sliders-horizontal" }
+    ];
+
+    function samePath(a) {
+        // Placeholder links (e.g. Settings = "#") must never count as the current page
+        if (!a || a.charAt(0) === "#") return false;
+        try {
+            return new URL(a, location.href).pathname.replace(/\/+$/, "") ===
+                location.pathname.replace(/\/+$/, "");
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function buildBottomNav() {
+        if (document.querySelector(".mobile-bottom-nav")) return;
+
+        var links = Array.prototype.slice.call(
+            document.querySelectorAll("#sidebar a[href]")
+        );
+        if (!links.length) return;
+
+        var items = [];
+        WANTED.forEach(function (w) {
+            var match = links.filter(function (a) {
+                return w.re.test(a.textContent) && !/^javascript:/i.test(a.getAttribute("href"));
+            })[0];
+            if (match) items.push({ a: match, w: w });
+        });
+
+        // Fallback: if the sidebar uses other labels, take its first four links
+        if (items.length < 2) {
+            items = links.slice(0, 4).map(function (a) {
+                return { a: a, w: { label: a.textContent.trim(), icon: "ph-circle" } };
+            });
+        }
+
+        var nav = document.createElement("nav");
+        nav.className = "mobile-bottom-nav";
+        nav.setAttribute("aria-label", "Primary");
+        nav.style.setProperty("--mbn-count", items.length);
+
+        items.forEach(function (it) {
+            var href = it.a.getAttribute("href");
+            var a = document.createElement("a");
+            a.href = href;
+
+            // Reuse the sidebar's own icon when it has one
+            var srcIcon = it.a.querySelector("i[class*='ph']");
+            var i = document.createElement("i");
+            i.className = srcIcon ? srcIcon.className.replace(/\btext-\S+/g, "").trim()
+                                  : "ph " + it.w.icon;
+            i.setAttribute("aria-hidden", "true");
+
+            var s = document.createElement("span");
+            s.textContent = it.w.label;
+
+            a.appendChild(i);
+            a.appendChild(s);
+
+            var active = samePath(href) ||
+                it.a.classList.contains("active") ||
+                it.a.classList.contains("bg-indigo-50");
+            if (active) {
+                a.classList.add("is-active");
+                a.setAttribute("aria-current", "page");
+            }
+            nav.appendChild(a);
+        });
+
+        document.body.appendChild(nav);
+    }
+
+    function init() {
+        buildBottomNav();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+    } else {
+        init();
+    }
+})();
+
+    </script>
+</body>
+
+</html>

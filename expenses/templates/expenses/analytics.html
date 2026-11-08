@@ -1,0 +1,284 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpendWise | Analytics</title>
+    <!-- Apply saved theme before first paint (prevents white flash between pages) -->
+    <script>
+        try {
+            if (localStorage.getItem("spendwise-theme") === "dark") {
+                document.documentElement.style.backgroundColor = "#000000";
+            }
+        } catch (e) {}
+    </script>
+
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'expenses/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'expenses/analytics.css' %}">
+
+</head>
+
+<body class="bg-slate-50 text-slate-800 h-screen flex overflow-hidden">
+    <script>
+        try {
+            if (localStorage.getItem("spendwise-theme") === "dark") {
+                document.body.classList.add("dark-mode");
+            }
+        } catch (e) {}
+    </script>
+
+    <div class="app-layout flex w-full min-w-0 h-screen overflow-hidden">
+        {% include 'expenses/sidebar.html' %}
+
+        <main class="analytics-main flex-1 flex flex-col h-screen overflow-hidden min-w-0">
+
+            <!-- Header (same structure as the Dashboard header) -->
+            <header
+                class="dashboard-header bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-8 flex-shrink-0">
+                <div class="flex items-center gap-4">
+                    <button id="sidebar-toggle" type="button" class="md:hidden p-2 text-slate-700 rounded-lg"
+                        aria-label="Open navigation menu" aria-expanded="false">
+                        <span>☰</span>
+                    </button>
+
+                    <h1 class="header-title text-xl font-semibold text-slate-800"><i class="ph ph-chart-line-up header-title-icon" aria-hidden="true"></i>Analytics</h1>
+                </div>
+
+                <div class="header-actions flex items-center gap-3">
+                    <button type="button" id="theme-toggle" class="theme-toggle"
+                        aria-label="Switch to dark mode" title="Switch to dark mode">
+                        <i class="ph ph-moon" id="theme-icon"></i>
+                    </button>
+
+                    <button type="button"
+                        class="notification-button relative p-2 text-slate-400 hover:text-slate-600 transition-colors"
+                        aria-label="Notifications">
+                        <i class="ph ph-bell text-xl"></i>
+                        <span
+                            class="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full border border-white"></span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="analytics-scroll flex-1 overflow-y-auto p-4 sm:p-8">
+                <div class="max-w-7xl mx-auto space-y-6">
+                    <section class="analytics-intro flex flex-wrap items-end justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-semibold tracking-widest text-indigo-600 mb-2">YOUR FINANCIAL INSIGHTS
+                            </p>
+                            <h2 class="text-2xl font-semibold text-slate-800">Where does your money go?</h2>
+                            <p class="text-sm text-slate-500 mt-1">Explore your expenses by category and month.</p>
+                        </div>
+
+                        <div class="month-nav" role="group" aria-label="Choose month">
+                            <button type="button" id="month-prev" class="month-nav-btn" aria-label="Previous month">
+                                <i class="ph ph-caret-left"></i>
+                            </button>
+                            <span id="analytics-period-label" class="month-nav-label" aria-live="polite">&mdash;</span>
+                            <button type="button" id="month-next" class="month-nav-btn" aria-label="Next month">
+                                <i class="ph ph-caret-right"></i>
+                            </button>
+                            <button type="button" id="month-today" class="month-nav-today" hidden>This month</button>
+                        </div>
+                    </section>
+
+                    <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4" aria-label="Expense summary">
+                        <div class="analytics-stat">
+                            <span class="stat-icon" aria-hidden="true"><i class="ph ph-wallet"></i></span>
+                            <p class="analytics-stat-label">Total Spending</p>
+                            <h3 id="total-spending" class="analytics-stat-value">₹0.00</h3>
+                            <p id="total-spending-note" class="text-xs text-slate-400 mt-1">Current month</p>
+                        </div>
+                        <div class="analytics-stat">
+                            <span class="stat-icon" aria-hidden="true"><i class="ph ph-calendar-dots"></i></span>
+                            <p class="analytics-stat-label">Average Daily</p>
+                            <h3 id="average-daily" class="analytics-stat-value">₹0.00</h3>
+                            <p id="average-daily-note" class="text-xs text-slate-400 mt-1">Average so far this month</p>
+                        </div>
+                        <div class="analytics-stat">
+                            <span class="stat-icon" aria-hidden="true"><i class="ph ph-trophy"></i></span>
+                            <p class="analytics-stat-label">Top Category</p>
+                            <h3 id="top-category" class="text-xl font-bold text-slate-800 break-words">—</h3>
+                            <p id="top-category-note" class="text-xs text-slate-400 mt-1">Highest spending category this month</p>
+                        </div>
+                        <div class="analytics-stat">
+                            <span class="stat-icon" aria-hidden="true"><i class="ph ph-receipt"></i></span>
+                            <p class="analytics-stat-label">Total Transactions</p>
+                            <h3 id="total-transactions" class="analytics-stat-value">0</h3>
+                            <p id="total-transactions-note" class="text-xs text-slate-400 mt-1">Expense records this month</p>
+                        </div>
+                    </section>
+
+                    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="analytics-card lg:col-span-2">
+                            <div class="mb-4 flex flex-wrap items-start justify-between gap-3">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-slate-800">Spending Trends</h3>
+                                    <p id="trend-subtitle" class="text-sm text-slate-500">Daily expenses over the current month</p>
+                                </div>
+                                <div class="chart-pills" aria-live="polite">
+                                    <span id="trend-peak" class="chart-pill chart-pill--peak">Peak · —</span>
+                                    <span id="trend-avg" class="chart-pill chart-pill--avg">Avg / day · ₹0.00</span>
+                                </div>
+                            </div>
+                            <div class="analytics-chart-container"><canvas id="trendChart"></canvas></div>
+                        </div>
+
+                        <div class="analytics-card">
+                            <div class="mb-4">
+                                <h3 class="text-lg font-semibold text-slate-800">Monthly Expenses</h3>
+                                <p id="monthly-subtitle" class="text-sm text-slate-500">Last 6 months comparison</p>
+                            </div>
+                            <div class="analytics-chart-container"><canvas id="monthlyChart"></canvas></div>
+                        </div>
+
+                        <div class="analytics-card">
+                            <div class="mb-4">
+                                <h3 class="text-lg font-semibold text-slate-800">Expenses by Category</h3>
+                                <p id="category-subtitle" class="text-sm text-slate-500">Distribution of this month's spending</p>
+                            </div>
+                            <div class="analytics-chart-container"><canvas id="categoryChart"></canvas></div>
+                        </div>
+                    </section>
+
+                    <section class="analytics-card">
+                        <div class="mb-5">
+                            <h3 class="text-lg font-semibold text-slate-800">Detailed Breakdown</h3>
+                            <p id="breakdown-subtitle" class="text-sm text-slate-500 mt-1">Category totals and their share of this month's
+                                spending.</p>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="analytics-table">
+                                <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Amount</th>
+                                        <th>% of Total</th>
+                                        <th class="w-1/3">Progress</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="category-breakdown">
+                                    <tr>
+                                        <td colspan="4" class="text-center">Loading analytics…</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                    <p id="analytics-message" role="status" aria-live="polite"></p>
+                    <div class="h-6"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{% static 'expenses/analytics.js' %}" defer></script>
+    <script src="{% static 'expenses/sidebar.js' %}" defer></script>
+    <script src="{% static 'expenses/darkmode.js' %}"></script>
+    <script>
+/* SpendWise - mobile bottom navigation.
+   1. Builds the bottom navigation from the existing sidebar links
+      (so URLs/icons never get out of sync with sidebar.html).
+   Nothing here runs visibly on desktop: the nav and pills are hidden by CSS. */
+(function () {
+    "use strict";
+
+    var WANTED = [
+        { re: /dashboard/i, label: "Dashboard", icon: "ph-squares-four" },
+        { re: /transaction/i, label: "Transactions", icon: "ph-receipt" },
+        { re: /analytic/i, label: "Analytics", icon: "ph-chart-line-up" },
+        { re: /setting/i, label: "Settings", icon: "ph-sliders-horizontal" }
+    ];
+
+    function samePath(a) {
+        // Placeholder links (e.g. Settings = "#") must never count as the current page
+        if (!a || a.charAt(0) === "#") return false;
+        try {
+            return new URL(a, location.href).pathname.replace(/\/+$/, "") ===
+                location.pathname.replace(/\/+$/, "");
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function buildBottomNav() {
+        if (document.querySelector(".mobile-bottom-nav")) return;
+
+        var links = Array.prototype.slice.call(
+            document.querySelectorAll("#sidebar a[href]")
+        );
+        if (!links.length) return;
+
+        var items = [];
+        WANTED.forEach(function (w) {
+            var match = links.filter(function (a) {
+                return w.re.test(a.textContent) && !/^javascript:/i.test(a.getAttribute("href"));
+            })[0];
+            if (match) items.push({ a: match, w: w });
+        });
+
+        // Fallback: if the sidebar uses other labels, take its first four links
+        if (items.length < 2) {
+            items = links.slice(0, 4).map(function (a) {
+                return { a: a, w: { label: a.textContent.trim(), icon: "ph-circle" } };
+            });
+        }
+
+        var nav = document.createElement("nav");
+        nav.className = "mobile-bottom-nav";
+        nav.setAttribute("aria-label", "Primary");
+        nav.style.setProperty("--mbn-count", items.length);
+
+        items.forEach(function (it) {
+            var href = it.a.getAttribute("href");
+            var a = document.createElement("a");
+            a.href = href;
+
+            // Reuse the sidebar's own icon when it has one
+            var srcIcon = it.a.querySelector("i[class*='ph']");
+            var i = document.createElement("i");
+            i.className = srcIcon ? srcIcon.className.replace(/\btext-\S+/g, "").trim()
+                                  : "ph " + it.w.icon;
+            i.setAttribute("aria-hidden", "true");
+
+            var s = document.createElement("span");
+            s.textContent = it.w.label;
+
+            a.appendChild(i);
+            a.appendChild(s);
+
+            var active = samePath(href) ||
+                it.a.classList.contains("active") ||
+                it.a.classList.contains("bg-indigo-50");
+            if (active) {
+                a.classList.add("is-active");
+                a.setAttribute("aria-current", "page");
+            }
+            nav.appendChild(a);
+        });
+
+        document.body.appendChild(nav);
+    }
+
+    function init() {
+        buildBottomNav();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+    } else {
+        init();
+    }
+})();
+
+    </script>
+</body>
+
+</html>

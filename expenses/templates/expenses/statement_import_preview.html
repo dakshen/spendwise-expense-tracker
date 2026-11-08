@@ -1,0 +1,346 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Review Statement | SpendWise</title>
+
+    <!-- Apply saved theme before first paint (prevents flash between pages) -->
+    <script>
+        try {
+            if (localStorage.getItem("spendwise-theme") === "dark") {
+                document.documentElement.style.backgroundColor = "#000000";
+            }
+        } catch (e) {}
+    </script>
+
+    <!-- Tailwind + Phosphor: required by the shared sidebar and header -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'expenses/dashboard.css' %}">
+
+    <style>
+        .review-card {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 24px;
+            overflow: hidden;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            margin: 22px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th,
+        td {
+            padding: 13px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #475569;
+        }
+
+        .duplicate {
+            color: #b45309;
+            font-weight: 600;
+        }
+
+        .review-flag {
+            color: #b91c1c;
+            font-weight: 600;
+        }
+
+        .kind-select {
+            padding: 6px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: #fff;
+            color: #1e293b;
+            font: inherit;
+        }
+
+        .kind-select.needs-review {
+            border-color: #f87171;
+        }
+
+        .primary-btn {
+            border: 0;
+            border-radius: 10px;
+            padding: 12px 18px;
+            background: #4f46e5;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .primary-btn:hover {
+            background: #4338ca;
+        }
+
+        .secondary-btn {
+            display: inline-block;
+            padding: 11px 16px;
+            border-radius: 10px;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+            text-decoration: none;
+        }
+
+        .secondary-btn:hover {
+            background: #f1f5f9;
+        }
+
+        .help {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .review-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .messages {
+            margin-bottom: 16px;
+        }
+
+        .message {
+            background: #fff7ed;
+            color: #9a3412;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 767px) {
+            .review-card {
+                padding: 18px;
+            }
+        }
+
+        /* ===== Dark mode (true black) ===== */
+        body.dark-mode .review-card {
+            background: #0f0f0f !important;
+            border-color: #262626 !important;
+        }
+
+        body.dark-mode th {
+            background: #171717;
+            color: #d4d4d4;
+        }
+
+        body.dark-mode th,
+        body.dark-mode td {
+            border-bottom-color: #262626;
+            color: #d4d4d4;
+        }
+
+        body.dark-mode th {
+            color: #e5e5e5;
+        }
+
+        body.dark-mode .help {
+            color: #a3a3a3;
+        }
+
+        body.dark-mode .duplicate {
+            color: #fbbf24;
+        }
+
+        body.dark-mode .review-flag {
+            color: #fca5a5;
+        }
+
+        body.dark-mode .kind-select {
+            background: #000000;
+            border-color: #333333;
+            color: #e5e5e5;
+        }
+
+        body.dark-mode .kind-select.needs-review {
+            border-color: #f87171;
+        }
+
+        body.dark-mode .message {
+            background: rgba(245, 158, 11, 0.12);
+            color: #fcd34d;
+        }
+
+        body.dark-mode .secondary-btn {
+            color: #e5e5e5;
+            border-color: #333333;
+        }
+
+        body.dark-mode .secondary-btn:hover {
+            background: #1a1a1a;
+        }
+
+        body.dark-mode input[type="checkbox"] {
+            accent-color: #818cf8;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 h-screen flex overflow-hidden">
+    <script>
+        try {
+            if (localStorage.getItem("spendwise-theme") === "dark") {
+                document.body.classList.add("dark-mode");
+            }
+        } catch (e) {}
+    </script>
+
+    {% include 'expenses/sidebar.html' %}
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden dashboard-main">
+
+        <!-- Header (same structure as the Dashboard header) -->
+        <header
+            class="dashboard-header bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-8 flex-shrink-0">
+            <div class="flex items-center gap-4">
+                <button id="sidebar-toggle" type="button" class="md:hidden p-2 text-slate-700 rounded-lg"
+                    aria-label="Open navigation menu" aria-expanded="false">
+                    <span>☰</span>
+                </button>
+
+                <h1 class="header-title flex items-center gap-3 text-xl font-semibold text-slate-800"><i class="ph ph-upload-simple header-title-icon inline-flex items-center justify-center shrink-0 w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 text-xl" aria-hidden="true"></i>Review Statement</h1>
+            </div>
+
+            <div class="header-actions flex items-center gap-3">
+                <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode"
+                    title="Switch to dark mode">
+                    <i class="ph ph-moon" id="theme-icon"></i>
+                </button>
+
+                <button type="button"
+                    class="notification-button relative p-2 text-slate-400 hover:text-slate-600 transition-colors"
+                    aria-label="Notifications">
+                    <i class="ph ph-bell text-xl"></i>
+                    <span
+                        class="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full border border-white"></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Scrollable page content -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8">
+
+            <div class="review-card">
+                <p class="help">STATEMENT IMPORT / REVIEW</p>
+                <h2 class="text-3xl font-bold text-slate-900 mb-2">Review transactions</h2>
+                <p class="help">
+                    File: {{ batch.filename }} ·
+                    {{ batch.rows|length }} extracted row(s)
+                </p>
+
+                {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                    <p class="message">{{ message }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <p class="help">
+                    Likely duplicates are preselected as excluded. Check the
+                    date, description, amount and type before importing. You can
+                    change a row's type with the dropdown. Rows marked
+                    "Check type" could not be told apart as expense or income
+                    automatically, so they default to Expense.
+                </p>
+
+                <form method="post" action="{% url 'statement_import_confirm' batch.id %}">
+                    {% csrf_token %}
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Import</th>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in batch.rows %}
+                                <tr>
+                                    <td>
+                                        {% if row.duplicate %}
+                                        <input type="checkbox" disabled aria-label="Duplicate excluded">
+                                        {% else %}
+                                        <input type="checkbox" name="selected_rows" value="{{ forloop.counter0 }}"
+                                            checked aria-label="Select transaction">
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ row.date }}</td>
+                                    <td>{{ row.title }}</td>
+                                    <td>
+                                        <select name="kind_{{ forloop.counter0 }}"
+                                            class="kind-select{% if row.needs_review %} needs-review{% endif %}"
+                                            aria-label="Transaction type"{% if row.duplicate %} disabled{% endif %}>
+                                            <option value="expense"{% if row.kind == "expense" %} selected{% endif %}>Expense</option>
+                                            <option value="income"{% if row.kind == "income" %} selected{% endif %}>Income</option>
+                                        </select>
+                                    </td>
+                                    <td>₹{{ row.amount }}</td>
+                                    <td>
+                                        {% if row.duplicate %}
+                                        <span class="duplicate">Possible duplicate</span>
+                                        {% elif row.needs_review %}
+                                        <span class="review-flag">Check type</span>
+                                        {% else %}
+                                        <span class="help">Ready to import</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6">No transactions were extracted.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="review-actions">
+                        <button class="primary-btn" type="submit">
+                            Confirm and import selected
+                        </button>
+                        <a class="secondary-btn" href="{% url 'statement_import' %}">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="h-6"></div>
+        </div>
+    </main>
+
+    <script src="{% static 'expenses/sidebar.js' %}"></script>
+    <script src="{% static 'expenses/darkmode.js' %}"></script>
+</body>
+
+</html>
