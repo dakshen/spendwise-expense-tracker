@@ -15,6 +15,9 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# True when running on Vercel (Vercel sets VERCEL=1 at build time and runtime)
+ON_VERCEL = bool(os.environ.get("VERCEL"))
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
@@ -108,10 +111,13 @@ import dj_database_url
 if os.environ.get("DATABASE_URL"):
     DATABASES = {
         "default": dj_database_url.config(
-            conn_max_age=600,
+            # Warm serverless instances reuse the connection for a minute
+            conn_max_age=60 if ON_VERCEL else 600,
             ssl_require=True,
         )
     }
+    # Needed when the host is a pooled / PgBouncer URL (Neon "-pooler" hosts)
+    DATABASES["default"]["DISABLE_SERVER_SIDE_CURSORS"] = True
 else:
     DATABASES = {
         "default": {
@@ -159,14 +165,25 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+# The manifest storage raises "Missing staticfiles manifest entry" (HTTP 500)
+# whenever collectstatic has not run, which is what happens on Vercel unless the
+# build runs it. So: manifest storage on Render, plain storage on Vercel.
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": (
+            "whitenoise.storage.CompressedStaticFilesStorage"
+            if ON_VERCEL
+            else "whitenoise.storage.CompressedManifestStaticFilesStorage"
+        ),
     },
 }
+
+if ON_VERCEL:
+    # Serve CSS/JS straight from each app's static/ folder, no collectstatic needed
+    WHITENOISE_USE_FINDERS = True
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
@@ -174,5 +191,27 @@ STORAGES = {
 MAILERS = {
     'default': {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
+    },
+}
+
+
+# Print errors to stdout so they show up in Vercel -> Logs -> Runtime Logs
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {"class": "logging.StreamHandler"},
+    },
+    "loggers": {
+        "django.request": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+        "django.security": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": False,
+        },
     },
 }
