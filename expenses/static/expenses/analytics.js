@@ -4,6 +4,12 @@
 (function () {
     "use strict";
 
+    var swLocale = "en-IN";
+    try {
+        var swEl = document.getElementById("sw-prefs");
+        if (swEl) swLocale = JSON.parse(swEl.textContent).locale || swLocale;
+    } catch (e) {}
+
     var reduceMotion = window.matchMedia &&
         window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var canHover = window.matchMedia && window.matchMedia("(hover: hover)").matches;
@@ -91,7 +97,7 @@
             if (reduceMotion) { st.current = info.value; return; }
 
             function fmt(n) {
-                return info.prefix + (info.neg ? "-" : "") + n.toLocaleString("en-IN", {
+                return info.prefix + (info.neg ? "-" : "") + n.toLocaleString(swLocale, {
                     minimumFractionDigits: info.dec,
                     maximumFractionDigits: info.dec
                 });
@@ -270,8 +276,16 @@
        Helpers
        ------------------------------------------------------------------ */
 
+    const prefs = (function () {
+            var p = { symbol: "\u20b9", locale: "en-IN" };
+            try {
+                var el = document.getElementById("sw-prefs");
+                if (el) p = Object.assign(p, JSON.parse(el.textContent));
+            } catch (e) {}
+            return p;
+        })();
     function money(amount) {
-        return '₹' + Number(amount || 0).toLocaleString('en-IN', {
+        return prefs.symbol + Number(amount || 0).toLocaleString(prefs.locale, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         });
@@ -282,12 +296,12 @@
         const value = Number(amount || 0);
 
         try {
-            return '₹' + new Intl.NumberFormat('en-IN', {
+            return prefs.symbol + new Intl.NumberFormat(prefs.locale, {
                 notation: 'compact',
                 maximumFractionDigits: 1
             }).format(value);
         } catch (error) {
-            return '₹' + value.toLocaleString('en-IN');
+            return prefs.symbol + value.toLocaleString(prefs.locale);
         }
     }
 

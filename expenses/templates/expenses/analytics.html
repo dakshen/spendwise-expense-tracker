@@ -93,13 +93,13 @@
                         <div class="analytics-stat">
                             <span class="stat-icon" aria-hidden="true"><i class="ph ph-wallet"></i></span>
                             <p class="analytics-stat-label">Total Spending</p>
-                            <h3 id="total-spending" class="analytics-stat-value">₹0.00</h3>
+                            <h3 id="total-spending" class="analytics-stat-value">{{ prefs.symbol }}0.00</h3>
                             <p id="total-spending-note" class="text-xs text-slate-400 mt-1">Current month</p>
                         </div>
                         <div class="analytics-stat">
                             <span class="stat-icon" aria-hidden="true"><i class="ph ph-calendar-dots"></i></span>
                             <p class="analytics-stat-label">Average Daily</p>
-                            <h3 id="average-daily" class="analytics-stat-value">₹0.00</h3>
+                            <h3 id="average-daily" class="analytics-stat-value">{{ prefs.symbol }}0.00</h3>
                             <p id="average-daily-note" class="text-xs text-slate-400 mt-1">Average so far this month</p>
                         </div>
                         <div class="analytics-stat">
@@ -125,7 +125,7 @@
                                 </div>
                                 <div class="chart-pills" aria-live="polite">
                                     <span id="trend-peak" class="chart-pill chart-pill--peak">Peak · —</span>
-                                    <span id="trend-avg" class="chart-pill chart-pill--avg">Avg / day · ₹0.00</span>
+                                    <span id="trend-avg" class="chart-pill chart-pill--avg">Avg / day · {{ prefs.symbol }}0.00</span>
                                 </div>
                             </div>
                             <div class="analytics-chart-container"><canvas id="trendChart"></canvas></div>
@@ -179,6 +179,7 @@
         </main>
     </div>
 
+    {{ prefs|json_script:"sw-prefs" }}
     <script src="{% static 'expenses/analytics.js' %}" defer></script>
     <script src="{% static 'expenses/sidebar.js' %}" defer></script>
     <script src="{% static 'expenses/darkmode.js' %}"></script>

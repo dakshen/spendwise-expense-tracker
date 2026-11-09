@@ -1,0 +1,229 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+    <title>SpendWise - Settings</title>
+    <script>
+        try {
+            if (localStorage.getItem("spendwise-theme") === "dark") {
+                document.documentElement.style.backgroundColor = "#000000";
+            }
+        } catch (e) {}
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'expenses/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'expenses/settings.css' %}">
+</head>
+
+<body class="bg-slate-50 text-slate-800 h-screen flex overflow-hidden">
+    <script>
+        try {
+            if (localStorage.getItem("spendwise-theme") === "dark") {
+                document.body.classList.add("dark-mode");
+            }
+        } catch (e) {}
+    </script>
+
+    {% include 'expenses/sidebar.html' %}
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden dashboard-main">
+        <header class="dashboard-header bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-8 flex-shrink-0">
+            <div class="flex items-center gap-4">
+                <button id="sidebar-toggle" type="button" class="md:hidden p-2 text-slate-700 rounded-lg"
+                    aria-label="Open navigation menu" aria-expanded="false"><span>☰</span></button>
+                <h1 class="header-title text-xl font-semibold text-slate-800"><i class="ph ph-gear header-title-icon" aria-hidden="true"></i>Settings</h1>
+            </div>
+            <div class="header-actions flex items-center gap-3">
+                <button type="button" id="theme-toggle" class="theme-toggle"
+                    aria-label="Switch to dark mode" title="Switch to dark mode">
+                    <i class="ph ph-moon" id="theme-icon"></i>
+                </button>
+                <button type="button" class="notification-button relative p-2 text-slate-400 hover:text-slate-600 transition-colors" aria-label="Notifications">
+                    <i class="ph ph-bell text-xl"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8">
+            <div class="sx-wrap">
+
+                {% if messages %}
+                <div class="sx-toasts" id="sx-toasts" role="status">
+                    {% for message in messages %}
+                    <div class="sx-toast sx-toast--{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Profile -->
+                <section class="sx">
+                    <h2 class="sx-title"><i class="ph ph-user"></i> Profile</h2>
+                    <form method="post" class="sx-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="profile">
+                        <div class="sx-grid">
+                            <label class="sx-field"><span>First name</span>
+                                <input type="text" name="first_name" value="{{ request.user.first_name }}" autocomplete="given-name" maxlength="150"></label>
+                            <label class="sx-field"><span>Last name</span>
+                                <input type="text" name="last_name" value="{{ request.user.last_name }}" autocomplete="family-name" maxlength="150"></label>
+                        </div>
+                        <label class="sx-field"><span>Email</span>
+                            <input type="email" name="email" value="{{ request.user.email }}" autocomplete="email" maxlength="254"></label>
+                        <label class="sx-field"><span>Username</span>
+                            <input type="text" value="{{ request.user.username }}" disabled></label>
+                        <button type="submit" class="sx-btn">Save profile</button>
+                    </form>
+                </section>
+
+                <!-- Password -->
+                <section class="sx">
+                    <details {% if open_card == 'password' %}open{% endif %}>
+                        <summary class="sx-title"><i class="ph ph-lock-key"></i> Change password <i class="ph ph-caret-down sx-caret"></i></summary>
+                        <form method="post" class="sx-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="password">
+                            {% if password_form.errors %}
+                            <ul class="sx-errors">
+                                {% for field in password_form %}{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}{% endfor %}
+                                {% for e in password_form.non_field_errors %}<li>{{ e }}</li>{% endfor %}
+                            </ul>
+                            {% endif %}
+                            <label class="sx-field"><span>Current password</span>
+                                <input type="password" name="old_password" autocomplete="current-password" required></label>
+                            <label class="sx-field"><span>New password</span>
+                                <input type="password" name="new_password1" autocomplete="new-password" required></label>
+                            <label class="sx-field"><span>Confirm new password</span>
+                                <input type="password" name="new_password2" autocomplete="new-password" required></label>
+                            <button type="submit" class="sx-btn">Change password</button>
+                        </form>
+                    </details>
+                </section>
+
+                <!-- Appearance -->
+                <section class="sx">
+                    <h2 class="sx-title"><i class="ph ph-palette"></i> Appearance</h2>
+                    <p class="sx-hint">Saved on this device.</p>
+                    <div class="sx-seg" id="sx-theme" role="group" aria-label="Theme">
+                        <button type="button" data-theme="light"><i class="ph ph-sun"></i> Light</button>
+                        <button type="button" data-theme="dark"><i class="ph ph-moon"></i> Dark</button>
+                    </div>
+                </section>
+
+                <!-- Preferences -->
+                <section class="sx">
+                    <h2 class="sx-title"><i class="ph ph-sliders-horizontal"></i> Preferences</h2>
+                    <form method="post" class="sx-form" id="sx-prefs">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="preferences">
+                        <label class="sx-field"><span>Currency</span>
+                            <select name="currency" id="sx-currency">
+                                {% for code, label in currencies %}<option value="{{ code }}" {% if prefs.currency == code %}selected{% endif %}>{{ label }}</option>{% endfor %}
+                            </select></label>
+                        <label class="sx-field"><span>Number format</span>
+                            <select name="number_format" id="sx-format">
+                                {% for code, label in number_formats %}<option value="{{ code }}" {% if prefs.number_format == code %}selected{% endif %}>{{ label }}</option>{% endfor %}
+                            </select></label>
+                        <label class="sx-field"><span>Default date range (Transactions)</span>
+                            <select name="default_range">
+                                {% for code, label in ranges %}<option value="{{ code }}" {% if prefs.default_range == code %}selected{% endif %}>{{ label }}</option>{% endfor %}
+                            </select></label>
+                        <p class="sx-preview">Preview: <strong id="sx-preview">—</strong></p>
+                        <button type="submit" class="sx-btn">Save preferences</button>
+                    </form>
+                    {{ symbols|json_script:"sx-symbols" }}
+                </section>
+
+                <!-- Security -->
+                <section class="sx">
+                    <h2 class="sx-title"><i class="ph ph-shield-check"></i> Security</h2>
+                    <p class="sx-hint">Signs out every other browser and phone. You stay signed in here.</p>
+                    <form method="post" class="sx-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="logout_others">
+                        <button type="submit" class="sx-btn sx-btn--ghost">Log out of other devices</button>
+                    </form>
+                </section>
+
+                <!-- Danger zone -->
+                <section class="sx sx-danger">
+                    <h2 class="sx-title"><i class="ph ph-warning"></i> Danger zone</h2>
+
+                    <details class="sx-danger-item">
+                        <summary>Delete all transactions</summary>
+                        <form method="post" class="sx-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="delete_transactions">
+                            <p class="sx-hint">Removes every expense, income record and import. This cannot be undone. Type <strong>DELETE</strong> to confirm.</p>
+                            <input type="text" name="confirm" data-match="DELETE" autocomplete="off" autocapitalize="characters" placeholder="DELETE">
+                            <button type="submit" class="sx-btn sx-btn--danger" disabled>Delete all transactions</button>
+                        </form>
+                    </details>
+
+                    <details class="sx-danger-item" {% if open_card == 'delete' %}open{% endif %}>
+                        <summary>Delete my account</summary>
+                        <form method="post" class="sx-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="delete_account">
+                            <p class="sx-hint">Permanently deletes your account and all its data. Type your username <strong>{{ request.user.username }}</strong> and your password.</p>
+                            <input type="text" name="confirm" data-match="{{ request.user.username }}" autocomplete="off" autocapitalize="none" placeholder="Username">
+                            <input type="password" name="password" autocomplete="current-password" placeholder="Password" required>
+                            <button type="submit" class="sx-btn sx-btn--danger" disabled>Delete my account</button>
+                        </form>
+                    </details>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <script src="{% static 'expenses/sidebar.js' %}"></script>
+    <script src="{% static 'expenses/darkmode.js' %}"></script>
+    <script>
+    (function () {
+        // Theme segmented control: drive the existing toggle so darkmode.js stays the single owner
+        var seg = document.getElementById("sx-theme");
+        function isDark() { return document.body.classList.contains("dark-mode"); }
+        function sync() {
+            seg.querySelectorAll("button").forEach(function (b) {
+                var on = (b.dataset.theme === "dark") === isDark();
+                b.classList.toggle("is-on", on);
+                b.setAttribute("aria-pressed", on ? "true" : "false");
+            });
+        }
+        seg.addEventListener("click", function (e) {
+            var b = e.target.closest("button");
+            if (!b) return;
+            if ((b.dataset.theme === "dark") !== isDark()) document.getElementById("theme-toggle").click();
+            setTimeout(sync, 0);
+        });
+        new MutationObserver(sync).observe(document.body, { attributes: true, attributeFilter: ["class"] });
+        sync();
+
+        // Currency / format live preview
+        var symbols = JSON.parse(document.getElementById("sx-symbols").textContent);
+        var cur = document.getElementById("sx-currency"), fmt = document.getElementById("sx-format");
+        var out = document.getElementById("sx-preview");
+        function preview() {
+            var loc = fmt.value === "indian" ? "en-IN" : "en-US";
+            out.textContent = symbols[cur.value] + (1234567.89).toLocaleString(loc, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+        cur.addEventListener("change", preview); fmt.addEventListener("change", preview); preview();
+
+        // Typed confirmations enable their button only on an exact match
+        document.querySelectorAll("input[data-match]").forEach(function (inp) {
+            var form = inp.form, btn = form.querySelector("button[type=submit]");
+            function check() { btn.disabled = inp.value.trim() !== inp.dataset.match; }
+            inp.addEventListener("input", check); check();
+        });
+
+        // Fade toasts
+        var t = document.getElementById("sx-toasts");
+        if (t) setTimeout(function () { t.classList.add("is-hidden"); }, 5000);
+    })();
+    </script>
+</body>
+</html>

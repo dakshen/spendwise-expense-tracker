@@ -14,6 +14,7 @@ urlpatterns = [
     path("api/income/", views.income_api, name="income_api"),
     path("api/income/<int:income_id>/",views.income_detail_api,name="income_detail_api"),
     path("transactions/",views.transactions,name="transactions"),
+    path("settings/", views.settings_view, name="settings"),
     path(
         "statements/import/",
         views.statement_import,

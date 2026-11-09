@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search-input");
     const typeFilter = document.getElementById("type-filter");
@@ -183,50 +182,6 @@ document.getElementById("export-csv")?.addEventListener("click", function () {
         });
     });
 
-    /* 2. Count-up for the three headline figures */
-    function countUp(el) {
-        var raw = el.textContent.replace(/\s+/g, " ").trim();
-        var m = raw.match(/^([^\d-]*)(-?)([\d,]*\.?\d+)$/);
-        if (!m) return;
-
-        var prefix = m[1];
-        var negative = m[2] === "-";
-        var numText = m[3].replace(/,/g, "");
-        var target = parseFloat(numText);
-        if (!isFinite(target)) return;
-
-        var decimals = (numText.split(".")[1] || "").length;
-        var fmt = function (n) {
-            return prefix + (negative ? "-" : "") + n.toLocaleString("en-IN", {
-                minimumFractionDigits: decimals,
-                maximumFractionDigits: decimals
-            });
-        };
-
-        if (reduceMotion || target === 0) {
-            el.textContent = fmt(target);
-            return;
-        }
-
-        var duration = 900;
-        var delay = 150;
-        var start = null;
-        el.textContent = fmt(0);
-
-        function step(ts) {
-            if (start === null) start = ts;
-            var t = Math.min(1, Math.max(0, (ts - start - delay) / duration));
-            var eased = 1 - Math.pow(1 - t, 3);
-            el.textContent = fmt(target * eased);
-            if (t < 1) {
-                requestAnimationFrame(step);
-            } else {
-                el.textContent = fmt(target);
-            }
-        }
-        requestAnimationFrame(step);
-    }
-    document.querySelectorAll(".summary-card strong").forEach(countUp);
 
     /* 3. Click ripple on the Export button */
     var exportBtn = document.getElementById("export-csv");
@@ -326,11 +281,46 @@ document.getElementById("export-csv")?.addEventListener("click", function () {
         };
     }
 
+    var prefs = { symbol: "₹", locale: "en-IN", range: "all" };
+    try {
+        var prefEl = document.getElementById("sw-prefs");
+        if (prefEl) prefs = Object.assign(prefs, JSON.parse(prefEl.textContent));
+    } catch (e) {}
+
     function money(n) {
-        return "₹" + Math.abs(n).toLocaleString("en-IN", {
+        return prefs.symbol + Math.abs(n).toLocaleString(prefs.locale, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         });
+    }
+
+    var reduceMotion = window.matchMedia &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Roll a figure from its previous value to the new one (ease-out cubic)
+    function setNum(el, to, fmt) {
+        var from = typeof el._v === "number" ? el._v : 0;
+        el._v = to;
+        if (el._raf) cancelAnimationFrame(el._raf);
+        if (reduceMotion || from === to) {
+            el.textContent = fmt(to);
+            return;
+        }
+        var t0 = null;
+        var dur = 750;
+        function step(ts) {
+            if (t0 === null) t0 = ts;
+            var p = Math.min((ts - t0) / dur, 1);
+            var e = 1 - Math.pow(1 - p, 3);
+            el.textContent = fmt(from + (to - from) * e);
+            if (p < 1) el._raf = requestAnimationFrame(step);
+            else el.textContent = fmt(to);
+        }
+        el._raf = requestAnimationFrame(step);
+    }
+
+    function signedMoney(n) {
+        return (n < 0 ? "-" : "") + money(n);
     }
 
     function isHidden(row) {
@@ -383,9 +373,9 @@ document.getElementById("export-csv")?.addEventListener("click", function () {
 
         var net = income - expense;
 
-        incomeEl.textContent = money(income);
-        expenseEl.textContent = money(expense);
-        netEl.textContent = (net < 0 ? "-" : "") + money(net);
+        setNum(incomeEl, income, money);
+        setNum(expenseEl, expense, money);
+        setNum(netEl, net, signedMoney);
         netEl.className = net < 0 ? "expense-value" : "income-value";
 
         var period = currentPeriod();
@@ -437,6 +427,21 @@ document.getElementById("export-csv")?.addEventListener("click", function () {
 
     var clearBtn = document.getElementById("clear-filters");
     if (clearBtn) clearBtn.addEventListener("click", function () { setTimeout(schedule, 0); });
+
+    // Show the saved currency and number format on every row
+    document.querySelectorAll("tr.transaction-row").forEach(function (row) {
+        var cell = row.querySelector("td.amount-column");
+        var amt = parseFloat(row.getAttribute("data-amount"));
+        if (cell && !isNaN(amt)) {
+            var sign = row.getAttribute("data-type") === "income" ? "+" : "\u2212";
+            cell.textContent = sign + " " + money(amt);
+        }
+    });
+
+    // Apply the saved default range unless the user already picked dates
+    if (prefs.range && prefs.range !== "all" && startEl && endEl && !startEl.value && !endEl.value) {
+        setPeriod(prefs.range);
+    }
 
     update();
 })();

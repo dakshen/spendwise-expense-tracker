@@ -1,0 +1,64 @@
+[
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$MqS7hEiaDa7jwW76p553ai$kPEw+cQtV8fvd2WiXFvSj/8FB+d5BX/xGhtaI02uT9s=",
+    "last_login": "2026-10-21T13:25:00.074Z",
+    "is_superuser": false,
+    "username": "dakshen3",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-21T13:24:37.978Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$DUgctex2JfbbX9yCBPTKgd$zHpD11ldeLMuDnsqu3QZhOvx2gp0Ritc98Hb1Afa2Fc=",
+    "last_login": "2026-11-08T18:01:13.597Z",
+    "is_superuser": false,
+    "username": "dakshen",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-21T13:26:02.343Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "expenses.expense",
+  "pk": 2,
+  "fields": {
+    "title": "Maggie",
+    "amount": "100.05",
+    "date": "2026-10-27",
+    "category": "Food & Dining",
+    "user": [
+      "dakshen"
+    ],
+    "import_fingerprint": null
+  }
+},
+{
+  "model": "expenses.income",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "dakshen"
+    ],
+    "title": "salary",
+    "amount": "5000.04",
+    "date": "2026-11-08",
+    "category": "Salary",
+    "import_fingerprint": null
+  }
+}
+]

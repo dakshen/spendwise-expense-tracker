@@ -795,7 +795,9 @@ html body #bottom-nav .bottom-nav-scan:focus-visible .bottom-nav-scan__disc {
 
         <p class="nav-label">Account</p>
 
-        <a href="#" class="nav-link">
+        <a href="{% url 'settings' %}"
+            class="nav-link{% if request.resolver_match.url_name == 'settings' %} is-active{% endif %}"
+            {% if request.resolver_match.url_name == 'settings' %}aria-current="page"{% endif %}>
             <i class="ph ph-gear" aria-hidden="true"></i>
             <span>Settings</span>
         </a>
@@ -937,7 +939,8 @@ html body #bottom-nav .bottom-nav-scan:focus-visible .bottom-nav-scan__disc {
         {% if request.resolver_match.url_name == 'analytics' %}aria-current="page"{% endif %}>
         <i class="ph ph-chart-line-up"></i><span>Analytics</span>
     </a>
-    <a href="#" class="bottom-nav-item">
+    <a href="{% url 'settings' %}" class="bottom-nav-item {% if request.resolver_match.url_name == 'settings' %}is-active{% endif %}"
+        {% if request.resolver_match.url_name == 'settings' %}aria-current="page"{% endif %}>
         <i class="ph ph-gear"></i><span>Settings</span>
     </a>
 </nav>

@@ -212,6 +212,7 @@
         </section>
     </main>
 
+    {{ prefs|json_script:"sw-prefs" }}
     <script src="{% static 'expenses/transactions.js' %}" defer></script>
     <script src="{% static 'expenses/transactions-summary.js' %}" defer></script>
     <script src="{% static 'expenses/sidebar.js' %}"></script>

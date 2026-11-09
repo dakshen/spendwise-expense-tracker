@@ -22,10 +22,17 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
 
-from .models import Expense, Income, StatementImportBatch
+from .models import Expense, Income, StatementImportBatch, UserSettings
 from .statement_parser import read_statement
 
 from functools import partial
+
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.sessions.models import Session
+from django.core.validators import validate_email
+from django.db import OperationalError, ProgrammingError
+from django.utils import timezone
 from django.views.decorators.cache import never_cache
 
 # Every protected page sends visitors who are not signed in to the login page
@@ -139,12 +146,12 @@ def home(request):
 @never_cache
 @login_required
 def dashboard_v2(request):
-    return render(request, 'expenses/dashboard.html')    
+    return render(request, 'expenses/dashboard.html', {'prefs': prefs_for(request.user)})
 
 @never_cache
 @login_required
 def analytics(request):
-    return render(request, 'expenses/analytics.html')
+    return render(request, 'expenses/analytics.html', {'prefs': prefs_for(request.user)})
 
 
 @never_cache
@@ -204,6 +211,7 @@ def transactions(request):
         "total_expense": total_expense,
         "net_balance": total_income - total_expense,
         "categories": categories,
+        "prefs": prefs_for(request.user),
     })
 
 
@@ -646,3 +654,187 @@ def statement_import_confirm(request, batch_id):
         "duplicate or invalid transaction(s).",
     )
     return redirect("transactions")
+
+
+# ---------------------------------------------------------------------------
+# Settings page
+# ---------------------------------------------------------------------------
+
+DEFAULT_PREFS = {
+    "currency": "INR",
+    "symbol": "\u20b9",
+    "format": "indian",
+    "locale": "en-IN",
+    "range": "all",
+}
+
+
+def get_user_settings(user):
+    prefs, _ = UserSettings.objects.get_or_create(user=user)
+    return prefs
+
+
+def prefs_for(user):
+    """Preferences as a plain dict for templates and JavaScript.
+
+    Falls back to the defaults if the UserSettings table does not exist yet
+    (for example, code deployed before `migrate` was run), so pages that only
+    read the preferences never break.
+    """
+    try:
+        prefs = get_user_settings(user)
+    except (OperationalError, ProgrammingError):
+        return dict(DEFAULT_PREFS)
+
+    return {
+        "currency": prefs.currency,
+        "symbol": prefs.symbol,
+        "format": prefs.number_format,
+        "locale": "en-IN" if prefs.number_format == "indian" else "en-US",
+        "range": prefs.default_range,
+    }
+
+
+def logout_other_devices(request):
+    """Delete every other session that belongs to the signed-in user."""
+    current_key = request.session.session_key
+    user_id = str(request.user.pk)
+    removed = 0
+
+    for session in Session.objects.filter(expire_date__gte=timezone.now()):
+        if session.session_key == current_key:
+            continue
+        try:
+            data = session.get_decoded()
+        except Exception:
+            continue
+        if data.get("_auth_user_id") == user_id:
+            session.delete()
+            removed += 1
+
+    return removed
+
+
+@never_cache
+@login_required
+@require_http_methods(["GET", "POST"])
+def settings_view(request):
+    user = request.user
+    prefs = get_user_settings(user)
+    password_form = PasswordChangeForm(user)
+    open_card = ""
+
+    if request.method == "POST":
+        action = request.POST.get("action", "")
+
+        # ---- Profile ------------------------------------------------------
+        if action == "profile":
+            first_name = request.POST.get("first_name", "").strip()[:150]
+            last_name = request.POST.get("last_name", "").strip()[:150]
+            email = request.POST.get("email", "").strip()[:254]
+
+            try:
+                if email:
+                    validate_email(email)
+            except ValidationError:
+                messages.error(request, "Please enter a valid email address.")
+                return redirect("settings")
+
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            user.save(update_fields=["first_name", "last_name", "email"])
+            messages.success(request, "Profile updated.")
+            return redirect("settings")
+
+        # ---- Password -----------------------------------------------------
+        if action == "password":
+            password_form = PasswordChangeForm(user, request.POST)
+            if password_form.is_valid():
+                user = password_form.save()
+                # Keep this browser signed in after the password changes
+                update_session_auth_hash(request, user)
+                messages.success(request, "Password changed.")
+                return redirect("settings")
+            open_card = "password"
+
+        # ---- Preferences --------------------------------------------------
+        elif action == "preferences":
+            currency = request.POST.get("currency", "")
+            number_format = request.POST.get("number_format", "")
+            default_range = request.POST.get("default_range", "")
+
+            if (
+                currency in UserSettings.SYMBOLS
+                and number_format in dict(UserSettings.NUMBER_FORMATS)
+                and default_range in dict(UserSettings.RANGES)
+            ):
+                prefs.currency = currency
+                prefs.number_format = number_format
+                prefs.default_range = default_range
+                prefs.save()
+                messages.success(request, "Preferences saved.")
+            else:
+                messages.error(request, "Please choose valid options.")
+            return redirect("settings")
+
+        # ---- Log out of other devices ------------------------------------
+        elif action == "logout_others":
+            removed = logout_other_devices(request)
+            if removed:
+                messages.success(
+                    request,
+                    f"Signed out of {removed} other "
+                    f"{'device' if removed == 1 else 'devices'}.",
+                )
+            else:
+                messages.info(request, "No other signed-in devices were found.")
+            return redirect("settings")
+
+        # ---- Delete all transactions -------------------------------------
+        elif action == "delete_transactions":
+            if request.POST.get("confirm", "").strip() != "DELETE":
+                messages.error(
+                    request,
+                    "Type DELETE exactly to confirm. Nothing was removed.",
+                )
+                return redirect("settings")
+
+            with transaction.atomic():
+                expenses_removed = Expense.objects.filter(user=user).delete()[0]
+                income_removed = Income.objects.filter(user=user).delete()[0]
+                StatementImportBatch.objects.filter(user=user).delete()
+
+            messages.success(
+                request,
+                f"Deleted {expenses_removed + income_removed} transaction(s).",
+            )
+            return redirect("settings")
+
+        # ---- Delete account ----------------------------------------------
+        elif action == "delete_account":
+            typed = request.POST.get("confirm", "").strip()
+            password = request.POST.get("password", "")
+
+            if typed != user.username or not user.check_password(password):
+                messages.error(
+                    request,
+                    "Your username or password did not match. "
+                    "Your account was not deleted.",
+                )
+                open_card = "delete"
+            else:
+                logout(request)
+                user.delete()
+                messages.success(request, "Your account has been deleted.")
+                return redirect("register")
+
+    return render(request, "expenses/settings.html", {
+        "prefs": prefs,
+        "password_form": password_form,
+        "currencies": UserSettings.CURRENCIES,
+        "number_formats": UserSettings.NUMBER_FORMATS,
+        "ranges": UserSettings.RANGES,
+        "open_card": open_card,
+        "symbols": UserSettings.SYMBOLS,
+    })

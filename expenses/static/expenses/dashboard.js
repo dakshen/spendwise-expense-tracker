@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
     // Expense form elements
     const expenseForm = document.getElementById("expense-form");
@@ -41,8 +40,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Format currency
+    const prefs = (function () {
+            var p = { symbol: "\u20b9", locale: "en-IN" };
+            try {
+                var el = document.getElementById("sw-prefs");
+                if (el) p = Object.assign(p, JSON.parse(el.textContent));
+            } catch (e) {}
+            return p;
+        })();
     function money(value) {
-        return "₹" + Number(value || 0).toLocaleString("en-IN", {
+        return prefs.symbol + Number(value || 0).toLocaleString(prefs.locale, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         });
@@ -617,6 +624,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* ---------- Count-up for the summary figures ---------- */
 
+    var fxLocale = "en-IN";
+    try {
+        var fxEl = document.getElementById("sw-prefs");
+        if (fxEl) fxLocale = JSON.parse(fxEl.textContent).locale || fxLocale;
+    } catch (e) {}
+
     var NUMBER = /\d[\d,]*(?:\.\d+)?/;
 
     function parse(text) {
@@ -637,7 +650,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function format(v, p) {
         if (!p.grouped && v < 1000) return v.toFixed(p.decimals);
-        return v.toLocaleString(p.lakh ? "en-IN" : "en-US", {
+        return v.toLocaleString(fxLocale, {
             minimumFractionDigits: p.decimals,
             maximumFractionDigits: p.decimals
         });

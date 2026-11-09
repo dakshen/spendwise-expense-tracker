@@ -377,3 +377,27 @@ label { display: block; margin-bottom: 8px; color: var(--ink); font-size: 13px; 
     .line-draw { stroke-dashoffset: 0; }
     .float, .step { translate: none !important; }
 }
+
+
+/* ---------- iOS: stop Safari zooming into focused fields ----------
+   Safari zooms in on any input whose font-size is under 16px. The old rule
+   only covered screens up to 420px wide, so bigger phones and landscape
+   mode still zoomed. This covers every iOS device and every phone-sized
+   screen. */
+@supports (-webkit-touch-callout: none) {
+    input,
+    select,
+    textarea,
+    .input-wrap input {
+        font-size: 16px !important;
+    }
+}
+
+@media (max-width: 900px) {
+    input,
+    select,
+    textarea,
+    .input-wrap input {
+        font-size: 16px;
+    }
+}
